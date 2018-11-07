@@ -3,9 +3,13 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <title>Lite Map</title>
-    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.10&key=ec486436619b748e0a94f011e2249552"></script>
+    <script type="text/javascript"
+            src="//api.map.baidu.com/api?ak=NiPNmBDuAvPfSbMelZLl1TYrs4XBbbRu&type=lite&v=1.0"></script>
+    <%--<script type="text/javascript"
+            src="http://api.map.baidu.com/api?v=2.0&ak=NiPNmBDuAvPfSbMelZLl1TYrs4XBbbRu"></script>--%>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="resources/js/bootstrap/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="resources/css/bootstrap/bootstrap.min.css"/>
@@ -22,7 +26,7 @@
         }
 
         #map_canvas {
-            height: 100%;
+            height: 100%
         }
 
         #map_canvas img {
@@ -80,5 +84,5 @@
     </div>
 </div>
 </body>
-<script type="text/javascript" src="resources/js/index/index.js"></script>
+<script type="text/javascript" src="resources/js/index/index_old_2.js"></script>
 </html>
