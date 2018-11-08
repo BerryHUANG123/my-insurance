@@ -40,6 +40,9 @@
 </head>
 <body>
 <div id="map_canvas"></div>
+<div>
+    <input type="text" id="addressSearch" style="position:fixed; right:50px;  top:10px;border:10px solid black;"/>
+</div>
 <div class="modal fade" id="addMarkModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

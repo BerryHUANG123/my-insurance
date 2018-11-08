@@ -9,7 +9,7 @@
         {
             resizeEnable: true, //是否监控地图容器尺寸变化
             zoom: 11,//级别
-            center: [116.397428, 39.90923],//中心点坐标
+            center: [113.264385, 23.129112],//中心点坐标
             viewMode: '3D'//使用3D视图
         }
     );
@@ -118,6 +118,8 @@
                 if (result.success) {
                     var data = result.data;
                     showMark(data.lng, data.lat, data.name, data.phone, data.address, data.content, data.markId, data.customerId);
+                    //更改地图中心点
+                    map.setCenter([data.lng, data.lat]);
                 } else {
                     alert("出现错误!");
                 }
@@ -238,5 +240,46 @@
             });
         }
     });
+
+    //输入提示
+    AMap.plugin('AMap.Autocomplete', function () {
+        // 实例化Autocomplete
+        var autoOptions = {
+            // input 为绑定输入提示功能的input的DOM ID
+            input: 'addressSearch'
+        };
+        var autoComplete = new AMap.Autocomplete(autoOptions);
+
+        autoComplete.on("select", function (e) {
+            console.log(e);
+            var poi = e.poi;
+            //获取完整地址
+            var address = poi.district + poi.address + poi.name;
+            //获取经纬度
+            var location = poi.location;
+            if(!location){
+                alert("请更换地点,该点没有经纬度数据!");
+                return;
+            }
+            var lng = poi.location.lng;
+            var lat = poi.location.lat;
+            //检查当前经纬度是否已有标注,若有警告用户重新选择
+            for (var i = 0; i < markers.length; i++) {
+                var lngLat = markers[i].getPosition();
+                if (lngLat.getLng() == lng &&lngLat.getLat() == lat) {
+                    alert("该经纬度已存在标注,请选择其他相近地点进行标注!");
+                    return;
+                }
+            }
+            //打开新建标注模态框
+            $("#lng").html(lng);
+            $("#lat").html(lat);
+            $("#name").val('');
+            $("#phone").val('');
+            $("#address").val('');
+            $("#content").val('');
+            $("#addMarkModal").modal("show");
+        });
+    })
 
 })(jQuery, window, document);
