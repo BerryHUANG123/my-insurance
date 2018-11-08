@@ -1,9 +1,6 @@
 (function ($, W, D) {
     //当前被打开的信息窗口
     var currentInfoWindow = null;
-
-    var id = 1;
-    //TODO：从服务器接受原始数据，并处理成markers
     //从服务器接受的markers
     var markers = [];
 
@@ -18,15 +15,28 @@
     );
 
 
-    //TODO:从服务器读取已保存的所有标注并回显
+    //从服务器读取已保存的所有标注并回显
     map.on('complete', function () {
-        alert('地图加载完了！');
         //地图任意点单击事件
         map.on('click', function (e) {
             var lnglat = e.lnglat;
             $("#lng").html(lnglat.getLng());
             $("#lat").html(lnglat.getLat());
             $("#addMarkModal").modal("show");
+        });
+
+        //从服务器接受原始数据，并处理成markers和回显
+        commonFn.mLoading.show();
+        $.get(commonFn.baseUrl + "marker/list.json", function (result) {
+            commonFn.mLoading.hide();
+            if (result.success) {
+                var data = result.data;
+                for (var i = 0; i < data.length; i++) {
+                    showMark(data[i].lng, data[i].lat, data[i].name, data[i].name, data[i].phone, data[i].address, data[i].content, data[i].markId);
+                }
+            } else {
+                alert("出错了!");
+            }
         });
     });
 
@@ -37,7 +47,6 @@
         var phone = $("#phone").val();
         var address = $("#address").val();
         var content = $("#content").val();
-
         createMark(lng, lat, name, name, phone, address, content);
         $("#addMarkModal").modal("hide");
     });
@@ -53,37 +62,52 @@
      * @param content 内容
      */
     var createMark = function (lng, lat, title, name, phone, address, content) {
-        //TODO：先持久化到数据库再回显
         commonFn.mLoading.show();
         $.post(
-            commonFn.baseUrl+"marker/save.json",
+            commonFn.baseUrl + "marker/save.json",
             {
-                name:name,
-                phone:phone,
-                address:address,
-                content:content,
-                lng:lng,
-                lat:lat
+                name: name,
+                phone: phone,
+                address: address,
+                content: content,
+                lng: lng,
+                lat: lat
             },
-            function(result){
+            function (result) {
                 commonFn.mLoading.hide();
-                console.log(result);
+                if (result.success) {
+                    var data = result.data;
+                    showMark(data.lng, data.lat, data.name, data.name, data.phone, data.address, data.content, data.markId);
+                } else {
+                    alert("出现错误!");
+                }
             }
         );
+    };
 
-
+    /**
+     * 用于页面回显标记
+     * @param lng
+     * @param lat
+     * @param title
+     * @param name
+     * @param phone
+     * @param address
+     * @param content
+     * @param markId
+     */
+    var showMark = function (lng, lat, title, name, phone, address, content, markId) {
         var lngLat = new AMap.LngLat(lng, lat);
         // 创建一个 Marker 实例：
         var marker = new AMap.Marker({
             position: lngLat,   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-            title: title,
-            label: {content: title, offset: new AMap.Pixel(20, 5)}
+            title: name,
+            label: {content: name, offset: new AMap.Pixel(20, 5)}
         });
         // 将创建的点标记添加到已有的地图实例
-        //TODO:服务器返回ID
-        marker.setExtData(++id);
-        markers.push(marker);
+        marker.setExtData(markId);
         map.add(marker);
+        markers.push(marker);
 
         //创建信息窗口
         // 创建 infoWindow 实例
@@ -92,7 +116,7 @@
             '<p>电话：' + phone + '</p>' +
             '<p>地址：' + address + '</p>' +
             '<p>备注：' + content + '</p>' +
-            '<div><button>编辑</button> <button class="deleteMarkBtn" data-id="' + id + '">删除</button></div>' +
+            '<div><button>编辑</button> <button class="deleteMarkBtn" data-id="' + markId + '">删除</button></div>' +
             '</div>';
 
         var infoWindow = new AMap.InfoWindow({
@@ -101,9 +125,6 @@
             offset: new AMap.Pixel(1, -15),
             autoMove: true
         });
-        // 打开信息窗体
-        infoWindow.open(map);
-        currentInfoWindow = infoWindow;
 
         //绑定标点单击事件
         marker.on('click', function () {

@@ -5,4 +5,8 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class BaseController {
     protected final Logger logger = LogManager.getLogger(this.getClass());
+
+    protected Integer getUid() {
+        return 1;
+    }
 }
