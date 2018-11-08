@@ -8,8 +8,10 @@
     <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.10&key=ec486436619b748e0a94f011e2249552"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="resources/js/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="resources/js/mloading/jquery.mloading.js"></script>
     <link rel="stylesheet" type="text/css" href="resources/css/bootstrap/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="resources/css/bootstrap/bootstrap-responsive.min.css"/>
+    <link rel="stylesheet" type="text/css" href="resources/css/mloading/jquery.mloading.css"/>
     <style type="text/css">
         html {
             height: 100%;
@@ -80,5 +82,6 @@
     </div>
 </div>
 </body>
+<script type="text/javascript" src="resources/js/common/common.js"></script>
 <script type="text/javascript" src="resources/js/index/index.js"></script>
 </html>

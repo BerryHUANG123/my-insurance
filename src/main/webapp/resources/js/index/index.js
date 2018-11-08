@@ -3,6 +3,7 @@
     var currentInfoWindow = null;
 
     var id = 1;
+    //TODO：从服务器接受原始数据，并处理成markers
     //从服务器接受的markers
     var markers = [];
 
@@ -53,8 +54,25 @@
      */
     var createMark = function (lng, lat, title, name, phone, address, content) {
         //TODO：先持久化到数据库再回显
-        var lngLat = new AMap.LngLat(lng, lat);
+        commonFn.mLoading.show();
+        $.post(
+            commonFn.baseUrl+"marker/save",
+            {
+                name:name,
+                phone:phone,
+                address:address,
+                content:content,
+                lng:lng,
+                lat:lat
+            },
+            function(result){
+                commonFn.mLoading.hide();
+                console.log(result);
+            }
+        );
 
+
+        var lngLat = new AMap.LngLat(lng, lat);
         // 创建一个 Marker 实例：
         var marker = new AMap.Marker({
             position: lngLat,   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
