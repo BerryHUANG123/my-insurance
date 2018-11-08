@@ -56,7 +56,7 @@
         //TODO：先持久化到数据库再回显
         commonFn.mLoading.show();
         $.post(
-            commonFn.baseUrl+"marker/save",
+            commonFn.baseUrl+"marker/save.json",
             {
                 name:name,
                 phone:phone,
