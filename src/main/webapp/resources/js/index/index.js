@@ -14,7 +14,6 @@
         }
     );
 
-
     //从服务器读取已保存的所有标注并回显
     map.on('complete', function () {
         //地图任意点单击事件
@@ -22,6 +21,10 @@
             var lnglat = e.lnglat;
             $("#lng").html(lnglat.getLng());
             $("#lat").html(lnglat.getLat());
+            $("#name").val('');
+            $("#phone").val('');
+            $("#address").val('');
+            $("#content").val('');
             $("#addMarkModal").modal("show");
         });
 
@@ -32,7 +35,7 @@
             if (result.success) {
                 var data = result.data;
                 for (var i = 0; i < data.length; i++) {
-                    showMark(data[i].lng, data[i].lat, data[i].name, data[i].name, data[i].phone, data[i].address, data[i].content, data[i].markId);
+                    showMark(data[i].lng, data[i].lat, data[i].name, data[i].phone, data[i].address, data[i].content, data[i].markId, data[i].customerId);
                 }
             } else {
                 alert("出错了!");
@@ -40,6 +43,7 @@
         });
     });
 
+    //创建标注保存按钮单击事件
     $(D).off("click", "#saveMarkBtn").on("click", "#saveMarkBtn", function () {
         var lng = $("#lng").html();
         var lat = $("#lat").html();
@@ -47,12 +51,48 @@
         var phone = $("#phone").val();
         var address = $("#address").val();
         var content = $("#content").val();
-        createMark(lng, lat, name, name, phone, address, content);
+        createMark(lng, lat, name, phone, address, content);
         $("#addMarkModal").modal("hide");
     });
 
+    //编辑标注保存按钮单击事件
+    $(D).off("click", "#editMarkBtn").on("click", "#editMarkBtn", function () {
+        var $editMarkModal = $("#editMarkModal");
+        var markId = $editMarkModal.find("[data-type='markId']").val();
+        var customerId = $editMarkModal.find("[data-type='customerId']").val();
+        var name = $editMarkModal.find("[data-type='name']").val();
+        var phone = $editMarkModal.find("[data-type='phone']").val();
+        var address = $editMarkModal.find("[data-type='address']").val();
+        var content = $editMarkModal.find("[data-type='content']").val();
+
+        commonFn.mLoading.show();
+        $.post(
+            commonFn.baseUrl + "marker/edit.json",
+            {
+                markId: markId,
+                customerId: customerId,
+                name: name,
+                phone: phone,
+                address: address,
+                content: content
+            },
+            function (result) {
+                commonFn.mLoading.hide();
+                if (result.success) {
+                    //保存成功后从markers中删除这个点并重新展示这个点（页面上）
+                    var data = result.data;
+                    removeMark(data.markId);
+                    showMark(data.lng, data.lat, data.name, data.phone, data.address, data.content, data.markId, data.customerId);
+                    $("#editMarkModal").modal("hide");
+                } else {
+                    alert(result.msg);
+                }
+            }
+        );
+    });
+
     /**
-     * 创建标注（包括标注和信息窗口）
+     * 创建标注（包括标注和信息窗口,产生数据库交互）
      * @param lng 经度
      * @param lat 纬度
      * @param name 姓名
@@ -61,7 +101,7 @@
      * @param address 地址
      * @param content 内容
      */
-    var createMark = function (lng, lat, title, name, phone, address, content) {
+    var createMark = function (lng, lat, name, phone, address, content) {
         commonFn.mLoading.show();
         $.post(
             commonFn.baseUrl + "marker/save.json",
@@ -77,7 +117,7 @@
                 commonFn.mLoading.hide();
                 if (result.success) {
                     var data = result.data;
-                    showMark(data.lng, data.lat, data.name, data.name, data.phone, data.address, data.content, data.markId);
+                    showMark(data.lng, data.lat, data.name, data.phone, data.address, data.content, data.markId, data.customerId);
                 } else {
                     alert("出现错误!");
                 }
@@ -86,7 +126,7 @@
     };
 
     /**
-     * 用于页面回显标记
+     * 用于页面回显标记(不产生数据库交互)
      * @param lng
      * @param lat
      * @param title
@@ -96,7 +136,7 @@
      * @param content
      * @param markId
      */
-    var showMark = function (lng, lat, title, name, phone, address, content, markId) {
+    var showMark = function (lng, lat, name, phone, address, content, markId, customerId) {
         var lngLat = new AMap.LngLat(lng, lat);
         // 创建一个 Marker 实例：
         var marker = new AMap.Marker({
@@ -116,7 +156,10 @@
             '<p>电话：' + phone + '</p>' +
             '<p>地址：' + address + '</p>' +
             '<p>备注：' + content + '</p>' +
-            '<div><button>编辑</button> <button class="deleteMarkBtn" data-id="' + markId + '">删除</button></div>' +
+            '<div><button class="editMarkBtn" ' +
+            'data-markId = "' + markId + '" ' +
+            'data-customerId="' + customerId + '">编辑</button>' +
+            ' <button class="deleteMarkBtn" data-markId="' + markId + '">删除</button></div>' +
             '</div>';
 
         var infoWindow = new AMap.InfoWindow({
@@ -133,26 +176,66 @@
         });
     };
 
+    /**
+     * 从页面移除某个存在的标注(不产生数据库交互)
+     * @param markId
+     */
+    var removeMark = function (markId) {
+        var index = null;
+        for (var i = 0; i < markers.length; i++) {
+            var marker = markers[i];
+            if (marker.getExtData() == markId) {
+                map.remove(marker);
+                index = i;
+            }
+        }
+        if (index || index == 0) {
+            markers.splice(index, 1);
+        }
+        if (currentInfoWindow) {
+            currentInfoWindow.close();
+        }
+    };
+
+    //编辑标记按钮单击事件
+    $(D).off("click", ".editMarkBtn").on("click", ".editMarkBtn", function () {
+        //从数据库查询客户信息和标注信息
+        var markId = $(this).attr("data-markId");
+        commonFn.mLoading.show();
+        $.get(commonFn.baseUrl + "marker/get.json?markId=" + markId, function (result) {
+            commonFn.mLoading.hide();
+            if (result.success) {
+                var data = result.data;
+                var $editMarkModal = $("#editMarkModal");
+                $editMarkModal.find("[data-type='lng']").html(data.lng);
+                $editMarkModal.find("[data-type='lat']").html(data.lat);
+                $editMarkModal.find("[data-type='markId']").val(data.markId);
+                $editMarkModal.find("[data-type='customerId']").val(data.customerId);
+                $editMarkModal.find("[data-type='name']").val(data.name);
+                $editMarkModal.find("[data-type='phone']").val(data.phone);
+                $editMarkModal.find("[data-type='address']").val(data.address);
+                $editMarkModal.find("[data-type='content']").val(data.content);
+                $editMarkModal.modal("show");
+            } else {
+                alert(result.msg);
+            }
+        });
+    });
+
     //删除标记按钮单击事件
     $(D).off("click", ".deleteMarkBtn").on("click", ".deleteMarkBtn", function () {
         var flag = confirm("是否删除此标注？");
         if (flag) {
-            var id = $(this).attr("data-id");
-            //TODO:从服务器删除后,再删除页面上的
-            var index = null;
-            for (var i = 0; i < markers.length; i++) {
-                var marker = markers[i];
-                if (marker.getExtData() == id) {
-                    map.remove(marker);
-                    index = i;
+            var markId = $(this).attr("data-markId");
+            commonFn.mLoading.show();
+            $.post(commonFn.baseUrl + "marker/remove.json?markId=" + markId, function (result) {
+                commonFn.mLoading.hide();
+                if (result.success) {
+                    removeMark(markId);
+                } else {
+                    alert(result.msg);
                 }
-            }
-            if (index || index == 0) {
-                markers.splice(index, 1);
-            }
-            if (currentInfoWindow) {
-                currentInfoWindow.close();
-            }
+            });
         }
     });
 

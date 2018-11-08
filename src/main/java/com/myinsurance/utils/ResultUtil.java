@@ -33,6 +33,7 @@ public class ResultUtil implements Serializable {
     public static Result<Object> returnError(String msg) {
         Result<Object> result = new Result<>();
         result.setSuccess(false);
+        result.setMsg(msg);
         return result;
     }
 

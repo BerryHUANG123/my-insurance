@@ -8,6 +8,8 @@ import com.myinsurance.model.view.Result;
  */
 public interface IMarkerService {
 
+    Result get(Integer uid,Integer markId);
+
     Result list(Integer uid);
 
     Result save(Integer uid,MarkDo markDo);

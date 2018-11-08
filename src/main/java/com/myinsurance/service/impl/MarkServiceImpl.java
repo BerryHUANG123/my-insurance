@@ -28,6 +28,24 @@ public class MarkServiceImpl extends BaseService implements IMarkerService {
     private ICustomerDao customerDao;
 
     @Override
+    public Result get(Integer uid, Integer markId) {
+        MapMarkerExample mapMarkerExample = new MapMarkerExample();
+        MapMarkerExample.Criteria mapMarkerExampleCriteria = mapMarkerExample.createCriteria();
+        mapMarkerExampleCriteria.andUidEqualTo(uid);
+        mapMarkerExampleCriteria.andIdEqualTo(markId);
+        List<MapMarker> mapMarkerList = mapMarkerDao.selectByExample(mapMarkerExample);
+        if (mapMarkerList == null || mapMarkerList.isEmpty()) {
+            return ResultUtil.returnError("标注点已不存在!");
+        }
+        MapMarker mapMarker = mapMarkerList.get(0);
+        Customer customer = customerDao.selectByPrimaryKey(mapMarker.getCustomerId());
+        if (customer == null) {
+            return ResultUtil.returnError("该点所属客户资料不存在!");
+        }
+        return ResultUtil.returnSuccess(transformate(customer, mapMarker));
+    }
+
+    @Override
     public Result list(Integer uid) {
         MapMarkerExample mapMarkerExample = new MapMarkerExample();
         MapMarkerExample.Criteria mapMarkerExampleCriteria = mapMarkerExample.createCriteria();
@@ -94,18 +112,58 @@ public class MarkServiceImpl extends BaseService implements IMarkerService {
 
     @Override
     public Result edit(Integer uid, MarkDo markDo) {
-        return null;
+        //若标注或客户不存在,则无法完成编辑
+        Integer markId = markDo.getMarkId();
+        MapMarkerExample mapMarkerExample = new MapMarkerExample();
+        MapMarkerExample.Criteria mapMarkerExampleCriteria = mapMarkerExample.createCriteria();
+        mapMarkerExampleCriteria.andUidEqualTo(uid);
+        mapMarkerExampleCriteria.andIdEqualTo(markId);
+        List<MapMarker> mapMarkerList = mapMarkerDao.selectByExample(mapMarkerExample);
+        if (mapMarkerList == null || mapMarkerList.isEmpty()) {
+            return ResultUtil.returnError("标注点已不存在!");
+        }
+        MapMarker oldMapMarker = mapMarkerList.get(0);
+        Customer oldCustomer = customerDao.selectByPrimaryKey(oldMapMarker.getCustomerId());
+        if (oldCustomer == null) {
+            return ResultUtil.returnError("该点所属客户资料不存在!");
+        }
+
+        //先保存标注,再保存客户
+        Date updateTime = new Date();
+        MapMarker newMapMarker = new MapMarker();
+        newMapMarker.setRemark(markDo.getContent());
+        newMapMarker.setUpdateTime(updateTime);
+        mapMarkerDao.updateByExampleSelective(newMapMarker, mapMarkerExample);
+
+        Customer newCustomer = new Customer();
+        newCustomer.setId(oldMapMarker.getCustomerId());
+        newCustomer.setPhone(markDo.getPhone());
+        newCustomer.setName(markDo.getName());
+        newCustomer.setAddress(markDo.getAddress());
+        newCustomer.setUpdateTime(updateTime);
+        customerDao.updateByPrimaryKeySelective(newCustomer);
+
+        //查询更新后的客户信息和标注信息并返回给页面
+        MapMarker lastMapMarker = mapMarkerDao.selectByExample(mapMarkerExample).get(0);
+        Customer lastCustomer = customerDao.selectByPrimaryKey(oldMapMarker.getCustomerId());
+        return ResultUtil.returnSuccess(transformate(lastCustomer, lastMapMarker));
     }
 
     @Override
     public Result remove(Integer uid, Integer markId) {
         //删除标记,但不删除客户信息
-        return null;
+        MapMarkerExample mapMarkerExample = new MapMarkerExample();
+        MapMarkerExample.Criteria mapMarkerExampleCriteria = mapMarkerExample.createCriteria();
+        mapMarkerExampleCriteria.andUidEqualTo(uid);
+        mapMarkerExampleCriteria.andIdEqualTo(markId);
+        mapMarkerDao.deleteByExample(mapMarkerExample);
+        return ResultUtil.returnSuccess();
     }
 
     private MarkVo transformate(Customer customer, MapMarker mapMarker) {
         MarkVo markVo = new MarkVo();
         markVo.setMarkId(mapMarker.getId());
+        markVo.setCustomerId(customer.getId());
         markVo.setName(customer.getName());
         markVo.setAddress(customer.getAddress());
         markVo.setLat(mapMarker.getLat());

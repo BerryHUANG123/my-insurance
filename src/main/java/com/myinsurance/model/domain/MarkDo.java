@@ -3,7 +3,11 @@ package com.myinsurance.model.domain;
 /**
  * 业务实体Mark(页面传来的数据)
  */
-public class MarkDo extends BaseDo{
+public class MarkDo extends BaseDo {
+    /**
+     * 标注ID
+     */
+    private Integer markId;
     /**
      * 姓名
      */
@@ -33,6 +37,14 @@ public class MarkDo extends BaseDo{
      * 纬度
      */
     private Double lat;
+
+    public Integer getMarkId() {
+        return markId;
+    }
+
+    public void setMarkId(Integer markId) {
+        this.markId = markId;
+    }
 
     public String getName() {
         return name;

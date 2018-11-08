@@ -8,6 +8,11 @@ public class MarkVo extends BaseVo {
     private Integer markId;
 
     /**
+     * 标记所属客户ID
+     */
+    private Integer customerId;
+
+    /**
      * 姓名
      */
     private String name;
@@ -43,6 +48,14 @@ public class MarkVo extends BaseVo {
 
     public void setMarkId(Integer markId) {
         this.markId = markId;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 
     public String getName() {
