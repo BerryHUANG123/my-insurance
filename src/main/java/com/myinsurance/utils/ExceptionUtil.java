@@ -1,6 +1,6 @@
 package com.myinsurance.utils;
 
-public class ExceptionUtil {
+public final class ExceptionUtil {
 
     public static String getExceptionAllinformation(Exception ex){
         String sOut = "";

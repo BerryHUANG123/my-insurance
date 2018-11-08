@@ -4,7 +4,7 @@ import com.myinsurance.model.view.Result;
 
 import java.io.Serializable;
 
-public class ResultUtil implements Serializable {
+public final class ResultUtil implements Serializable {
 
     private ResultUtil() {
     }

@@ -1,5 +1,6 @@
 package com.myinsurance.interceptor;
 
+import com.myinsurance.utils.NetworkUtil;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,10 +20,11 @@ public class EventInterceptor extends BaseInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
         // 保存日志
-        String message = "开始时间: {}; 结束时间: {}; 耗时: {}s; URI: {}; ";
+        String message = "访问IP: {};开始时间: {}; 结束时间: {}; 耗时: {}s; URI: {}; ";
+        String ip = NetworkUtil.getIpAddress(httpServletRequest);
         long startTime = System.currentTimeMillis();
         long endTime = System.currentTimeMillis();
-        logger.info(message, DateFormatUtils.format(startTime, "HH:mm:ss.SSS"),
+        logger.info(message, ip, DateFormatUtils.format(startTime, "HH:mm:ss.SSS"),
                 DateFormatUtils.format(endTime, "HH:mm:ss.SSS"),
                 (endTime - startTime) / 1000.00, httpServletRequest.getServletPath());
     }
