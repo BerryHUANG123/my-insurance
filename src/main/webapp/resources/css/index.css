@@ -1,0 +1,44 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+#map_canvas {
+    height: 100%;
+}
+
+#map_canvas img {
+    max-width: none;
+}
+
+#addressSearch {
+    position: fixed;
+    right: 40px;
+    top: 10px;
+    border: 10px solid black;
+}
+
+#controlSwitchDiv {
+    background-color: white;
+    border-radius: 5px;
+    position: fixed;
+    right: 45%;
+    bottom: 0.5%;
+    padding-left:10px;
+    padding-right:10px;
+    padding-top:3px;
+    border:1px solid black;
+}
+
+#geolocationSwitch{
+    margin-bottom:7px;
+}
+
+#mapTypeSwitch{
+    margin-bottom:7px;
+}

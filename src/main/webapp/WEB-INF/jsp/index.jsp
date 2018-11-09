@@ -5,43 +5,18 @@
     <base href="<%=basePath%>/">
     <title><%=title%></title>
     <%@ include file="common/headCssJs.jsp"%>
-    <style type="text/css">
-        html {
-            height: 100%;
-        }
-
-        body {
-            height: 100%;
-            margin: 0px;
-            padding: 0px;
-        }
-
-        #map_canvas {
-            height: 100%;
-        }
-
-        #map_canvas img {
-            max-width: none;
-        }
-
-        #removeMarkBtn {
-            cursor: pointer;
-            border: 1px solid gray;
-            background-color: white;
-            position: absolute;
-            z-index: 10;
-            text-size-adjust: none;
-            bottom: auto;
-            right: auto;
-            top: 10px;
-            left: 10px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>/resources/css/index.css"/>
 </head>
 <body>
 <div id="map_canvas"></div>
 <div>
-    <input type="text" id="addressSearch" style="position:fixed; right:50px;  top:10px;border:10px solid black;"/>
+    <input type="text" id="addressSearch"/>
+</div>
+<div id="controlSwitchDiv">
+    <span><input type="checkbox" id="geolocationSwitch"/>当前位置</span>
+    &nbsp;
+    <span><input type="checkbox" id="mapTypeSwitch"/>地图切换</span>
+
 </div>
 <div class="modal fade" id="addMarkModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
     <div class="modal-dialog" role="document">

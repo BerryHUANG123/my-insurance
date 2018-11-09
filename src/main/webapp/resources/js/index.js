@@ -10,9 +10,100 @@
             resizeEnable: true, //是否监控地图容器尺寸变化
             zoom: 11,//级别
             center: [113.264385, 23.129112],//中心点坐标
-            viewMode: '3D'//使用3D视图
+            viewMode: '3D',//使用3D视图
+            pitch: 0, // 地图俯仰角度，有效范围 0 度- 83 度
         }
     );
+
+    //引入输入提示插件
+    AMap.plugin('AMap.Autocomplete', function () {
+        // 实例化Autocomplete
+        var autoOptions = {
+            // input 为绑定输入提示功能的input的DOM ID
+            input: 'addressSearch'
+        };
+        var autoComplete = new AMap.Autocomplete(autoOptions);
+
+        autoComplete.on("select", function (e) {
+            var poi = e.poi;
+            //获取完整地址
+            var address = poi.district + poi.address + poi.name;
+            //获取经纬度
+            var location = poi.location;
+            if (!location) {
+                alert("请更换地点,该点没有经纬度数据!");
+                return;
+            }
+            var lng = poi.location.lng;
+            var lat = poi.location.lat;
+            //检查当前经纬度是否已有标注,若有警告用户重新选择
+            for (var i = 0; i < markers.length; i++) {
+                var lngLat = markers[i].getPosition();
+                if (lngLat.getLng() == lng && lngLat.getLat() == lat) {
+                    alert("该经纬度已存在标注,请选择其他相近地点进行标注!");
+                    return;
+                }
+            }
+            //打开新建标注模态框
+            $("#lng").html(lng);
+            $("#lat").html(lat);
+            $("#name").val('');
+            $("#phone").val('');
+            $("#address").val(address);
+            $("#content").val('');
+            $("#addMarkModal").modal("show");
+        });
+    });
+
+    // 同时引入工具条插件，比例尺插件和鹰眼插件
+    var mapTypeControl;
+    var geolocationControl;
+    AMap.plugin([
+        'AMap.ToolBar',
+        'AMap.Scale',
+        'AMap.OverView',
+        'AMap.MapType',
+        'AMap.Geolocation',
+    ], function () {
+        // 在图面添加工具条控件，工具条控件集成了缩放、平移、定位等功能按钮在内的组合控件
+        map.addControl(new AMap.ToolBar({noIpLocate:true}));
+
+        // 在图面添加比例尺控件，展示地图在当前层级和纬度下的比例尺
+        map.addControl(new AMap.Scale());
+
+        // 在图面添加鹰眼控件，在地图右下角显示地图的缩略图
+        map.addControl(new AMap.OverView({isOpen: true}));
+
+        // 在图面添加类别切换控件，实现默认图层与卫星图、实施交通图层之间切换的控制
+
+        mapTypeControl = new AMap.MapType();
+        map.addControl(mapTypeControl);
+        mapTypeControl.hide();
+
+        // 在图面添加定位控件，用来获取和展示用户主机所在的经纬度位置
+        geolocationControl = new AMap.Geolocation();
+    });
+
+//当前位置控件开关按钮单击事件
+    $(D).off("click", "#geolocationSwitch").on("click", "#geolocationSwitch", function () {
+        var checked = $(this).prop("checked");
+        if (checked) {
+            map.addControl(geolocationControl);
+        } else {
+            map.removeControl(geolocationControl);
+        }
+    });
+
+    //地图类型切换控件开关按钮单击事件
+    $(D).off("click", "#mapTypeSwitch").on("click", "#mapTypeSwitch", function () {
+        var checked = $(this).prop("checked");
+        if (checked) {
+            mapTypeControl.show();
+        } else {
+            mapTypeControl.hide();
+        }
+    });
+
 
     //从服务器读取已保存的所有标注并回显
     map.on('complete', function () {
@@ -241,44 +332,5 @@
         }
     });
 
-    //输入提示
-    AMap.plugin('AMap.Autocomplete', function () {
-        // 实例化Autocomplete
-        var autoOptions = {
-            // input 为绑定输入提示功能的input的DOM ID
-            input: 'addressSearch'
-        };
-        var autoComplete = new AMap.Autocomplete(autoOptions);
-
-        autoComplete.on("select", function (e) {
-            var poi = e.poi;
-            //获取完整地址
-            var address = poi.district + poi.address + poi.name;
-            //获取经纬度
-            var location = poi.location;
-            if (!location) {
-                alert("请更换地点,该点没有经纬度数据!");
-                return;
-            }
-            var lng = poi.location.lng;
-            var lat = poi.location.lat;
-            //检查当前经纬度是否已有标注,若有警告用户重新选择
-            for (var i = 0; i < markers.length; i++) {
-                var lngLat = markers[i].getPosition();
-                if (lngLat.getLng() == lng && lngLat.getLat() == lat) {
-                    alert("该经纬度已存在标注,请选择其他相近地点进行标注!");
-                    return;
-                }
-            }
-            //打开新建标注模态框
-            $("#lng").html(lng);
-            $("#lat").html(lat);
-            $("#name").val('');
-            $("#phone").val('');
-            $("#address").val(address);
-            $("#content").val('');
-            $("#addMarkModal").modal("show");
-        });
-    })
 
 })(jQuery, window, document);
