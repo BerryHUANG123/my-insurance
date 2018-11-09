@@ -1,8 +1,6 @@
 package com.myinsurance.interceptor;
 
 import com.myinsurance.model.persistant.User;
-import com.myinsurance.utils.NetworkUtil;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +11,7 @@ public class LoginInterceptor extends BaseInterceptor {
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         User user = (User) httpServletRequest.getSession().getAttribute("user");
         if (user == null) {
-            httpServletRequest.setAttribute("warning", "请登录!");
-            httpServletRequest.getRequestDispatcher("/login/page.htm").forward(httpServletRequest, httpServletResponse);
+            httpServletResponse.sendRedirect("/login/page.htm");
             return false;
         }
         return true;
