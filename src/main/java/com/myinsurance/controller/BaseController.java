@@ -3,8 +3,9 @@ package com.myinsurance.controller;
 import com.myinsurance.model.persistant.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import javax.servlet.http.HttpSession;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import javax.servlet.http.HttpServletRequest;
 
 public abstract class BaseController {
 
@@ -12,9 +13,16 @@ public abstract class BaseController {
 
     /**
      * 获取用户ID
+     *
      * @return
      */
     protected Integer getUid() {
-        return 1;
+        Integer uid = null;
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User user = (User) request.getSession().getAttribute("user");
+        if (user != null) {
+            uid = user.getId();
+        }
+        return uid;
     }
 }

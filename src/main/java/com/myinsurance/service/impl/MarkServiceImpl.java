@@ -60,7 +60,6 @@ public class MarkServiceImpl extends BaseService implements IMarkerService {
 
     @Override
     public Result save(Integer uid, MarkDo markDo) {
-        logger.info(markDo);
         //先查询该客户是否存在,若存在则取出
         CustomerExample customerExample = new CustomerExample();
         CustomerExample.Criteria criteria = customerExample.createCriteria();
