@@ -9,20 +9,20 @@ public final class ResultUtil implements Serializable {
     private ResultUtil() {
     }
 
-    public static Result<Object> returnSuccess() {
-        Result<Object> result = new Result<>();
+    public static Result returnSuccess() {
+        Result result = new Result<>();
         result.setSuccess(true);
         return result;
     }
 
-    public static Result<Object> returnSuccess(Object o) {
-        Result<Object> result = new Result<>();
+    public static Result returnSuccess(Object o) {
+        Result result = new Result<>();
         result.setSuccess(true);
         result.setData(o);
         return result;
     }
 
-    public static Result<Object> returnError(String msg,Object o) {
+    public static Result returnError(String msg,Object o) {
         Result<Object> result = new Result<>();
         result.setSuccess(false);
         result.setMsg(msg);
@@ -30,8 +30,8 @@ public final class ResultUtil implements Serializable {
         return result;
     }
 
-    public static Result<Object> returnError(String msg) {
-        Result<Object> result = new Result<>();
+    public static Result returnError(String msg) {
+        Result result = new Result<>();
         result.setSuccess(false);
         result.setMsg(msg);
         return result;

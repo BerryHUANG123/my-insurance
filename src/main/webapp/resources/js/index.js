@@ -38,7 +38,7 @@
                     showMark(data[i].lng, data[i].lat, data[i].name, data[i].phone, data[i].address, data[i].content, data[i].markId, data[i].customerId);
                 }
             } else {
-                alert("出错了!");
+                alert(result.msg);
             }
         });
     });
