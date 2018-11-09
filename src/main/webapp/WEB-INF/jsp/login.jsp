@@ -16,7 +16,7 @@
 <body class="login-background">
 <div class="login-box">
     <p class="login-title">MY-INSURANCE</p>
-    <form method="post" action="/login/doLogin.htm">
+    <form method="post" action="/login/doLogin.json">
         <p>姓名：<input type="text" name="userName" size="10"></p>
         <p>密码：<input type="password" name="password" size="10"></p>
         <p style="color: red;">${warning}</p>

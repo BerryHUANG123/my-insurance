@@ -12,17 +12,17 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.servlet.http.HttpServletRequest;
 
-/*@ControllerAdvice
-@EnableWebMvc*/
+@ControllerAdvice
+@EnableWebMvc
 public class GlobalExceptionHandler {
 
     private Logger logger = LogManager.getLogger();
 
-    /*@ExceptionHandler(Exception.class)
-    @ResponseBody*/
+    @ExceptionHandler
+    @ResponseBody
     public Result<String> ajaxException(HttpServletRequest req, Exception e) {
         logger.error(ExceptionUtil.getExceptionAllinformation(e));
-        return ResultUtil.returnError(e.getLocalizedMessage());
+        return ResultUtil.returnError(e.getClass().getName());
     }
 
 }

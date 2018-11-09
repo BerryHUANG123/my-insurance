@@ -29,9 +29,7 @@ public class LoginController extends BaseController {
 
     @RequestMapping("doLogin")
     public void doLogin(HttpServletRequest request, HttpServletResponse response, String userName, String password) throws ServletException, IOException {
-
-        User user = loginService.doLogin(userName, password);
-
+       User user = loginService.doLogin(userName, password);
         if (user != null) {
             HttpSession httpSession = request.getSession();
             httpSession.setAttribute("user", user);
