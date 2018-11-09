@@ -18,15 +18,16 @@ public class LoginServiceImpl extends BaseService implements ILoginService {
     private IUserDao userDao;
 
     @Override
-    public boolean doLogin(String userName, String password) {
+    public User doLogin(String userName, String password) {
+        User user = null;
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
         criteria.andUserNameEqualTo(userName);
         criteria.andPasswordEqualTo(password);
         List<User> userList = userDao.selectByExample(userExample);
-        if (userList == null || userList.isEmpty()) {
-            return false;
+        if (userList != null && !userList.isEmpty()) {
+            return userList.get(0);
         }
-        return true;
+        return user;
     }
 }

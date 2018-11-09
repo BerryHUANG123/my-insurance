@@ -70,7 +70,7 @@
     </bean>
 
     <!-- Spring 来扫描指定包下的类，并注册被@Component，@Controller，@Service，@Repository等注解标记的组件 -->
-    <mvc:annotation-driven />
+    <mvc:annotation-driven/>
 
     <!-- 静态资源处理  css js imgs -->
     <mvc:resources location="/resources/" mapping="/resources/**"/>
@@ -79,10 +79,18 @@
     <mvc:interceptors>
         <!--访问路径拦截器,打印输出当前访问路径-->
         <mvc:interceptor>
-            <mvc:mapping path="/**" />
-            <mvc:exclude-mapping path="/*.ico" />
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/*.ico"/>
             <mvc:exclude-mapping path="/resources/**"/>
-            <bean class="com.myinsurance.interceptor.EventInterceptor" />
+            <bean class="com.myinsurance.interceptor.EventInterceptor"/>
+        </mvc:interceptor>
+        <!--登录拦截器-->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/*.ico"/>
+            <mvc:exclude-mapping path="/resources/**"/>
+            <mvc:exclude-mapping path="/login/**"/>
+            <bean class="com.myinsurance.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 </beans>

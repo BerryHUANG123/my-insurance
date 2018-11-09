@@ -251,13 +251,12 @@
         var autoComplete = new AMap.Autocomplete(autoOptions);
 
         autoComplete.on("select", function (e) {
-            console.log(e);
             var poi = e.poi;
             //获取完整地址
             var address = poi.district + poi.address + poi.name;
             //获取经纬度
             var location = poi.location;
-            if(!location){
+            if (!location) {
                 alert("请更换地点,该点没有经纬度数据!");
                 return;
             }
@@ -266,7 +265,7 @@
             //检查当前经纬度是否已有标注,若有警告用户重新选择
             for (var i = 0; i < markers.length; i++) {
                 var lngLat = markers[i].getPosition();
-                if (lngLat.getLng() == lng &&lngLat.getLat() == lat) {
+                if (lngLat.getLng() == lng && lngLat.getLat() == lat) {
                     alert("该经纬度已存在标注,请选择其他相近地点进行标注!");
                     return;
                 }
@@ -276,7 +275,7 @@
             $("#lat").html(lat);
             $("#name").val('');
             $("#phone").val('');
-            $("#address").val('');
+            $("#address").val(address);
             $("#content").val('');
             $("#addMarkModal").modal("show");
         });

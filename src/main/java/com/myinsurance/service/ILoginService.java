@@ -1,8 +1,9 @@
 package com.myinsurance.service;
 
+import com.myinsurance.model.persistant.User;
 import com.myinsurance.model.view.Result;
 
 public interface ILoginService {
 
-    boolean doLogin(String userName,String password);
+    User doLogin(String userName, String password);
 }

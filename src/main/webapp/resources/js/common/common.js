@@ -2,8 +2,8 @@ var commonFn = (function ($, D, W) {
 
     return {
         baseUrl: (function () {
-            var host = W.location.href;
-            return host;
+            var host = W.location.host;
+            return "http://"+host+"/";
         })(),
         mLoading: (function(){
             return {
