@@ -117,5 +117,5 @@
 </div>
 </body>
 <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.10&key=ec486436619b748e0a94f011e2249552"></script>
-<script type="text/javascript" src="<%=basePath%>/resources/js/index/index.js"></script>
+<script type="text/javascript" src="<%=basePath%>/resources/js/index.js"></script>
 </html>

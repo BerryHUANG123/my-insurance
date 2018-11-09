@@ -1,4 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%--<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
@@ -6,7 +5,7 @@
 <%
     String path = request.getContextPath();
     String basePath = request.getScheme()+"://"+request.getHeader("HOST")+path;
-    String title = "Mall";
+    String title = "MY-INSURANCE";
 
 //项目js 根据模块定
     String comJsVer = "1.0";
