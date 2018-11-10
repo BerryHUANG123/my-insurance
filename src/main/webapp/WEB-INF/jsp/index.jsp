@@ -4,14 +4,20 @@
 <head>
     <base href="<%=basePath%>/">
     <title><%=title%></title>
-    <%@ include file="common/headCssJs.jsp"%>
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>/resources/css/index.css"/>
+    <%@ include file="/WEB-INF/jsp/common/headCssJs.jsp"%>
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>/resources/css/index.css?ver=<%=indexCssVer%>"/>
 </head>
 <body>
-<div id="map_canvas"></div>
-<div>
+<%--每个页面都必须有的,该模块名称 和父级模块名称--%>
+<input type="hidden" id="moduleInfo" data-name="map" data-parentName="map"/>
+<%--公共上部导航栏--%>
+<%@ include file="/WEB-INF/jsp/common/topNav.jsp"%>
+<div id="addressSearchDiv">
+    地址搜索添加备注
     <input type="text" id="addressSearch"/>
 </div>
+<div class="clear-float"></div>
+<div id="map_canvas"></div>
 <div id="controlSwitchDiv">
     <span><input type="checkbox" id="geolocationSwitch"/>当前位置</span>
     &nbsp;
@@ -92,5 +98,5 @@
 </div>
 </body>
 <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.10&key=ec486436619b748e0a94f011e2249552"></script>
-<script type="text/javascript" src="<%=basePath%>/resources/js/index.js"></script>
+<script type="text/javascript" src="<%=basePath%>/resources/js/index.js?ver=<%=indexJsVer%>"></script>
 </html>

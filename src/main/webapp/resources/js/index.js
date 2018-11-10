@@ -1,4 +1,7 @@
 (function ($, W, D) {
+    //首先初始化地图区域DIV需要的高度
+    $("#map_canvas").css("height",(D.documentElement.clientHeight - 100) + 'px');
+
     //当前被打开的信息窗口
     var currentInfoWindow = null;
     //从服务器接受的markers
@@ -61,18 +64,18 @@
     AMap.plugin([
         'AMap.ToolBar',
         'AMap.Scale',
-        'AMap.OverView',
+       /* 'AMap.OverView',*/
         'AMap.MapType',
         'AMap.Geolocation',
     ], function () {
         // 在图面添加工具条控件，工具条控件集成了缩放、平移、定位等功能按钮在内的组合控件
-        map.addControl(new AMap.ToolBar({noIpLocate:true}));
+        map.addControl(new AMap.ToolBar({noIpLocate: true}));
 
         // 在图面添加比例尺控件，展示地图在当前层级和纬度下的比例尺
         map.addControl(new AMap.Scale());
 
         // 在图面添加鹰眼控件，在地图右下角显示地图的缩略图
-        map.addControl(new AMap.OverView({isOpen: true}));
+       /* map.addControl(new AMap.OverView({isOpen: true}));*/
 
         // 在图面添加类别切换控件，实现默认图层与卫星图、实施交通图层之间切换的控制
 

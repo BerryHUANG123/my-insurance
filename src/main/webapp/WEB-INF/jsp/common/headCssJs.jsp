@@ -13,3 +13,4 @@
 <link rel="stylesheet" type="text/css" href="<%=basePath%>/resources/css/common/bootstrap/bootstrap.min.css"/>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>/resources/css/common/bootstrap/bootstrap-responsive.min.css"/>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>/resources/css/common/mloading/jquery.mloading.css"/>
+<link rel="stylesheet" type="text/css" href="<%=basePath%>/resources/css/common/common.css"/>
