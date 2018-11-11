@@ -5,8 +5,8 @@
         <div class="pull-left" id="topNavTitleDiv">MY-INSURANCE</div>
         <div class="pull-left" id="navSeparateDiv">||</div>
         <ul class="pull-left" id="topNavUl">
-            <li data-name="map"><a href="<%=basePath%>/index/page.htm">地图</a></li>
-            <li data-name="customer"><a href="<%=basePath%>/customer/page.htm">客户</a></li>
+            <li data-name="map"><a href="<%=basePath%>/index/page.htm">标注管理</a></li>
+            <li data-name="customer"><a href="<%=basePath%>/customer/page.htm">客户管理</a></li>
         </ul>
         <div class="clear-float"></div>
     </div>
