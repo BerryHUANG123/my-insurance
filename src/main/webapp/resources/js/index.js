@@ -1,6 +1,6 @@
 (function ($, W, D) {
     //首先初始化地图区域DIV需要的高度
-    $("#map_canvas").css("height",(D.documentElement.clientHeight - 100) + 'px');
+    $("#map_canvas").css("height", (D.documentElement.clientHeight - 100) + 'px');
 
     //当前被打开的信息窗口
     var currentInfoWindow = null;
@@ -14,7 +14,7 @@
             zoom: 11,//级别
             center: [113.264385, 23.129112],//中心点坐标
             /*viewMode: '3D',*///使用3D视图
-          /*  pitch: 0, */// 地图俯仰角度，有效范围 0 度- 83 度
+            /*  pitch: 0, */// 地图俯仰角度，有效范围 0 度- 83 度
         }
     );
 
@@ -48,13 +48,14 @@
                 }
             }
             //打开新建标注模态框
-            $("#lng").html(lng);
-            $("#lat").html(lat);
-            $("#name").val('');
-            $("#phone").val('');
-            $("#address").val(address);
-            $("#content").val('');
-            $("#addMarkModal").modal("show");
+            var $addMarkModal = $("#addMarkModal");
+            $addMarkModal.find("[data-type='lng']").html(lng);
+            $addMarkModal.find("[data-type='lat']").html(lat);
+            $addMarkModal.find("[data-type='name']").val('');
+            $addMarkModal.find("[data-type='phone']").val('');
+            $addMarkModal.find("[data-type='address']").val(address);
+            $addMarkModal.find("[data-type='content']").val('');
+            $addMarkModal.find("#addMarkModal").modal("show");
         });
     });
 
@@ -64,7 +65,7 @@
     AMap.plugin([
         'AMap.ToolBar',
         'AMap.Scale',
-       /* 'AMap.OverView',*/
+        /* 'AMap.OverView',*/
         'AMap.MapType',
         'AMap.Geolocation',
     ], function () {
@@ -75,7 +76,7 @@
         map.addControl(new AMap.Scale());
 
         // 在图面添加鹰眼控件，在地图右下角显示地图的缩略图
-       /* map.addControl(new AMap.OverView({isOpen: true}));*/
+        /* map.addControl(new AMap.OverView({isOpen: true}));*/
 
         // 在图面添加类别切换控件，实现默认图层与卫星图、实施交通图层之间切换的控制
 
@@ -113,13 +114,14 @@
         //地图任意点单击事件
         map.on('click', function (e) {
             var lnglat = e.lnglat;
-            $("#lng").html(lnglat.getLng());
-            $("#lat").html(lnglat.getLat());
-            $("#name").val('');
-            $("#phone").val('');
-            $("#address").val('');
-            $("#content").val('');
-            $("#addMarkModal").modal("show");
+            var $addMarkModal = $("#addMarkModal");
+            $addMarkModal.find("[data-type='lng']").html(lnglat.getLng());
+            $addMarkModal.find("[data-type='lat']").html(lnglat.getLat());
+            $addMarkModal.find("[data-type='name']").val('');
+            $addMarkModal.find("[data-type='phone']").val('');
+            $addMarkModal.find("[data-type='address']").val('');
+            $addMarkModal.find("[data-type='content']").val('');
+            $addMarkModal.modal("show");
         });
 
         //从服务器接受原始数据，并处理成markers和回显
@@ -139,14 +141,43 @@
 
     //创建标注保存按钮单击事件
     $(D).off("click", "#saveMarkBtn").on("click", "#saveMarkBtn", function () {
-        var lng = $("#lng").html();
-        var lat = $("#lat").html();
-        var name = $("#name").val();
-        var phone = $("#phone").val();
-        var address = $("#address").val();
-        var content = $("#content").val();
-        createMark(lng, lat, name, phone, address, content);
-        $("#addMarkModal").modal("hide");
+        var $addMarkModal = $("#addMarkModal");
+        var lng = $addMarkModal.find("[data-type='lng']").html();
+        var lat = $addMarkModal.find("[data-type='lat']").html();
+        var name = $addMarkModal.find("[data-type='name']").val();
+        var phone = $addMarkModal.find("[data-type='phone']").val();
+        var address = $addMarkModal.find("[data-type='address']").val();
+        var content = $addMarkModal.find("[data-type='content']").val();
+
+        if (!name) {
+            commonFn.messaage('error', '请输入客户姓名!');
+            return;
+        }
+        commonFn.mLoading.show();
+        $.post(
+            commonFn.baseUrl + "marker/save.json",
+            {
+                name: name,
+                phone: phone,
+                address: address,
+                content: content,
+                lng: lng,
+                lat: lat
+            },
+            function (result) {
+                commonFn.mLoading.hide();
+                if (result.success) {
+                    var data = result.data;
+                    showMark(data.lng, data.lat, data.name, data.phone, data.address, data.content, data.markId, data.customerId);
+                    //更改地图中心点
+                    map.setCenter([data.lng, data.lat]);
+                    $addMarkModal.modal("hide");
+                } else {
+                    alert("出现错误!");
+                }
+            }
+        );
+        /*createMark(lng, lat, name, phone, address, content);*/
     });
 
     //编辑标注保存按钮单击事件
@@ -158,6 +189,11 @@
         var phone = $editMarkModal.find("[data-type='phone']").val();
         var address = $editMarkModal.find("[data-type='address']").val();
         var content = $editMarkModal.find("[data-type='content']").val();
+
+        if (!name) {
+            commonFn.messaage('error', '请输入客户姓名!');
+            return;
+        }
 
         commonFn.mLoading.show();
         $.post(
@@ -195,7 +231,7 @@
      * @param address 地址
      * @param content 内容
      */
-    var createMark = function (lng, lat, name, phone, address, content) {
+    /*var createMark = function (lng, lat, name, phone, address, content) {
         commonFn.mLoading.show();
         $.post(
             commonFn.baseUrl + "marker/save.json",
@@ -219,7 +255,7 @@
                 }
             }
         );
-    };
+    };*/
 
     /**
      * 用于页面回显标记(不产生数据库交互)
