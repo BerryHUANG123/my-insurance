@@ -1,6 +1,7 @@
 (function ($, W, D) {
+
     //首先初始化地图区域DIV需要的高度
-    $("#map_canvas").css("height", (D.documentElement.clientHeight - 100) + 'px');
+    $("#map_canvas").css("height", (D.documentElement.clientHeight - 130) + 'px');
 
     //当前被打开的信息窗口
     var currentInfoWindow = null;
@@ -55,7 +56,7 @@
             $addMarkModal.find("[data-type='phone']").val('');
             $addMarkModal.find("[data-type='address']").val(address);
             $addMarkModal.find("[data-type='content']").val('');
-            $addMarkModal.find("#addMarkModal").modal("show");
+            $addMarkModal.addClass("mui-active");
         });
     });
 
@@ -108,7 +109,6 @@
         }
     });
 
-
     //从服务器读取已保存的所有标注并回显
     map.on('complete', function () {
         //地图任意点单击事件
@@ -121,7 +121,7 @@
             $addMarkModal.find("[data-type='phone']").val('');
             $addMarkModal.find("[data-type='address']").val('');
             $addMarkModal.find("[data-type='content']").val('');
-            $addMarkModal.modal("show");
+            $addMarkModal.addClass("mui-active");
         });
 
         //从服务器接受原始数据，并处理成markers和回显
@@ -140,7 +140,7 @@
     });
 
     //创建标注保存按钮单击事件
-    $(D).off("click", "#saveMarkBtn").on("click", "#saveMarkBtn", function () {
+    $(D).off("tap", "#saveMarkBtn").on("tap", "#saveMarkBtn", function () {
         var $addMarkModal = $("#addMarkModal");
         var lng = $addMarkModal.find("[data-type='lng']").html();
         var lat = $addMarkModal.find("[data-type='lat']").html();
@@ -171,17 +171,16 @@
                     showMark(data.lng, data.lat, data.name, data.phone, data.address, data.content, data.markId, data.customerId);
                     //更改地图中心点
                     map.setCenter([data.lng, data.lat]);
-                    $addMarkModal.modal("hide");
+                    $addMarkModal.removeClass("mui-active");
                 } else {
                     alert("出现错误!");
                 }
             }
         );
-        /*createMark(lng, lat, name, phone, address, content);*/
     });
 
     //编辑标注保存按钮单击事件
-    $(D).off("click", "#editMarkBtn").on("click", "#editMarkBtn", function () {
+    $(D).off("tap", "#editMarkBtn").on("tap", "#editMarkBtn", function () {
         var $editMarkModal = $("#editMarkModal");
         var markId = $editMarkModal.find("[data-type='markId']").val();
         var customerId = $editMarkModal.find("[data-type='customerId']").val();
@@ -213,49 +212,13 @@
                     var data = result.data;
                     removeMark(data.markId);
                     showMark(data.lng, data.lat, data.name, data.phone, data.address, data.content, data.markId, data.customerId);
-                    $("#editMarkModal").modal("hide");
+                    $("#editMarkModal").removeClass("mui-active");
                 } else {
                     alert(result.msg);
                 }
             }
         );
     });
-
-    /**
-     * 创建标注（包括标注和信息窗口,产生数据库交互）
-     * @param lng 经度
-     * @param lat 纬度
-     * @param name 姓名
-     * @param title 标题
-     * @param phone 电话
-     * @param address 地址
-     * @param content 内容
-     */
-    /*var createMark = function (lng, lat, name, phone, address, content) {
-        commonFn.mLoading.show();
-        $.post(
-            commonFn.baseUrl + "marker/save.json",
-            {
-                name: name,
-                phone: phone,
-                address: address,
-                content: content,
-                lng: lng,
-                lat: lat
-            },
-            function (result) {
-                commonFn.mLoading.hide();
-                if (result.success) {
-                    var data = result.data;
-                    showMark(data.lng, data.lat, data.name, data.phone, data.address, data.content, data.markId, data.customerId);
-                    //更改地图中心点
-                    map.setCenter([data.lng, data.lat]);
-                } else {
-                    alert("出现错误!");
-                }
-            }
-        );
-    };*/
 
     /**
      * 用于页面回显标记(不产生数据库交互)
@@ -347,7 +310,7 @@
                 $editMarkModal.find("[data-type='phone']").val(data.phone);
                 $editMarkModal.find("[data-type='address']").val(data.address);
                 $editMarkModal.find("[data-type='content']").val(data.content);
-                $editMarkModal.modal("show");
+                $editMarkModal.addClass("mui-active");
             } else {
                 alert(result.msg);
             }

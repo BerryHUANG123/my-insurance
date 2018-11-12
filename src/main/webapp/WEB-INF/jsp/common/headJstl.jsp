@@ -9,10 +9,10 @@
 
 //项目js 根据模块定
     String comJsVer = "1.0";
-    String indexJsVer="1.1";
+    String indexJsVer="1.2";
 //项目css (css/*.css)
-    String comCssVer = "1.0";
-    String indexCssVer="1.1";
+    String comCssVer = "1.1";
+    String indexCssVer="1.3";
 //自写组件用(js/plugin/picZoom/picZoom.js)
     String componentsVer = "1.0";
 //框架、插件类 (js/plugin/*  js/com/jq.js   js/com/format.js)
