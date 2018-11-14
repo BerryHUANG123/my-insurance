@@ -10,6 +10,9 @@
 .bg-color-error{
     background-color:palevioletred;
 }
+.bg-color-white{
+    background-color:white !important;
+}
 .ft-color-white{
     color:white;
 }

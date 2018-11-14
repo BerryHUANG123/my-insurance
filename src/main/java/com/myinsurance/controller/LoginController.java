@@ -33,7 +33,7 @@ public class LoginController extends BaseController {
         if (user != null) {
             HttpSession httpSession = request.getSession();
             httpSession.setAttribute("user", user);
-            response.sendRedirect("/route/page.htm?moduleName=map");
+            response.sendRedirect("/index/page.htm");
         } else {
             request.setAttribute("warning", "用户名或密码错误!");
             request.getRequestDispatcher("/login/page.htm").forward(request, response);
