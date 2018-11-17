@@ -1,6 +1,6 @@
 package com.myinsurance.utils;
 
-import com.myinsurance.model.view.Result;
+import com.myinsurance.model.vo.Result;
 
 import java.io.Serializable;
 

@@ -1,9 +1,7 @@
 package com.myinsurance.controller;
 
-import com.myinsurance.model.persistant.User;
-import com.myinsurance.model.view.Result;
+import com.myinsurance.model.po.User;
 import com.myinsurance.service.ILoginService;
-import com.myinsurance.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

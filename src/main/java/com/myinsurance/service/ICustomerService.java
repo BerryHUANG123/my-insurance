@@ -1,6 +1,6 @@
 package com.myinsurance.service;
 
-import com.myinsurance.model.view.Result;
+import com.myinsurance.model.vo.Result;
 
 
 public interface ICustomerService {

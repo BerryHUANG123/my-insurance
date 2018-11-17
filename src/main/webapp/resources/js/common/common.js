@@ -35,6 +35,18 @@ var commonFn = (function ($, D, W) {
                 onOpen: onOpenCallback,
                 onClose: onCloseCallback
             });
+        },
+        ajax: function (url, jsonObject, callback) {
+            $.ajax({
+                type: "post",
+                url: url,
+                data: JSON.stringify(jsonObject),
+                dataType: "json",
+                contentType: "application/json;charset=UTF-8",
+                success: function (result) {
+                    callback(result);
+                }
+            });
         }
     };
 

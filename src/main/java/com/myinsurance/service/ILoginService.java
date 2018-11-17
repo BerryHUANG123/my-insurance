@@ -1,7 +1,6 @@
 package com.myinsurance.service;
 
-import com.myinsurance.model.persistant.User;
-import com.myinsurance.model.view.Result;
+import com.myinsurance.model.po.User;
 
 public interface ILoginService {
 

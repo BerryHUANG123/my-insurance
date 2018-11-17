@@ -10,7 +10,7 @@
     <packaging>war</packaging>
 
     <name>my-insurance Maven Webapp</name>
-    <!-- FIXME change it persistant the project's website -->
+    <!-- FIXME change it po the project's website -->
     <url>http://www.example.com</url>
 
     <properties>
@@ -285,7 +285,7 @@
 
     <build>
         <finalName>my-insurance</finalName>
-        <pluginManagement><!-- lock down plugins versions persistant avoid using Maven defaults (may be moved persistant parent pom) -->
+        <pluginManagement><!-- lock down plugins versions po avoid using Maven defaults (may be moved po parent pom) -->
             <plugins>
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>

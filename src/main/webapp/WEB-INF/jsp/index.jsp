@@ -27,7 +27,7 @@
 </div>
 <div class="modal fade" id="addMarkModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-remark">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
@@ -67,7 +67,7 @@
                         <table>
                             <tr>
                                 <td>备注:</td>
-                                <td><textarea data-type="content" placeholder="请输入标记点备注信息"></textarea></td>
+                                <td><textarea data-type="remark" placeholder="请输入标记点备注信息"></textarea></td>
                             </tr>
                         </table>
                     </div>
@@ -82,7 +82,7 @@
 </div>
 <div class="modal fade" id="editMarkModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-remark">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
@@ -127,7 +127,7 @@
                         <table>
                             <tr>
                                 <td>备注:</td>
-                                <td><textarea data-type="content" placeholder="请输入标记点备注信息"></textarea></td>
+                                <td><textarea data-type="remark" placeholder="请输入标记点备注信息"></textarea></td>
                             </tr>
                         </table>
                     </div>

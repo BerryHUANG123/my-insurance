@@ -1,6 +1,6 @@
 package com.myinsurance.interceptor;
 
-import com.myinsurance.model.persistant.User;
+import com.myinsurance.model.po.User;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;

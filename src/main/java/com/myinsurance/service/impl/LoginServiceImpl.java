@@ -1,12 +1,10 @@
 package com.myinsurance.service.impl;
 
 import com.myinsurance.dao.IUserDao;
-import com.myinsurance.model.persistant.User;
-import com.myinsurance.model.persistant.UserExample;
-import com.myinsurance.model.view.Result;
+import com.myinsurance.model.po.User;
+import com.myinsurance.model.po.UserExample;
 import com.myinsurance.service.BaseService;
 import com.myinsurance.service.ILoginService;
-import com.myinsurance.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

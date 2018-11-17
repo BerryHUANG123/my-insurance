@@ -1,6 +1,6 @@
 package com.myinsurance.commons;
 
-import com.myinsurance.model.view.Result;
+import com.myinsurance.model.vo.Result;
 import com.myinsurance.utils.ExceptionUtil;
 import com.myinsurance.utils.ResultUtil;
 import org.apache.logging.log4j.LogManager;

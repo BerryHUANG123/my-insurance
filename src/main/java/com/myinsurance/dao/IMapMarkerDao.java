@@ -1,7 +1,7 @@
 package com.myinsurance.dao;
 
-import com.myinsurance.model.persistant.MapMarker;
-import com.myinsurance.model.persistant.MapMarkerExample;
+import com.myinsurance.model.po.MapMarker;
+import com.myinsurance.model.po.MapMarkerExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 

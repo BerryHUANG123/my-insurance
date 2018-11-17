@@ -1,4 +1,4 @@
-package com.myinsurance.model.persistant;
+package com.myinsurance.model.po;
 
 import java.util.ArrayList;
 import java.util.Date;

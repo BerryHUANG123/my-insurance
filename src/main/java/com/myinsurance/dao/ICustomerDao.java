@@ -1,7 +1,7 @@
 package com.myinsurance.dao;
 
-import com.myinsurance.model.persistant.Customer;
-import com.myinsurance.model.persistant.CustomerExample;
+import com.myinsurance.model.po.Customer;
+import com.myinsurance.model.po.CustomerExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 

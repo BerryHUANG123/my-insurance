@@ -1,4 +1,4 @@
-package com.myinsurance.model.view;
+package com.myinsurance.model.vo;
 
 import java.io.Serializable;
 

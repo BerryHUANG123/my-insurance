@@ -1,6 +1,6 @@
 package com.myinsurance.controller;
 
-import com.myinsurance.model.persistant.User;
+import com.myinsurance.model.po.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.context.request.RequestContextHolder;

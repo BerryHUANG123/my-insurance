@@ -1,4 +1,44 @@
 (function ($, W, D) {
+    //Dto对象
+    var CustomerDto = function (id, name, sex, birthday, age, phone, address, remark) {
+        this.id = id;
+        this.name = name;
+        this.sex = sex;
+        this.birthday = birthday;
+        this.age = age;
+        this.phone = phone;
+        this.address = address;
+        this.remark = remark;
+    };
+
+    var MarkDto = function (markId, remark, lng, lat, customerDtoList) {
+        this.markId = markId;
+        this.remark = remark;
+        this.lng = lng;
+        this.lat = lat;
+        this.customerDtoList = customerDtoList;
+    };
+
+    //Vo对象
+    /*var CustomerVo = function (id, name, sex, birthday, age, phone, address, remark) {
+        this.id = id;
+        this.name = name;
+        this.sex = sex;
+        this.birthday = birthday;
+        this.age = age;
+        this.phone = phone;
+        this.address = address;
+        this.remark = remark;
+    };
+    var MarkVo = function (markId, remark, lng, lat, customerVoList) {
+        this.markId = markId;
+        this.remark = remark;
+        this.lng = lng;
+        this.lat = lat;
+        this.customerVoList = customerVoList;
+    };*/
+
+
     //首先初始化地图区域DIV需要的高度
     $("#map_canvas").css("height", (D.documentElement.clientHeight - 100) + 'px');
 
@@ -54,7 +94,7 @@
             $addMarkModal.find("[data-type='name']").val('');
             $addMarkModal.find("[data-type='phone']").val('');
             $addMarkModal.find("[data-type='address']").val(address);
-            $addMarkModal.find("[data-type='content']").val('');
+            $addMarkModal.find("[data-type='remark']").val('');
             $addMarkModal.modal("show");
         });
     });
@@ -120,7 +160,7 @@
             $addMarkModal.find("[data-type='name']").val('');
             $addMarkModal.find("[data-type='phone']").val('');
             $addMarkModal.find("[data-type='address']").val('');
-            $addMarkModal.find("[data-type='content']").val('');
+            $addMarkModal.find("[data-type='remark']").val('');
             $addMarkModal.modal("show");
         });
 
@@ -131,7 +171,7 @@
             if (result.success) {
                 var data = result.data;
                 for (var i = 0; i < data.length; i++) {
-                    showMark(data[i].lng, data[i].lat, data[i].name, data[i].phone, data[i].address, data[i].content, data[i].markId, data[i].customerId);
+                    showMark(data[i]);
                 }
             } else {
                 alert(result.msg);
@@ -147,7 +187,7 @@
         var name = $addMarkModal.find("[data-type='name']").val();
         var phone = $addMarkModal.find("[data-type='phone']").val();
         var address = $addMarkModal.find("[data-type='address']").val();
-        var content = $addMarkModal.find("[data-type='content']").val();
+        var remark = $addMarkModal.find("[data-type='remark']").val();
 
         if (!name) {
             commonFn.messaage('error', '请输入客户姓名!');
@@ -156,19 +196,11 @@
         commonFn.mLoading.show();
         $.post(
             commonFn.baseUrl + "marker/save.json",
-            {
-                name: name,
-                phone: phone,
-                address: address,
-                content: content,
-                lng: lng,
-                lat: lat
-            },
+            new MarkDto(null, remark, lng, lat, [new CustomerDto(null, name, null, null, phone, address, remark)]),
             function (result) {
                 commonFn.mLoading.hide();
                 if (result.success) {
-                    var data = result.data;
-                    showMark(data.lng, data.lat, data.name, data.phone, data.address, data.content, data.markId, data.customerId);
+                    showMark(result.data);
                     //更改地图中心点
                     map.setCenter([data.lng, data.lat]);
                     $addMarkModal.modal("hide");
@@ -177,7 +209,6 @@
                 }
             }
         );
-        /*createMark(lng, lat, name, phone, address, content);*/
     });
 
     //编辑标注保存按钮单击事件
@@ -188,7 +219,7 @@
         var name = $editMarkModal.find("[data-type='name']").val();
         var phone = $editMarkModal.find("[data-type='phone']").val();
         var address = $editMarkModal.find("[data-type='address']").val();
-        var content = $editMarkModal.find("[data-type='content']").val();
+        var remark = $editMarkModal.find("[data-type='remark']").val();
 
         if (!name) {
             commonFn.messaage('error', '请输入客户姓名!');
@@ -196,29 +227,56 @@
         }
 
         commonFn.mLoading.show();
-        $.post(
-            commonFn.baseUrl + "marker/edit.json",
-            {
-                markId: markId,
-                customerId: customerId,
-                name: name,
-                phone: phone,
-                address: address,
-                content: content
-            },
+        commonFn.ajax(commonFn.baseUrl + "marker/edit.json",
+            new MarkDto(markId, remark, null, null, [new CustomerDto(customerId, name, null, null, phone, address, remark)]),
             function (result) {
                 commonFn.mLoading.hide();
                 if (result.success) {
                     //保存成功后从markers中删除这个点并重新展示这个点（页面上）
                     var data = result.data;
                     removeMark(data.markId);
-                    showMark(data.lng, data.lat, data.name, data.phone, data.address, data.content, data.markId, data.customerId);
+                    showMark(data);
+                    $("#editMarkModal").modal("hide");
+                } else {
+                    alert(result.msg);
+                }
+            });
+        /*$.ajax({
+            type: "post",
+            url: commonFn.baseUrl + "marker/edit.json",
+            data: JSON.stringify(new MarkDto(markId, remark, null, null, [new CustomerDto(customerId, name, null, null, phone, address, remark)])),
+            dataType: "json",
+            contentType: "application/json;charset=UTF-8",
+            success: function (result) {
+                commonFn.mLoading.hide();
+                if (result.success) {
+                    //保存成功后从markers中删除这个点并重新展示这个点（页面上）
+                    var data = result.data;
+                    removeMark(data.markId);
+                    showMark(data);
+                    $("#editMarkModal").modal("hide");
+                } else {
+                    alert(result.msg);
+                }
+
+            }
+        });*/
+        /*$.post(
+            commonFn.baseUrl + "marker/edit.json",
+            new MarkDto(markId, remark, null,null, [new CustomerDto(customerId, name, null, null, phone, address, remark)]),
+            function (result) {
+                commonFn.mLoading.hide();
+                if (result.success) {
+                    //保存成功后从markers中删除这个点并重新展示这个点（页面上）
+                    var data = result.data;
+                    removeMark(data.markId);
+                    showMark(data);
                     $("#editMarkModal").modal("hide");
                 } else {
                     alert(result.msg);
                 }
             }
-        );
+        );*/
     });
 
     /**
@@ -229,9 +287,9 @@
      * @param title 标题
      * @param phone 电话
      * @param address 地址
-     * @param content 内容
+     * @param remark 内容
      */
-    /*var createMark = function (lng, lat, name, phone, address, content) {
+    /*var createMark = function (lng, lat, name, phone, address, remark) {
         commonFn.mLoading.show();
         $.post(
             commonFn.baseUrl + "marker/save.json",
@@ -239,7 +297,7 @@
                 name: name,
                 phone: phone,
                 address: address,
-                content: content,
+                remark: remark,
                 lng: lng,
                 lat: lat
             },
@@ -247,7 +305,7 @@
                 commonFn.mLoading.hide();
                 if (result.success) {
                     var data = result.data;
-                    showMark(data.lng, data.lat, data.name, data.phone, data.address, data.content, data.markId, data.customerId);
+                    showMark(data.lng, data.lat, data.name, data.phone, data.address, data.remark, data.markId, data.customerId);
                     //更改地图中心点
                     map.setCenter([data.lng, data.lat]);
                 } else {
@@ -259,39 +317,33 @@
 
     /**
      * 用于页面回显标记(不产生数据库交互)
-     * @param lng
-     * @param lat
-     * @param title
-     * @param name
-     * @param phone
-     * @param address
-     * @param content
-     * @param markId
+     * @param markVo
      */
-    var showMark = function (lng, lat, name, phone, address, content, markId, customerId) {
-        var lngLat = new AMap.LngLat(lng, lat);
+    var showMark = function (markVo) {
+        var customerVo = (markVo.customerVoList)[0];
+        var lngLat = new AMap.LngLat(markVo.lng, markVo.lat);
         // 创建一个 Marker 实例：
         var marker = new AMap.Marker({
             position: lngLat,   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-            title: name,
-            label: {content: name, offset: new AMap.Pixel(20, 5)}
+            title: customerVo.name,
+            label: {content: customerVo.name, offset: new AMap.Pixel(20, 5)}
         });
         // 将创建的点标记添加到已有的地图实例
-        marker.setExtData(markId);
+        marker.setExtData(markVo.markId);
         map.add(marker);
         markers.push(marker);
 
         //创建信息窗口
         // 创建 infoWindow 实例
         var showContent = '<div>' +
-            '<p>姓名：' + name + '</p>' +
-            '<p>电话：' + phone + '</p>' +
-            '<p>地址：' + address + '</p>' +
-            '<p>备注：' + content + '</p>' +
+            '<p>姓名：' + customerVo.name + '</p>' +
+            '<p>电话：' + customerVo.phone + '</p>' +
+            '<p>地址：' + customerVo.address + '</p>' +
+            '<p>备注：' + markVo.remark + '</p>' +
             '<div><button class="editMarkBtn" ' +
-            'data-markId = "' + markId + '" ' +
-            'data-customerId="' + customerId + '">编辑</button>' +
-            ' <button class="deleteMarkBtn" data-markId="' + markId + '">删除</button></div>' +
+            'data-markId = "' + markVo.markId + '" ' +
+            'data-customerId="' + customerVo.customerId + '">编辑</button>' +
+            ' <button class="deleteMarkBtn" data-markId="' + markVo.markId + '">删除</button></div>' +
             '</div>';
 
         var infoWindow = new AMap.InfoWindow({
@@ -337,16 +389,17 @@
         $.get(commonFn.baseUrl + "marker/get.json?markId=" + markId, function (result) {
             commonFn.mLoading.hide();
             if (result.success) {
-                var data = result.data;
+                var markVo = result.data;
+                var customerVo = (markVo.customerVoList)[0];
                 var $editMarkModal = $("#editMarkModal");
-                $editMarkModal.find("[data-type='lng']").html(data.lng);
-                $editMarkModal.find("[data-type='lat']").html(data.lat);
-                $editMarkModal.find("[data-type='markId']").val(data.markId);
-                $editMarkModal.find("[data-type='customerId']").val(data.customerId);
-                $editMarkModal.find("[data-type='name']").val(data.name);
-                $editMarkModal.find("[data-type='phone']").val(data.phone);
-                $editMarkModal.find("[data-type='address']").val(data.address);
-                $editMarkModal.find("[data-type='content']").val(data.content);
+                $editMarkModal.find("[data-type='lng']").html(markVo.lng);
+                $editMarkModal.find("[data-type='lat']").html(markVo.lat);
+                $editMarkModal.find("[data-type='markId']").val(markVo.markId);
+                $editMarkModal.find("[data-type='customerId']").val(customerVo.customerId);
+                $editMarkModal.find("[data-type='name']").val(customerVo.name);
+                $editMarkModal.find("[data-type='phone']").val(customerVo.phone);
+                $editMarkModal.find("[data-type='address']").val(customerVo.address);
+                $editMarkModal.find("[data-type='remark']").val(markVo.remark);
                 $editMarkModal.modal("show");
             } else {
                 alert(result.msg);

@@ -4,8 +4,8 @@
 <title>登录</title>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="Content-Type" remark="text/html; charset=utf-8"/>
+    <meta name="viewport" remark="initial-scale=1.0, user-scalable=no">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>/resources/frame/bootstrap/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/resources/frame/bootstrap/bootstrap.min.css"/>

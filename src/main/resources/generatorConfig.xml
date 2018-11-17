@@ -29,7 +29,7 @@
         </javaTypeResolver>
 
         <!-- 生成模型的包名和位置 -->
-        <javaModelGenerator targetPackage="com.myinsurance.model.persistant" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="com.myinsurance.model.po" targetProject="src/main/java">
             <property name="enableSubPackages" value="true" />
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
@@ -78,7 +78,7 @@
                enableDeleteByExample="true"
                enableSelectByExample="true"
                selectByExampleQueryId="true" />-->
-        <!--<table tableName="t_customer_hobby"
+        <!--<table tableName="t_customer_hobby" 
                domainObjectName="CustomerHobby"
                mapperName="ICustomerHobbyDao"
                enableCountByExample="true"

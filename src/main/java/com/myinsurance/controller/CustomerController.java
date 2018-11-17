@@ -1,6 +1,6 @@
 package com.myinsurance.controller;
 
-import com.myinsurance.model.view.Result;
+import com.myinsurance.model.vo.Result;
 import com.myinsurance.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
