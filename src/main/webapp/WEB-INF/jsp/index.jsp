@@ -27,7 +27,7 @@
 </div>
 <div class="modal fade" id="addMarkModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
     <div class="modal-dialog" role="document">
-        <div class="modal-remark">
+        <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
@@ -48,12 +48,42 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td>性别:</td>
+                                <td>
+                                    <div class="margin-bottom-5px">
+                                        <input type="radio" name="sex" data-type="sex" value="male" style="margin:0px;" checked="checked"/>男
+                                        &nbsp;
+                                        <input type="radio" name="sex" data-type="sex" value="female" style="margin:0px;"/>女
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>年龄:</td>
+                                <td><input type="text" data-type="age" placeholder="请输入年龄"/></td>
+                            </tr>
+                            <tr>
+                                <td>生日:</td>
+                                <td>
+                                    <div class="input-append date" id="birthdayInput">
+                                        <input class="span2" size="16" type="text">
+                                        <span class="add-on"><i class="icon-remove"></i></span>
+                                        <span class="add-on"><i class="icon-th"></i></span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>电话:</td>
                                 <td><input type="text" data-type="phone" placeholder="请输入客户电话"/></td>
                             </tr>
                             <tr>
                                 <td>地址:</td>
                                 <td><textarea data-type="address" placeholder="请输入联络地址"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    备注:
+                                </td>
+                                <td><textarea data-type="" placeholder="请输入联络地址"></textarea></td>
                             </tr>
                         </table>
                     </div>
@@ -67,7 +97,7 @@
                         <table>
                             <tr>
                                 <td>备注:</td>
-                                <td><textarea data-type="remark" placeholder="请输入标记点备注信息"></textarea></td>
+                                <td><textarea data-type="marker-remark" placeholder="请输入标记点备注信息"></textarea></td>
                             </tr>
                         </table>
                     </div>
@@ -82,7 +112,7 @@
 </div>
 <div class="modal fade" id="editMarkModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
     <div class="modal-dialog" role="document">
-        <div class="modal-remark">
+        <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
@@ -127,7 +157,7 @@
                         <table>
                             <tr>
                                 <td>备注:</td>
-                                <td><textarea data-type="remark" placeholder="请输入标记点备注信息"></textarea></td>
+                                <td><textarea data-type="marker-remark" placeholder="请输入标记点备注信息"></textarea></td>
                             </tr>
                         </table>
                     </div>

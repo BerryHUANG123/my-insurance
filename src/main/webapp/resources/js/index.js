@@ -38,6 +38,20 @@
         this.customerVoList = customerVoList;
     };*/
 
+    //注册日期插件
+    $("#birthdayInput").datetimepicker({
+        format:'yyyy-mm-dd',
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 4,
+        minView: 2,
+        forceParse: 1,
+        endDate:new Date(),
+        pickerPosition: "bottom-left"
+    });
 
     //首先初始化地图区域DIV需要的高度
     $("#map_canvas").css("height", (D.documentElement.clientHeight - 100) + 'px');
@@ -94,7 +108,7 @@
             $addMarkModal.find("[data-type='name']").val('');
             $addMarkModal.find("[data-type='phone']").val('');
             $addMarkModal.find("[data-type='address']").val(address);
-            $addMarkModal.find("[data-type='remark']").val('');
+            $addMarkModal.find("[data-type='marker-remark']").val('');
             $addMarkModal.modal("show");
         });
     });
@@ -160,7 +174,7 @@
             $addMarkModal.find("[data-type='name']").val('');
             $addMarkModal.find("[data-type='phone']").val('');
             $addMarkModal.find("[data-type='address']").val('');
-            $addMarkModal.find("[data-type='remark']").val('');
+            $addMarkModal.find("[data-type='marker-remark']").val('');
             $addMarkModal.modal("show");
         });
 
@@ -187,7 +201,7 @@
         var name = $addMarkModal.find("[data-type='name']").val();
         var phone = $addMarkModal.find("[data-type='phone']").val();
         var address = $addMarkModal.find("[data-type='address']").val();
-        var remark = $addMarkModal.find("[data-type='remark']").val();
+        var remark = $addMarkModal.find("[data-type='marker-remark']").val();
 
         if (!name) {
             commonFn.messaage('error', '请输入客户姓名!');
@@ -219,7 +233,7 @@
         var name = $editMarkModal.find("[data-type='name']").val();
         var phone = $editMarkModal.find("[data-type='phone']").val();
         var address = $editMarkModal.find("[data-type='address']").val();
-        var remark = $editMarkModal.find("[data-type='remark']").val();
+        var remark = $editMarkModal.find("[data-type='marker-remark']").val();
 
         if (!name) {
             commonFn.messaage('error', '请输入客户姓名!');
@@ -399,7 +413,7 @@
                 $editMarkModal.find("[data-type='name']").val(customerVo.name);
                 $editMarkModal.find("[data-type='phone']").val(customerVo.phone);
                 $editMarkModal.find("[data-type='address']").val(customerVo.address);
-                $editMarkModal.find("[data-type='remark']").val(markVo.remark);
+                $editMarkModal.find("[data-type='marker-remark']").val(markVo.remark);
                 $editMarkModal.modal("show");
             } else {
                 alert(result.msg);

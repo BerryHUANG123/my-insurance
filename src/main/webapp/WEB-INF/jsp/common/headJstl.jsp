@@ -11,7 +11,7 @@
     String comJsVer = "1.0";
     String indexJsVer="1.1";
 //项目css (css/*.css)
-    String comCssVer = "1.0";
+    String comCssVer = "1.1";
     String indexCssVer="1.1";
 //自写组件用(js/plugin/picZoom/picZoom.js)
     String componentsVer = "1.0";
