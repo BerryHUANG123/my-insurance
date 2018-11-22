@@ -40,7 +40,7 @@
 
     //注册日期插件
     $("#birthdayInput").datetimepicker({
-        format:'yyyy-mm-dd',
+        format: 'yyyy-mm-dd',
         language: 'zh-CN',
         weekStart: 1,
         todayBtn: 1,
@@ -49,7 +49,7 @@
         startView: 4,
         minView: 2,
         forceParse: 1,
-        endDate:new Date(),
+        endDate: new Date(),
         pickerPosition: "bottom-left"
     });
 
@@ -438,5 +438,28 @@
         }
     });
 
+    //生日输入框值改变事件(计算年龄回显)
+    $(D).off("input propertychange", "#addMarkModal [data-type='birthday'],#editMarkModal [data-type='birthday']")
+        .on("input propertychange", "#addMarkModal [data-type='birthday'],#editMarkModal [data-type='birthday']", function () {
+            var inputStr = $(this).val();
+            var age = commonFn.age(inputStr);
+            if (age != 0 && !age) {
+                //返回年龄不正确,清空年龄
+                $(this).closest('div.modal').find("[data-type='age']").val('');
+            }else{
+                //回显年龄
+                $(this).closest('div.modal').find("[data-type='age']").val(age);
+            }
+        });
+
+    $(D).off("changeDate", "#birthdayInput").on("changeDate", "#birthdayInput", function (ev) {
+        var date = ev.date;
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        var birthdayStr = year + "-" + month + "-" + day;
+        var age = commonFn.age(birthdayStr);
+        $("#addMarkModal [data-type='age'],#editMarkModal [data-type='age']").val(age);
+    });
 
 })(jQuery, window, document);

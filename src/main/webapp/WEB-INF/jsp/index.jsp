@@ -65,7 +65,7 @@
                                 <td>生日:</td>
                                 <td>
                                     <div class="input-append date" id="birthdayInput">
-                                        <input class="span2" size="16" type="text">
+                                        <input class="span2" size="16" type="text" data-type="birthday">
                                         <span class="add-on"><i class="icon-remove"></i></span>
                                         <span class="add-on"><i class="icon-th"></i></span>
                                     </div>
