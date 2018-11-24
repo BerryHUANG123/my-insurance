@@ -2,19 +2,19 @@ package com.myinsurance.service.impl;
 
 import com.google.common.collect.Lists;
 import com.myinsurance.dao.ICustomerDao;
+import com.myinsurance.dao.ICustomerHobbyDao;
 import com.myinsurance.dao.IMapMarkerDao;
 import com.myinsurance.model.dto.CustomerDto;
+import com.myinsurance.model.dto.CustomerHobbyDto;
 import com.myinsurance.model.dto.MarkDto;
-import com.myinsurance.model.po.Customer;
-import com.myinsurance.model.po.CustomerExample;
-import com.myinsurance.model.po.MapMarker;
-import com.myinsurance.model.po.MapMarkerExample;
+import com.myinsurance.model.po.*;
 import com.myinsurance.model.vo.CustomerVo;
 import com.myinsurance.model.vo.MarkVo;
 import com.myinsurance.model.vo.Result;
 import com.myinsurance.service.BaseService;
 import com.myinsurance.service.IMarkerService;
 import com.myinsurance.utils.ResultUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +28,8 @@ public class MarkServiceImpl extends BaseService implements IMarkerService {
     private IMapMarkerDao mapMarkerDao;
     @Autowired
     private ICustomerDao customerDao;
+    @Autowired
+    private ICustomerHobbyDao customerHobbyDao;
 
     @Override
     public Result get(Integer uid, Integer markId) {
@@ -76,8 +78,9 @@ public class MarkServiceImpl extends BaseService implements IMarkerService {
             customer = new Customer();
             customer.setUid(uid);
             customer.setName(customerDTO.getName());
-            customer.setSex("unknown");
-            customer.setAge(1000);
+            customer.setSex(customerDTO.getSex());
+            customer.setAge(customerDTO.getAge());
+            customer.setBirthday(customerDTO.getBirthday());
             customer.setPhone(customerDTO.getPhone());
             customer.setAddress(customerDTO.getAddress());
             customer.setRemark(customerDTO.getRemark());
@@ -90,6 +93,21 @@ public class MarkServiceImpl extends BaseService implements IMarkerService {
             customerExampleCriteria1.andNameEqualTo(customer.getName());
             List<Customer> customerList1 = customerDao.selectByExample(customerExample1);
             customer = customerList1.get(0);
+
+            //插入爱好数据
+            List<CustomerHobbyDto> customerHobbyDtoList = customerDTO.getCustomerHobbyDtoList();
+            if (customerHobbyDtoList != null && !customerHobbyDtoList.isEmpty()) {
+                for (CustomerHobbyDto customerHobbyDto : customerHobbyDtoList) {
+                    CustomerHobby customerHobby = new CustomerHobby();
+                    customerHobby.setUid(uid);
+                    customerHobby.setCustomerId(customer.getId());
+                    customerHobby.setHobby(customerHobbyDto.getHobby());
+                    customerHobby.setSpecificHobby(customerHobbyDto.getSpecificHobby());
+                    customerHobby.setCustomHobby(customerHobbyDto.getCustomHobby());
+                    customerHobby.setCreateTime(new Date());
+                    customerHobbyDao.insertSelective(customerHobby);
+                }
+            }
         }
 
         //创建标记点

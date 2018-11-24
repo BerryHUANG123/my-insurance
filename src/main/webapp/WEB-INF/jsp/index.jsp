@@ -44,46 +44,62 @@
                             <tr>
                                 <td>姓名:</td>
                                 <td>
-                                    <input type="text" data-type="name" placeholder="请输入客户姓名"/>
+                                    <input class="form-control" type="text" data-type="name" placeholder="请输入客户姓名"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>性别:</td>
                                 <td>
                                     <div class="margin-bottom-5px">
-                                        <input type="radio" name="sex" data-type="sex" value="male" style="margin:0px;" checked="checked"/>男
+                                        <label class="radio-inline">
+                                            <input type="radio" name="add-sex" data-type="sex" value="male" checked="checked"/>男
+                                        </label>
                                         &nbsp;
-                                        <input type="radio" name="sex" data-type="sex" value="female" style="margin:0px;"/>女
+                                        <label class="radio-inline">
+                                            <input type="radio" name="add-sex" data-type="sex" value="female"/>女
+                                        </label>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>年龄:</td>
-                                <td><input type="text" data-type="age" placeholder="请输入年龄"/></td>
+                                <td><input class="form-control" type="text" data-type="age" placeholder="请输入年龄"/></td>
                             </tr>
                             <tr>
                                 <td>生日:</td>
                                 <td>
-                                    <div class="input-append date" id="birthdayInput">
-                                        <input class="span2" size="16" type="text" data-type="birthday">
-                                        <span class="add-on"><i class="icon-remove"></i></span>
-                                        <span class="add-on"><i class="icon-th"></i></span>
+                                    <div class="input-group date form_date" id="birthdayInput">
+                                        <input class="form-control" data-type="birthday" size="16" type="text" value="">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-calendar"></span></span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>爱好:</td>
+                                <td class="bg-color-darkgray border-radius-5px padding-left-5px padding-top-5px padding-bottom-5px">
+                                    <div class="pull-left" data-type="hobbyDiv"></div>
+                                    <div class="padding-top-5px padding-left-5px padding-right-5px pull-right">
+                                        <a class="cursor-pointer" href="javascript:;" data-type="addHobbyBtn">[+]</a>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>电话:</td>
-                                <td><input type="text" data-type="phone" placeholder="请输入客户电话"/></td>
+                                <td><input class="form-control" type="text" data-type="phone" placeholder="请输入客户电话"/>
+                                </td>
                             </tr>
                             <tr>
                                 <td>地址:</td>
-                                <td><textarea data-type="address" placeholder="请输入联络地址"></textarea></td>
+                                <td><textarea class="form-control" data-type="address" placeholder="请输入联络地址"></textarea>
+                                </td>
                             </tr>
                             <tr>
                                 <td>
                                     备注:
                                 </td>
-                                <td><textarea data-type="" placeholder="请输入联络地址"></textarea></td>
+                                <td><textarea class="form-control" data-type="customer-remark" placeholder="请输入客户备注信息"></textarea></td>
                             </tr>
                         </table>
                     </div>
@@ -97,7 +113,7 @@
                         <table>
                             <tr>
                                 <td>备注:</td>
-                                <td><textarea data-type="marker-remark" placeholder="请输入标记点备注信息"></textarea></td>
+                                <td><textarea class="form-control" data-type="marker-remark" placeholder="请输入标记点备注信息"></textarea></td>
                             </tr>
                         </table>
                     </div>
@@ -134,16 +150,63 @@
                             <tr>
                                 <td>姓名:</td>
                                 <td>
-                                    <input type="text" data-type="name" placeholder="请输入客户姓名"/>
+                                    <input class="form-control" type="text" data-type="name" placeholder="请输入客户姓名"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>性别:</td>
+                                <td>
+                                    <div class="margin-bottom-5px">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="edit-sex" data-type="sex" value="male"
+                                                   checked="checked"/>男
+                                        </label>
+                                        &nbsp;
+                                        <label class="radio-inline">
+                                            <input type="radio" name="edit-sex" data-type="sex" value="female"/>女
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>年龄:</td>
+                                <td><input class="form-control" type="text" data-type="age" placeholder="请输入年龄"/></td>
+                            </tr>
+                            <tr>
+                                <td>生日:</td>
+                                <td>
+                                    <div class="input-group date form_date" id="">
+                                        <input class="form-control" data-type="birthday" size="16" type="text" value="">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-calendar"></span></span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>爱好:</td>
+                                <td class="bg-color-darkgray border-radius-5px padding-left-5px padding-top-5px padding-bottom-5px">
+                                    <div class="pull-left" data-type="hobbyDiv"></div>
+                                    <div class="padding-top-5px padding-left-5px padding-right-5px pull-right">
+                                        <a class="cursor-pointer" href="javascript:;" data-type="addHobbyBtn">[+]</a>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>电话:</td>
-                                <td><input type="text" data-type="phone" placeholder="请输入客户电话"/></td>
+                                <td><input class="form-control" type="text" data-type="phone" placeholder="请输入客户电话"/>
+                                </td>
                             </tr>
                             <tr>
                                 <td>地址:</td>
-                                <td><textarea data-type="address" placeholder="请输入联络地址"></textarea></td>
+                                <td><textarea class="form-control" data-type="address" placeholder="请输入联络地址"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    备注:
+                                </td>
+                                <td><textarea class="form-control" data-type="customer-remark" placeholder="请输入客户备注信息"></textarea></td>
                             </tr>
                         </table>
                     </div>
@@ -157,7 +220,7 @@
                         <table>
                             <tr>
                                 <td>备注:</td>
-                                <td><textarea data-type="marker-remark" placeholder="请输入标记点备注信息"></textarea></td>
+                                <td><textarea class="form-control" data-type="marker-remark" placeholder="请输入标记点备注信息"></textarea></td>
                             </tr>
                         </table>
                     </div>

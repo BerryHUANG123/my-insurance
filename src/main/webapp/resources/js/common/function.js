@@ -53,9 +53,10 @@ var commonFn = (function ($, D, W) {
         //后续再增加相关的如日期判断等JS关于日期处理的相关方法
         /*根据出生日期算出年龄*/
         age: function (strBirthday) {
+            console.log(strBirthday);
             var returnAge;
 
-            var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+            var reg = /^[1-9]\d{3}-([0]?[1-9]|1[0-2])-([0]?[1-9]|[1-2][0-9]|3[0-1])$/;
             var regExp = new RegExp(reg);
             if(!regExp.test(strBirthday)){
                 return returnAge;

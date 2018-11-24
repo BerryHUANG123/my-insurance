@@ -30,7 +30,7 @@ public class MarkerController extends BaseController {
 
     @RequestMapping("save")
     @ResponseBody
-    public Result save(MarkDto markDTO) {
+    public Result save(@RequestBody MarkDto markDTO) {
         return markerService.save(getUid(), markDTO);
     }
 

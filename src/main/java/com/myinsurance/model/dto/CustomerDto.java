@@ -1,6 +1,10 @@
 package com.myinsurance.model.dto;
 
+import com.myinsurance.model.po.CustomerHobby;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
+import java.util.List;
 
 public class CustomerDto extends BaseDto {
 
@@ -10,9 +14,12 @@ public class CustomerDto extends BaseDto {
 
     private String sex;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
     private Integer age;
+
+    private List<CustomerHobbyDto> customerHobbyDtoList;
 
     private String phone;
 
@@ -82,6 +89,14 @@ public class CustomerDto extends BaseDto {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public List<CustomerHobbyDto> getCustomerHobbyDtoList() {
+        return customerHobbyDtoList;
+    }
+
+    public void setCustomerHobbyDtoList(List<CustomerHobbyDto> customerHobbyDtoList) {
+        this.customerHobbyDtoList = customerHobbyDtoList;
     }
 }
 

@@ -1,11 +1,13 @@
 (function ($, W, D) {
+
     //Dto对象
-    var CustomerDto = function (id, name, sex, birthday, age, phone, address, remark) {
+    var CustomerDto = function (id, name, sex, birthday, age, customerHobbyDtoList, phone, address, remark) {
         this.id = id;
         this.name = name;
         this.sex = sex;
         this.birthday = birthday;
         this.age = age;
+        this.customerHobbyDtoList = customerHobbyDtoList;
         this.phone = phone;
         this.address = address;
         this.remark = remark;
@@ -18,6 +20,14 @@
         this.lat = lat;
         this.customerDtoList = customerDtoList;
     };
+
+    var CustomerHobbyDto = function (id, customerId, hobby, specificHobby, customHobby) {
+        this.id = id;
+        this.customerId = customerId;
+        this.hobby = hobby;
+        this.specificHobby = specificHobby;
+        this.customHobby = customHobby;
+    }
 
     //Vo对象
     /*var CustomerVo = function (id, name, sex, birthday, age, phone, address, remark) {
@@ -142,7 +152,7 @@
         geolocationControl = new AMap.Geolocation();
     });
 
-//当前位置控件开关按钮单击事件
+    //当前位置控件开关按钮单击事件
     $(D).off("click", "#geolocationSwitch").on("click", "#geolocationSwitch", function () {
         var checked = $(this).prop("checked");
         if (checked) {
@@ -161,7 +171,6 @@
             mapTypeControl.hide();
         }
     });
-
 
     //从服务器读取已保存的所有标注并回显
     map.on('complete', function () {
@@ -199,30 +208,52 @@
         var lng = $addMarkModal.find("[data-type='lng']").html();
         var lat = $addMarkModal.find("[data-type='lat']").html();
         var name = $addMarkModal.find("[data-type='name']").val();
+        var sex = $addMarkModal.find("[data-type='sex']").val();
+        var age = $addMarkModal.find("[data-type='age']").val();
+        var birthday = $addMarkModal.find("[data-type='birthday']").val();
         var phone = $addMarkModal.find("[data-type='phone']").val();
         var address = $addMarkModal.find("[data-type='address']").val();
-        var remark = $addMarkModal.find("[data-type='marker-remark']").val();
+        var customerRemark = $addMarkModal.find("[data-type='customer-remark']").val();
+        var markerRemark = $addMarkModal.find("[data-type='marker-remark']").val();
+
+        //组成爱好list
+        var customerHobbyDtoList;
+        var $oneHobbyDivList = $addMarkModal.find('[data-type="oneHobbyDiv"]');
+        if ($oneHobbyDivList.length > 0) {
+            customerHobbyDtoList = [];
+            for (var i = 0; i < $oneHobbyDivList.length; i++) {
+                var $oneHobbyDiv = $oneHobbyDivList.eq(i);
+                var hobby = $oneHobbyDiv.find("[data-type='parentHobby']").val();
+                var specificHobby = null;
+                if (hobby.indexOf("other") < 0) {
+                    specificHobby = $oneHobbyDiv.find("[data-type='childHobby']").val();
+                }
+                var customHobby = null;
+                if (hobby.indexOf("other") >= 0 || (specificHobby && specificHobby.indexOf("other") >= 0)) {
+                    customHobby = $oneHobbyDiv.find("[data-type='customHobby']").val();
+                }
+                customerHobbyDtoList.push(new CustomerHobbyDto(null, null, hobby, specificHobby, customHobby));
+            }
+        }
 
         if (!name) {
             commonFn.messaage('error', '请输入客户姓名!');
             return;
         }
         commonFn.mLoading.show();
-        $.post(
-            commonFn.baseUrl + "marker/save.json",
-            new MarkDto(null, remark, lng, lat, [new CustomerDto(null, name, null, null, phone, address, remark)]),
+        commonFn.ajax(commonFn.baseUrl + "marker/save.json",
+            new MarkDto(null, markerRemark, lng, lat, [new CustomerDto(null, name, sex, birthday, age, customerHobbyDtoList, phone, address, customerRemark)]),
             function (result) {
                 commonFn.mLoading.hide();
                 if (result.success) {
                     showMark(result.data);
                     //更改地图中心点
-                    map.setCenter([data.lng, data.lat]);
+                    map.setCenter([result.data.lng, result.data.lat]);
                     $addMarkModal.modal("hide");
                 } else {
                     alert("出现错误!");
                 }
-            }
-        );
+            });
     });
 
     //编辑标注保存按钮单击事件
@@ -446,7 +477,7 @@
             if (age != 0 && !age) {
                 //返回年龄不正确,清空年龄
                 $(this).closest('div.modal').find("[data-type='age']").val('');
-            }else{
+            } else {
                 //回显年龄
                 $(this).closest('div.modal').find("[data-type='age']").val(age);
             }
@@ -459,7 +490,77 @@
         var day = date.getDate();
         var birthdayStr = year + "-" + month + "-" + day;
         var age = commonFn.age(birthdayStr);
-        $("#addMarkModal [data-type='age'],#editMarkModal [data-type='age']").val(age);
+        $(this).closest('div.modal').find("[data-type='age']").val(age);
     });
 
+    $(D).off("click", "#addMarkModal [data-type='addHobbyBtn'],#editMarkModal [data-type='addHobbyBtn']")
+        .on("click", "#addMarkModal [data-type='addHobbyBtn'],#editMarkModal [data-type='addHobbyBtn']", function () {
+            generateHobbyDiv($(this));
+        });
+
+
+    $(D).off('change', '#addMarkModal [data-type="childHobby"],#editMarkModal [data-type="childHobby"]')
+        .on('change', '#addMarkModal [data-type="childHobby"],#editMarkModal [data-type="childHobby"]', function () {
+
+            if ($(this).val().indexOf('other') >= 0) {
+                $(this).closest('[data-type="oneHobbyDiv"]').find('[data-type="customHobby"]').val('').removeClass('hidden');
+            } else {
+                $(this).closest('[data-type="oneHobbyDiv"]').find('[data-type="customHobby"]').addClass('hidden');
+            }
+        });
+
+    $(D).off('change', '#addMarkModal [data-type="parentHobby"],#editMarkModal [data-type="parentHobby"]')
+        .on('change', '#addMarkModal [data-type="parentHobby"],#editMarkModal [data-type="parentHobby"]', function () {
+            //生成子hobby节点并回显
+            var $this = $(this);
+            var $oneHobbyDiv = $this.closest("[data-type='oneHobbyDiv']");
+            var parentHobby = $this.val();
+            if (parentHobby != 'other') {
+                var $childHobby = $oneHobbyDiv.find("[data-type='childHobby']");
+                $childHobby.empty().append("<option>请选择</option>");
+                if (parentHobby) {
+                    var childHobbyList = commonObject.hobby.getChildHobbyList(parentHobby);
+                    $.each(childHobbyList, function (index, element) {
+                        $childHobby.append('<option value="' + element.key + '">' + element.cn_name + '</option>');
+                    });
+                }
+                $oneHobbyDiv.find("[data-type='customHobby']").addClass("hidden");
+                $childHobby.removeClass("hidden");
+            } else {
+                $oneHobbyDiv.find("[data-type='childHobby']").addClass("hidden");
+                $oneHobbyDiv.find("[data-type='customHobby']").val('').removeClass("hidden");
+            }
+        });
+
+    $(D).off('click', '#addMarkModal [data-type="removeHobbyBtn"],#editMarkModal [data-type="removeHobbyBtn"]')
+        .on('click', '#addMarkModal [data-type="removeHobbyBtn"],#editMarkModal [data-type="removeHobbyBtn"]', function () {
+            $(this).closest("[data-type='oneHobbyDiv']").remove();
+        });
+
+    //生成hobbyDiv方法
+    var generateHobbyDiv = function ($object) {
+        var $hobbyDiv = $object.closest("div.modal").find("[data-type='hobbyDiv']");
+        var $oneHobbyDiv = $('<div data-type="oneHobbyDiv"></div>');
+        var $parentHobbyDiv = $('<div class="pull-left" data-type="parentHobbyDiv"></div>');
+
+        //读取公共hobby并设置父hobby
+        var $parentHobbySelect = $('<select data-type="parentHobby"><option>请选择</option></select>');
+        var parentHobbyList = commonObject.hobby.getParentHobbyList();
+        $.each(parentHobbyList, function (index, element) {
+            $parentHobbySelect.append('<option value="' + element.key + '">' + element.cn_name + '</option>');
+        });
+        $parentHobbyDiv.append($parentHobbySelect);
+
+        var $childHobbyDiv = $('<div class="pull-left" data-type="childHobbyDiv"><select data-type="childHobby"><option>请选择</option></select></div>');
+        var $customHobbyDiv = $('<div class="pull-left" data-type="customHobbyDiv"><input type="text" class="hidden" data-type="customHobby" size="5" style="height: 20px;"/></div>');
+        var $operateHobbyDiv = $('<div class="pull-left" date-type="operateHobbyDiv">' +
+            '<span class="glyphicon glyphicon-remove cursor-pointer" data-type="removeHobbyBtn" style="margin-left: 2px;margin-top: 2px;"></span></div>');
+        var $clearFloatDiv = $('<div class="clear-float"></div>');
+        $oneHobbyDiv.append($parentHobbyDiv);
+        $oneHobbyDiv.append($childHobbyDiv);
+        $oneHobbyDiv.append($customHobbyDiv);
+        $oneHobbyDiv.append($operateHobbyDiv);
+        $oneHobbyDiv.append($clearFloatDiv);
+        $hobbyDiv.append($oneHobbyDiv);
+    };
 })(jQuery, window, document);
