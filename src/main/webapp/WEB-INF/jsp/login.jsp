@@ -17,9 +17,19 @@
 <div class="login-box">
     <p class="login-title">MY-INSURANCE</p>
     <form method="post" action="/login/doLogin.json">
-        <p>姓名：<input type="text" name="userName" size="10"></p>
-        <p>密码：<input type="password" name="password" size="10"></p>
-        <p style="color: red;">${warning}</p>
+        <table style="margin: auto;">
+            <tr>
+                <td>用户名：</td>
+                <td><input class="form-control" type="text" name="userName" size="10"></td>
+            </tr>
+            <tr>
+                <td>密码：</td>
+                <td><input class="form-control" type="password" name="password" size="10"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><p style="color: red;">${warning}</p></td>
+            </tr>
+        </table>
         <p><input class="btn btn-primary" type="submit" value="确定">
             <input class="btn" type="reset" value="取消"></p>
     </form>

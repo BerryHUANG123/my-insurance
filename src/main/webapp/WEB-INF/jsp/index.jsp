@@ -68,7 +68,7 @@
                             <tr>
                                 <td>生日:</td>
                                 <td>
-                                    <div class="input-group date form_date" id="birthdayInput">
+                                    <div class="input-group date form_date" data-type="birthdayInput">
                                         <input class="form-control" data-type="birthday" size="16" type="text" value="">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                                         <span class="input-group-addon"><span
@@ -175,11 +175,10 @@
                             <tr>
                                 <td>生日:</td>
                                 <td>
-                                    <div class="input-group date form_date" id="">
+                                    <div class="input-group date form_date" data-type="birthdayInput">
                                         <input class="form-control" data-type="birthday" size="16" type="text" value="">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                                        <span class="input-group-addon"><span
-                                                class="glyphicon glyphicon-calendar"></span></span>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                                     </div>
                                 </td>
                             </tr>

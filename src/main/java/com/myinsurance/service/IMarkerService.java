@@ -12,9 +12,9 @@ public interface IMarkerService {
 
     Result list(Integer uid);
 
-    Result save(Integer uid, MarkDto markDo);
+    Result save(Integer uid, MarkDto markDto);
 
-    Result edit(Integer uid, MarkDto markDo);
+    Result edit(Integer uid, MarkDto markDto);
 
     Result remove(Integer uid,Integer markId);
 }

@@ -58,7 +58,7 @@ var commonFn = (function ($, D, W) {
 
             var reg = /^[1-9]\d{3}-([0]?[1-9]|1[0-2])-([0]?[1-9]|[1-2][0-9]|3[0-1])$/;
             var regExp = new RegExp(reg);
-            if(!regExp.test(strBirthday)){
+            if (!regExp.test(strBirthday)) {
                 return returnAge;
             }
             var strBirthdayArr = strBirthday.split("-");
@@ -101,6 +101,46 @@ var commonFn = (function ($, D, W) {
                 }
             }
             return returnAge;//返回周岁年龄
+        },
+        /**
+         * 获取中文性别
+         * @param sex
+         * @returns {string}
+         */
+        sexFormat: function (sex) {
+            switch (sex) {
+                case 'male':
+                    return '男';
+                case 'female':
+                    return '女';
+                default:
+                    return 'unknown';
+            }
+        },
+        /**
+         * 根据毫秒值返回指定格式的日期.
+         * @param dateMsValue
+         */
+        dateFormat: function (dateMsValue, format) {
+            if (!dateMsValue) {
+                return null;
+            }
+            var date = new Date(dateMsValue);
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var day = date.getDate();
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var seconds = date.getSeconds();
+            var str;
+            switch (format) {
+                case 'yyyy-MM-dd':
+                    str = year + '-' + month + '-' + day;
+                    break;
+                default:
+                    str = year + '-' + month + '-' + day;
+            }
+            return str;
         }
     };
 

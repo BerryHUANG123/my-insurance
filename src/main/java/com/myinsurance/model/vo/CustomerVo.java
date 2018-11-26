@@ -2,6 +2,7 @@ package com.myinsurance.model.vo;
 
 
 import java.util.Date;
+import java.util.List;
 
 public class CustomerVo extends BaseVo {
 
@@ -15,6 +16,8 @@ public class CustomerVo extends BaseVo {
 
     private Integer age;
 
+    private List<CustomerHobbyVo> customerHobbyVoList;
+
     private String phone;
 
     private String address;
@@ -25,11 +28,12 @@ public class CustomerVo extends BaseVo {
 
     }
 
-    public CustomerVo(Integer id, String name, String sex, Date birthday, String phone, String address, String remark) {
+    public CustomerVo(Integer id, String name, String sex, Date birthday,Integer age, String phone, String address, String remark) {
         this.id = id;
         this.name = name;
         this.sex = sex;
         this.birthday = birthday;
+        this.age = age;
         this.phone = phone;
         this.address = address;
         this.remark = remark;
@@ -98,6 +102,14 @@ public class CustomerVo extends BaseVo {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public List<CustomerHobbyVo> getCustomerHobbyVoList() {
+        return customerHobbyVoList;
+    }
+
+    public void setCustomerHobbyVoList(List<CustomerHobbyVo> customerHobbyVoList) {
+        this.customerHobbyVoList = customerHobbyVoList;
     }
 }
 

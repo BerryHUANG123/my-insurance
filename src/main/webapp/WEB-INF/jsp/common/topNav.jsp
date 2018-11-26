@@ -2,8 +2,8 @@
 <link rel="stylesheet" type="text/css" href="<%=basePath%>/resources/css/common/topNav.css"/>
 <div id="topNav">
     <div id="topNavMenuDiv">
-        <div class="pull-left" id="topNavTitleDiv">MY-INSURANCE</div>
-        <div class="pull-left" id="navSeparateDiv">||</div>
+        <div class="pull-left" id="topNavTitleDiv"><img src="<%=basePath%>/resources/img/favicon.ico"/></div>
+        <div class="pull-left" id="navSeparateDiv"></div>
         <ul class="pull-left" id="topNavUl">
             <li data-name="map"><a href="<%=basePath%>/index/page.htm">标注管理</a></li>
             <li data-name="customer"><a href="<%=basePath%>/customer/page.htm">客户管理</a></li>
