@@ -52,7 +52,8 @@
                                 <td>
                                     <div class="margin-bottom-5px">
                                         <label class="radio-inline">
-                                            <input type="radio" name="add-sex" data-type="sex" value="male" checked="checked"/>男
+                                            <input type="radio" name="add-sex" data-type="sex" value="male"
+                                                   checked="checked"/>男
                                         </label>
                                         &nbsp;
                                         <label class="radio-inline">
@@ -99,7 +100,8 @@
                                 <td>
                                     备注:
                                 </td>
-                                <td><textarea class="form-control" data-type="customer-remark" placeholder="请输入客户备注信息"></textarea></td>
+                                <td><textarea class="form-control" data-type="customer-remark"
+                                              placeholder="请输入客户备注信息"></textarea></td>
                             </tr>
                         </table>
                     </div>
@@ -113,7 +115,8 @@
                         <table>
                             <tr>
                                 <td>备注:</td>
-                                <td><textarea class="form-control" data-type="marker-remark" placeholder="请输入标记点备注信息"></textarea></td>
+                                <td><textarea class="form-control" data-type="marker-remark"
+                                              placeholder="请输入标记点备注信息"></textarea></td>
                             </tr>
                         </table>
                     </div>
@@ -178,7 +181,8 @@
                                     <div class="input-group date form_date" data-type="birthdayInput">
                                         <input class="form-control" data-type="birthday" size="16" type="text" value="">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-calendar"></span></span>
                                     </div>
                                 </td>
                             </tr>
@@ -205,7 +209,8 @@
                                 <td>
                                     备注:
                                 </td>
-                                <td><textarea class="form-control" data-type="customer-remark" placeholder="请输入客户备注信息"></textarea></td>
+                                <td><textarea class="form-control" data-type="customer-remark"
+                                              placeholder="请输入客户备注信息"></textarea></td>
                             </tr>
                         </table>
                     </div>
@@ -219,7 +224,8 @@
                         <table>
                             <tr>
                                 <td>备注:</td>
-                                <td><textarea class="form-control" data-type="marker-remark" placeholder="请输入标记点备注信息"></textarea></td>
+                                <td><textarea class="form-control" data-type="marker-remark"
+                                              placeholder="请输入标记点备注信息"></textarea></td>
                             </tr>
                         </table>
                     </div>
@@ -228,6 +234,48 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary" id="editMarkBtn">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="editNoteModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">编辑Note</h4>
+            </div>
+            <div class="modal-body">
+                <div class="margin-left-5px margin-right-5px" class="pageTableDiv" id="customerNotePageTable">
+                    <div class="noData text-center border-width-1px border-style-solid border-color-darkgray border-radius-5px"
+                         style="width:100%;height: 100px;line-height: 100px">
+                        <span class="ft-weight-bolder">暂无数据</span>
+                    </div>
+                    <div class="hidden hasData">
+                        <div class="page-table">
+                            <table class="table" id="customerNoteTable">
+                                <thead>
+                                <tr>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="page-index">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>
     </div>

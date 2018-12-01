@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.myinsurance.dao.ICustomerDao;
 import com.myinsurance.model.po.Customer;
 import com.myinsurance.model.po.CustomerExample;
-import com.myinsurance.model.vo.Page;
+import com.myinsurance.model.vo.PageVo;
 import com.myinsurance.model.vo.Result;
 import com.myinsurance.service.ICustomerService;
 import com.myinsurance.utils.ResultUtil;
@@ -31,7 +31,7 @@ public class CustomerServiceImpl implements ICustomerService {
         criteria.andNameLike("黄%");
        List<Customer> list =  customerDao.selectByExample(customerExample);
         PageInfo<Customer> pageInfo = new PageInfo<>(list);
-        Page<Customer> resultPage = new Page<>(pageInfo.getTotal(),pageInfo.getPageSize(),pageInfo.getPageNum(),list);
-        return ResultUtil.returnSuccess(resultPage);
+        PageVo<Customer> resultPageVo = new PageVo<>(pageInfo.getTotal(),pageInfo.getPageSize(),pageInfo.getPageNum(),list);
+        return ResultUtil.returnSuccess(resultPageVo);
     }
 }

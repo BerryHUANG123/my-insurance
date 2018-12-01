@@ -118,6 +118,9 @@ body {
 .border-color-darkgray {
     border-color: darkgray;
 }
+.border-color-black {
+    border-color: black;
+}
 
 .border-radius-5px {
     border-radius: 5px;
@@ -133,4 +136,8 @@ body {
 
 .width-200px {
     width: 200px;
+}
+
+.width-100per {
+    width: 100%;
 }

@@ -2,7 +2,7 @@ package com.myinsurance.model.vo;
 
 import java.util.List;
 
-public class Page<T> {
+public class PageVo<T> extends BaseVo{
 
     private Long totalSize;
 
@@ -12,11 +12,11 @@ public class Page<T> {
 
     private List<T> rows;
 
-    public Page() {
+    public PageVo() {
 
     }
 
-    public Page(Long totalSize, Integer pageSize, Integer pageNum, List<T> rows) {
+    public PageVo(Long totalSize, Integer pageSize, Integer pageNum, List<T> rows) {
         this.totalSize = totalSize;
         this.pageSize = pageSize;
         this.pageNum = pageNum;

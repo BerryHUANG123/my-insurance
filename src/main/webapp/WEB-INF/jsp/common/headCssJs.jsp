@@ -31,5 +31,5 @@
 
 <%--project--%>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>/resources/css/common/common.css?ver=<%=comCssVer%>"/>
-<script type="text/javascript" src="<%=basePath%>/resources/js/common/function.js?ver=<%=comJsVer%>"></script>
-<script type="text/javascript" src="<%=basePath%>/resources/js/common/object.js?ver=<%=comJsVer%>"></script>
+<script type="text/javascript" src="<%=basePath%>/resources/js/common/commonFn.js?ver=<%=comJsVer%>"></script>
+<script type="text/javascript" src="<%=basePath%>/resources/js/common/commonObject.js?ver=<%=comJsVer%>"></script>
