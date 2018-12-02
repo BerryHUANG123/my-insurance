@@ -27,7 +27,8 @@ body {
 .bg-color-white {
     background-color: white !important;
 }
-.bg-color-deepskyblue{
+
+.bg-color-deepskyblue {
     background-color: deepskyblue !important;
 }
 
@@ -39,8 +40,12 @@ body {
     color: white;
 }
 
-.ft-weight-bolder{
+.ft-weight-bolder {
     font-weight: bolder;
+}
+
+.margin-auto {
+    margin: auto auto;
 }
 
 .margin-left-5px {
@@ -75,16 +80,20 @@ body {
     margin-bottom: 10px;
 }
 
-.padding-all-2px{
+.padding-all-2px {
     padding: 2px 2px 2px 2px;
 }
 
-.padding-all-5px{
+.padding-all-5px {
     padding: 5px 5px 5px 5px;
 }
 
 .padding-top-5px {
     padding-top: 5px;
+}
+
+.padding-top-7px {
+    padding-top: 7px;
 }
 
 .padding-top-44px {
@@ -118,6 +127,7 @@ body {
 .border-color-darkgray {
     border-color: darkgray;
 }
+
 .border-color-black {
     border-color: black;
 }

@@ -29,18 +29,19 @@
         this.customHobby = customHobby;
     };
 
-    var CustomerNoteDto = function (id, content) {
+    var CustomerNoteDto = function (id, customerId, content) {
         this.id = id;
+        this.customerId = customerId;
         this.content = content;
     };
 
-    var CustomerNotePageDto = function (customerId, pageSize, pageNum, orderField, desc) {
+    var CustomerNotePageDto = function (customerId, pageSize, pageNum, orderField, desc,searchContent) {
         this.customerId = customerId;
-
         this.pageSize = pageSize;
         this.pageNum = pageNum;
         this.orderField = orderField;
         this.desc = desc;
+        this.searchContent = searchContent;
     };
 
     //Vo对象
@@ -548,7 +549,10 @@
     var customerNoteTable;
     //编辑note按钮单击事件
     $(D).off("click", "[data-type='editNoteBtn']").on("click", "[data-type='editNoteBtn']", function () {
-        customerNoteTable = new commonFn.PageTable($("#customerNotePageTable"), commonFn.baseUrl + "customerNote/pageData.json", new CustomerNotePageDto($(this).attr('data-customerId'), 5, 1, "createTime", false), function (rows) {
+        var customerId = $(this).attr('data-customerId');
+        var $createCustomerNoteDiv = $("#createCustomerNoteDiv");
+        $createCustomerNoteDiv.find('[data-type="saveBtn"]').attr('data-customerId', customerId);
+        customerNoteTable = new commonFn.PageTable($("#customerNotePageTable"), commonFn.baseUrl + "customerNote/pageData.json", new CustomerNotePageDto(customerId, 5, 1, "createTime", true), function (rows) {
             //此处写如何渲染列表到table中的逻辑
             commonFn.mLoading.show();
             var $customerNotePageTable = $("#customerNotePageTable");
@@ -585,6 +589,8 @@
             commonFn.mLoading.hide();
         });
         customerNoteTable.reload();
+        $createCustomerNoteDiv.addClass('hidden');
+        $("#showCustomerNoteDiv").removeClass('hidden');
         $("#editNoteModal").modal("show");
     });
 
@@ -608,7 +614,7 @@
             commonFn.messaage('error', '请输入Note内容!');
             return;
         }
-        var customerNoteDto = new CustomerNoteDto(id, content);
+        var customerNoteDto = new CustomerNoteDto(id, null, content);
 
         commonFn.mLoading.show();
         commonFn.ajaxPost('customerNote/edit.json', customerNoteDto, function (result) {
@@ -637,22 +643,70 @@
         var id = $(this).attr('data-customerNoteId');
         commonFn.mLoading.show();
         $.post(
-            commonFn.baseUrl+'customerNote/delete.json',
-            {id:id},
-            function(result){
+            commonFn.baseUrl + 'customerNote/delete.json',
+            {id: id},
+            function (result) {
                 commonFn.mLoading.hide();
-                if(result.success){
-                    commonFn.messaage('success','删除成功!');
+                if (result.success) {
+                    commonFn.messaage('success', '删除成功!');
                     customerNoteTable.refresh();
-                }else{
-                    commonFn.messaage('error',result.msg);
+                } else {
+                    commonFn.messaage('error', result.msg);
                 }
             }
         );
 
 
+    });
+
+    //新建Note按钮单击事件
+    $(D).off('click', '#showCustomerNoteDiv [data-type="createBtn"]').on('click', '#showCustomerNoteDiv [data-type="createBtn"]', function () {
+        var $showCustomerNoteDiv = $('#showCustomerNoteDiv');
+        var $createCustomerNoteDiv = $('#createCustomerNoteDiv');
+
+        //清空信息
+        $createCustomerNoteDiv.find('[data-type="content"]').val('');
+
+        $showCustomerNoteDiv.addClass('hidden');
+        $createCustomerNoteDiv.removeClass('hidden');
+    });
+
+    //新建Note的保存按钮单击事件
+    $(D).off('click', '#createCustomerNoteDiv [data-type="saveBtn"]').on('click', '#createCustomerNoteDiv [data-type="saveBtn"]', function () {
+        //获取数据
+        var $createCustomerNoteDiv = $('#createCustomerNoteDiv');
+        var customerId = $createCustomerNoteDiv.find('[data-type="saveBtn"]').attr('data-customerId');
+        var content = $createCustomerNoteDiv.find('[data-type="content"]').val();
+        if (!content) {
+            commonFn.messaage('error', '请输入Note内容!');
+            return;
+        }
+
+        commonFn.mLoading.show();
+        commonFn.ajaxPost(
+            commonFn.baseUrl + 'customerNote/create.json',
+            new CustomerNoteDto(null, customerId, content),
+            function (result) {
+                commonFn.mLoading.hide();
+                if (result.success) {
+                    commonFn.messaage('success', '保存成功!');
+                } else {
+                    commonFn.messaage('success', result.msg);
+                }
+            }
+        );
 
     });
+
+    //新建Note的返回按钮单击事件
+    $(D).off('click', '#createCustomerNoteDiv [data-type="returnBtn"]').on('click', '#createCustomerNoteDiv [data-type="returnBtn"]', function () {
+        var $showCustomerNoteDiv = $('#showCustomerNoteDiv');
+        var $createCustomerNoteDiv = $('#createCustomerNoteDiv');
+        customerNoteTable.reload();
+        $showCustomerNoteDiv.removeClass('hidden');
+        $createCustomerNoteDiv.addClass('hidden');
+    });
+
 
     //删除标记按钮单击事件
     $(D).off("click", "[data-type='deleteMarkBtn']").on("click", "[data-type='deleteMarkBtn']", function () {

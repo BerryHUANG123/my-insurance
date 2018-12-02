@@ -76,7 +76,7 @@ var commonFn = (function ($, D, W) {
             };
 
             //刷新(保持当前页码)
-            this.refresh = function(){
+            this.refresh = function () {
                 var pageNum = this.config.pageTable.find('.page-index li.active').attr('data-pageNum');
                 var pageDto = this.config.pageDto;
                 var newPageDto = {};
@@ -88,7 +88,6 @@ var commonFn = (function ($, D, W) {
             };
 
             var show = function ($pageTable, url, pageDto, viewCallBack, async) {
-
                 $.ajax({
                     type: "get",
                     url: url,
@@ -125,8 +124,12 @@ var commonFn = (function ($, D, W) {
                                     })();
                                 }
                                 $paginationUl.append($previousPageNumLi);
-                                for (var i = 1; i <= totalPage; i++) {
-                                    var $pageNumLi = $('<li ' + (pageNum == i ? "class=\"active\"" : "") + ' data-pageNum="' + (i) + '"><a href="javascript:;">' + i + '</a></li>');
+                                //   var pageStart = pageNum < 9 ? 1 : totalPage - pageNum > 4 ? pageNum - 4 : pageNum - 7;
+                                var pageStart = pageNum % 10 == 0 ? pageNum - 9 : Math.floor(pageNum / 10) * 10 + 1;
+                                // var pageEnd = (pageStart + 8) > totalPage ? totalPage : (pageStart + 8);
+                                var pageEnd = (pageStart + 9) > totalPage ? totalPage : (pageStart + 9);
+                                for (var i = pageStart; i <= pageEnd; i++) {
+                                    var $pageNumLi = $('<li ' + (pageNum == i ? "class=\"active\"" : "") + ' data-pageNum="' + (i) + '"><a href="javascript:;">' + (i < 10 ? '0' + i : i) + '</a></li>');
                                     if (pageNum != i) {
                                         (function (index) {
                                             $pageNumLi.off('click').on('click', function () {
@@ -172,6 +175,35 @@ var commonFn = (function ($, D, W) {
                     }
                 });
             }
+
+
+            //筛选区域按钮绑定change事件
+            var $this = this;
+            $pageTable.find('select[data-type="orderField"]').off('change').on('change', function () {
+                var orderField = $(this).val();
+                $this.config.pageDto.orderField = orderField;
+                $this.reload();
+            });
+
+            $pageTable.find('select[data-type="desc"]').off('change').on('change', function () {
+                var desc = $(this).val();
+                $this.config.pageDto.desc = desc;
+                $this.reload();
+            });
+
+            $pageTable.find('button[data-type="searchBtn"]').off('click').on('click', function () {
+                var searchContent = $pageTable.find('input[data-type="searchContent"]').val();
+                if(searchContent){
+                    $this.config.pageDto.searchContent = searchContent;
+                    $this.reload();
+                }
+            });
+
+            $pageTable.find('button[data-type="searchEmptyBtn"]').off('click').on('click', function () {
+                $pageTable.find('input[data-type="searchContent"]').val('');
+                $this.config.pageDto.searchContent = null;
+                $this.reload();
+            });
         },
 
         //JS日期系列：根据出生日期 得到周岁年龄
@@ -264,7 +296,7 @@ var commonFn = (function ($, D, W) {
                     str = year + '-' + month + '-' + day;
                     break;
                 case 'yyyy-MM-dd HH:mm:ss':
-                    str = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+                    str = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + (parseInt(seconds) < 10 ? '0' + seconds : seconds);
                     break;
                 default:
                     str = year + '-' + month + '-' + day;

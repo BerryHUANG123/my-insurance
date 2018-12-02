@@ -8,6 +8,8 @@ public interface ICustomerNoteService {
 
     Result pageData(Integer uid, CustomerNotePageDto customerNotePageDto);
 
+    Result create(Integer uid, CustomerNoteDto customerNoteDto);
+
     Result edit(Integer uid, CustomerNoteDto customerNoteDto);
 
     Result delete(Integer uid,Integer id);

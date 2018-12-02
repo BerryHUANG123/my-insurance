@@ -247,32 +247,93 @@
                 <h4 class="modal-title">编辑Note</h4>
             </div>
             <div class="modal-body">
-                <div class="margin-left-5px margin-right-5px" class="pageTableDiv" id="customerNotePageTable">
-                    <div class="noData text-center border-width-1px border-style-solid border-color-darkgray border-radius-5px"
-                         style="width:100%;height: 100px;line-height: 100px">
-                        <span class="ft-weight-bolder">暂无数据</span>
+
+                <div class="hidden" id="createCustomerNoteDiv">
+                    <table class="margin-auto">
+                        <tr>
+                            <td><label>内容:</label></td>
+                            <td>
+                                <textarea class="form-control" data-type="content" placeholder="请输入Note内容"  rows="20" cols="60"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="text-center">
+                                <button class="btn btn-primary btn-sm" data-type="saveBtn">保存</button>
+                                <button class="btn btn-info btn-sm" data-type="returnBtn">返回</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="showCustomerNoteDiv">
+                    <div>
+                        <button class="btn btn-primary btn-sm border-radius-5px padding-all-5px cursor-pointer margin-right-5px pull-right" data-type="createBtn" title="新增Note">新增Note</button>
                     </div>
-                    <div class="hidden hasData">
-                        <div class="page-table">
-                            <table class="table" id="customerNoteTable">
-                                <thead>
-                                <tr>
-
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
+                    <div class="clear-float"></div>
+                    <div class="margin-left-5px margin-right-5px" class="pageTableDiv" id="customerNotePageTable">
+                        <div class="noData text-center border-width-1px border-style-solid border-color-darkgray border-radius-5px margin-top-5px"
+                             style="width:100%;height: 100px;line-height: 100px">
+                            <span class="ft-weight-bolder">暂无数据</span>
                         </div>
-                        <div class="page-index">
-                            <nav aria-label="Page navigation">
-                                <ul class="pagination">
-                                </ul>
-                            </nav>
+                        <div class="hidden hasData">
+                            <div class="page-table">
+                                <div class="page-table-filter padding-left-5px padding-right-5px padding-top-5px
+                                padding-bottom-5px margin-left-5px margin-right-5px margin-top-5px margin-bottom-5px border-width-1px border-style-solid border-color-darkgray border-radius-5px">
+                                    <div class="pull-left">
+                                        <div class="pull-left">
+                                            <input class="form-control" type="text" data-type="searchContent" placeholder="请输入搜索内容"/>
+                                        </div>
+                                        <div class="pull-left padding-top-5px padding-left-5px">
+                                            <button class="glyphicon glyphicon-search btn btn-sm" data-type="searchBtn" title="搜索"></button>
+                                            <button class=" glyphicon glyphicon-remove btn btn-sm" data-type="searchEmptyBtn" title="重置"></button>
+                                        </div>
+                                    </div>
+                                    <div class="pull-right">
+                                        <div class="pull-left padding-top-7px padding-right-5px">
+                                            按
+                                        </div>
+                                        <div class="pull-left">
+                                            <select class="form-control" data-type="orderField">
+                                                <option value="createTime">创建时间</option>
+                                                <option value="updateTime">更新时间</option>
+                                            </select>
+                                        </div>
+                                        <div class="pull-left">
+                                            <select class="form-control" data-type="desc">
+                                                <option value="true">降序</option>
+                                                <option value="false">升序</option>
+                                            </select>
+                                        </div>
+                                        <div class="pull-left padding-top-7px  padding-left-5px">
+                                            排列
+                                        </div>
+                                    </div>
+                                    <div class="clear-float"></div>
+                                </div>
+                                <div class="page-table-main text-center border-width-1px border-style-solid border-color-darkgray border-radius-5px margin-top-5px
+                                padding-left-5px padding-right-5px padding-top-5px padding-bottom-5px" style="height: 532px;overflow:auto">
+                                    <table class="table" id="customerNoteTable">
+                                        <thead>
+                                        <tr>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="page-index text-center">
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination">
+                                    </ul>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>

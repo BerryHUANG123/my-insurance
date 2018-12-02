@@ -23,6 +23,12 @@ public class CustomerNoteController extends BaseController {
         return customerNoteService.pageData(getUid(), customerNotePageDto);
     }
 
+    @RequestMapping("create")
+    @ResponseBody
+    public Result create(@RequestBody CustomerNoteDto customerNoteDto) {
+        return customerNoteService.create(getUid(), customerNoteDto);
+    }
+
     @RequestMapping("edit")
     @ResponseBody
     public Result edit(@RequestBody CustomerNoteDto customerNoteDto) {

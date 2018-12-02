@@ -10,6 +10,8 @@ public class PageDto extends BaseDto {
 
     private Boolean desc;
 
+    private String searchContent;
+
     public Integer getPageSize() {
         return pageSize;
     }
@@ -40,5 +42,13 @@ public class PageDto extends BaseDto {
 
     public void setDesc(Boolean desc) {
         this.desc = desc;
+    }
+
+    public String getSearchContent() {
+        return searchContent;
+    }
+
+    public void setSearchContent(String searchContent) {
+        this.searchContent = searchContent;
     }
 }
