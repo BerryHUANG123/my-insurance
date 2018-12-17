@@ -20,25 +20,43 @@ public class CustomerVo extends BaseVo {
 
     private String phone;
 
-    private String address;
+    private String basicAddress;
+
+    private String detailedAddress;
+
+    private Double lng;
+
+    private Double lat;
 
     private String remark;
+
+    private Integer mapMarkerId;
+
+    private Date createTime;
+
+    private Date updateTime;
 
     public CustomerVo() {
 
     }
 
-    public CustomerVo(Integer id, String name, String sex, Date birthday,Integer age, String phone, String address, String remark) {
+    public CustomerVo(Integer id, String name, String sex, Date birthday, Integer age, List<CustomerHobbyVo> customerHobbyVoList, String phone, String basicAddress, String detailedAddress, Double lng, Double lat, String remark, Integer mapMarkerId, Date createTime, Date updateTime) {
         this.id = id;
         this.name = name;
         this.sex = sex;
         this.birthday = birthday;
         this.age = age;
+        this.customerHobbyVoList = customerHobbyVoList;
         this.phone = phone;
-        this.address = address;
+        this.basicAddress = basicAddress;
+        this.detailedAddress = detailedAddress;
+        this.lng = lng;
+        this.lat = lat;
         this.remark = remark;
+        this.mapMarkerId = mapMarkerId;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
     }
-
 
     public Integer getId() {
         return id;
@@ -88,12 +106,44 @@ public class CustomerVo extends BaseVo {
         this.phone = phone;
     }
 
-    public String getAddress() {
-        return address;
+    public String getBasicAddress() {
+        return basicAddress;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setBasicAddress(String basicAddress) {
+        this.basicAddress = basicAddress;
+    }
+
+    public String getDetailedAddress() {
+        return detailedAddress;
+    }
+
+    public void setDetailedAddress(String detailedAddress) {
+        this.detailedAddress = detailedAddress;
+    }
+
+    public Double getLng() {
+        return lng;
+    }
+
+    public void setLng(Double lng) {
+        this.lng = lng;
+    }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Integer getMapMarkerId() {
+        return mapMarkerId;
+    }
+
+    public void setMapMarkerId(Integer mapMarkerId) {
+        this.mapMarkerId = mapMarkerId;
     }
 
     public String getRemark() {
@@ -110,6 +160,22 @@ public class CustomerVo extends BaseVo {
 
     public void setCustomerHobbyVoList(List<CustomerHobbyVo> customerHobbyVoList) {
         this.customerHobbyVoList = customerHobbyVoList;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }
 

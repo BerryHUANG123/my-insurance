@@ -17,11 +17,10 @@ import com.myinsurance.service.IMarkerService;
 import com.myinsurance.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -83,6 +82,7 @@ public class MarkServiceImpl extends BaseService implements IMarkerService {
         return ResultUtil.returnSuccess(markVoList);
     }
 
+    @Transactional
     @Override
     public Result save(Integer uid, MarkDto markDTO) {
         //先查询该客户是否存在,若存在则取出
@@ -103,7 +103,7 @@ public class MarkServiceImpl extends BaseService implements IMarkerService {
             customer.setAge(customerDTO.getAge());
             customer.setBirthday(customerDTO.getBirthday());
             customer.setPhone(customerDTO.getPhone());
-            customer.setAddress(customerDTO.getAddress());
+            customer.setAddress(customerDTO.getBasicAddress());
             customer.setRemark(customerDTO.getRemark());
             customer.setCreateTime(new Date());
             customerDao.insert(customer);
@@ -190,7 +190,8 @@ public class MarkServiceImpl extends BaseService implements IMarkerService {
         newCustomer.setId(oldMapMarker.getCustomerId());
         newCustomer.setPhone(customerDto.getPhone());
         newCustomer.setName(customerDto.getName());
-        newCustomer.setAddress(customerDto.getAddress());
+        newCustomer.setAddress(customerDto.getBasicAddress());
+        newCustomer.setRemark(customerDto.getRemark());
         newCustomer.setUpdateTime(updateTime);
         customerDao.updateByPrimaryKeySelective(newCustomer);
 
@@ -269,7 +270,7 @@ public class MarkServiceImpl extends BaseService implements IMarkerService {
         MarkVo markVo = new MarkVo();
         markVo.setMarkId(mapMarker.getId());
         List<CustomerVo> customerVOList = Lists.newArrayList();
-        CustomerVo customerVo = new CustomerVo(customer.getId(), customer.getName(), customer.getSex(), customer.getBirthday(), customer.getAge(), customer.getPhone(), customer.getAddress(), customer.getRemark());
+        CustomerVo customerVo = new CustomerVo(customer.getId(), customer.getName(), customer.getSex(), customer.getBirthday(), customer.getAge(), customer.getPhone(), customer.getAddress(), customer.getRemark(),customer.getCreateTime(),customer.getUpdateTime());
         List<CustomerHobbyVo> customerHobbyVoList = null;
         if (customerHobbyList != null && !customerHobbyList.isEmpty()) {
             customerHobbyVoList = Lists.newArrayList();

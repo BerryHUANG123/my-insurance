@@ -53,7 +53,9 @@
               enableUpdateByExample="true"
               enableDeleteByExample="true"
               enableSelectByExample="true"
-              selectByExampleQueryId="true" />-->
+              selectByExampleQueryId="true">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
         <!--<table tableName="t_map_marker"
                domainObjectName="MapMarker"
                mapperName="IMapMarkerDao"
@@ -61,7 +63,9 @@
                enableUpdateByExample="true"
                enableDeleteByExample="true"
                enableSelectByExample="true"
-               selectByExampleQueryId="true" />-->
+               selectByExampleQueryId="true" >
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
         <!--<table tableName="t_user"
                domainObjectName="User"
                mapperName="IUserDao"
@@ -69,7 +73,9 @@
                enableUpdateByExample="true"
                enableDeleteByExample="true"
                enableSelectByExample="true"
-               selectByExampleQueryId="true" />-->
+               selectByExampleQueryId="true">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
         <!--<table tableName="t_customer_note"
                domainObjectName="CustomerNote"
                mapperName="ICustomerNoteDao"
@@ -77,14 +83,18 @@
                enableUpdateByExample="true"
                enableDeleteByExample="true"
                enableSelectByExample="true"
-               selectByExampleQueryId="true" />-->
-        <!--<table tableName="t_customer_hobby" 
+               selectByExampleQueryId="true">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <!--<table tableName="t_customer_hobby"
                domainObjectName="CustomerHobby"
                mapperName="ICustomerHobbyDao"
                enableCountByExample="true"
                enableUpdateByExample="true"
                enableDeleteByExample="true"
                enableSelectByExample="true"
-               selectByExampleQueryId="true" />-->
+               selectByExampleQueryId="true">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
     </context>
 </generatorConfiguration>

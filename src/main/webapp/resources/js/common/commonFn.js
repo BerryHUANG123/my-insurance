@@ -61,6 +61,20 @@ var commonFn = (function ($, D, W) {
             });
         },
 
+        //分页
+        PageDto: function (pageSize, pageNum, orderField, desc, searchContent, otherParam) {
+            this.pageSize = pageSize;
+            this.pageNum = pageNum;
+            this.orderField = orderField;
+            this.desc = desc;
+            this.searchContent = searchContent;
+
+            if (otherParam) {
+                for (let key in otherParam) {
+                    this[key] = otherParam[key];
+                }
+            }
+        },
         PageTable: function ($pageTable, url, pageDto, viewCallBack, async) {
             this.config = {
                 pageTable: $pageTable,
@@ -69,12 +83,11 @@ var commonFn = (function ($, D, W) {
                 viewCallBack: viewCallBack,
                 async: async
             };
-
             //重新加载
             this.reload = function () {
                 show(this.config.pageTable, this.config.url, this.config.pageDto, this.config.viewCallBack, this.config.async);
+                return this;
             };
-
             //刷新(保持当前页码)
             this.refresh = function () {
                 var pageNum = this.config.pageTable.find('.page-index li.active').attr('data-pageNum');
@@ -86,7 +99,6 @@ var commonFn = (function ($, D, W) {
                 newPageDto.pageNum = pageNum;
                 show(this.config.pageTable, this.config.url, newPageDto, this.config.viewCallBack, this.config.async);
             };
-
             var show = function ($pageTable, url, pageDto, viewCallBack, async) {
                 $.ajax({
                     type: "get",
@@ -125,9 +137,11 @@ var commonFn = (function ($, D, W) {
                                 }
                                 $paginationUl.append($previousPageNumLi);
                                 //   var pageStart = pageNum < 9 ? 1 : totalPage - pageNum > 4 ? pageNum - 4 : pageNum - 7;
-                                var pageStart = pageNum % 10 == 0 ? pageNum - 9 : Math.floor(pageNum / 10) * 10 + 1;
+                                // var pageStart = pageNum % 10 == 0 ? pageNum - 9 : Math.floor(pageNum / 10) * 10 + 1;
+                                var pageStart = pageNum % 5 == 0 ? pageNum - 4 : Math.floor(pageNum / 5) * 5 + 1;
                                 // var pageEnd = (pageStart + 8) > totalPage ? totalPage : (pageStart + 8);
-                                var pageEnd = (pageStart + 9) > totalPage ? totalPage : (pageStart + 9);
+                                //var pageEnd = (pageStart + 9) > totalPage ? totalPage : (pageStart + 9);
+                                var pageEnd = (pageStart + 4) > totalPage ? totalPage : (pageStart + 4);
                                 for (var i = pageStart; i <= pageEnd; i++) {
                                     var $pageNumLi = $('<li ' + (pageNum == i ? "class=\"active\"" : "") + ' data-pageNum="' + (i) + '"><a href="javascript:;">' + (i < 10 ? '0' + i : i) + '</a></li>');
                                     if (pageNum != i) {
@@ -176,7 +190,6 @@ var commonFn = (function ($, D, W) {
                 });
             }
 
-
             //筛选区域按钮绑定change事件
             var $this = this;
             $pageTable.find('select[data-type="orderField"]').off('change').on('change', function () {
@@ -193,7 +206,7 @@ var commonFn = (function ($, D, W) {
 
             $pageTable.find('button[data-type="searchBtn"]').off('click').on('click', function () {
                 var searchContent = $pageTable.find('input[data-type="searchContent"]').val();
-                if(searchContent){
+                if (searchContent) {
                     $this.config.pageDto.searchContent = searchContent;
                     $this.reload();
                 }
@@ -204,6 +217,8 @@ var commonFn = (function ($, D, W) {
                 $this.config.pageDto.searchContent = null;
                 $this.reload();
             });
+
+            return this;
         },
 
         //JS日期系列：根据出生日期 得到周岁年龄
@@ -293,13 +308,13 @@ var commonFn = (function ($, D, W) {
             var str;
             switch (format) {
                 case 'yyyy-MM-dd':
-                    str = year + '-' + month + '-' + day;
+                    str = year + '-' + (month < 10 ? ('0' + month) : month) + '-' + (day < 10 ? ('0' + day) : day);
                     break;
                 case 'yyyy-MM-dd HH:mm:ss':
-                    str = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + (parseInt(seconds) < 10 ? '0' + seconds : seconds);
+                    str = year + '-' + (month < 10 ? ('0' + month) : month) + '-' + (day < 10 ? ('0' + day) : day) + ' ' + (hours < 10 ? ('0' + hours) : hours) + ':' + (minutes < 10 ? ('0' + minutes) : minutes) + ':' + (seconds < 10 ? ('0' + seconds) : seconds);
                     break;
                 default:
-                    str = year + '-' + month + '-' + day;
+                    str = year + '-' + (month < 10 ? ('0' + month) : month) + '-' + (day < 10 ? ('0' + day) : day);
             }
             return str;
         }

@@ -44,25 +44,6 @@
         this.searchContent = searchContent;
     };
 
-    //Vo对象
-    /*var CustomerVo = function (id, name, sexFormat, birthday, age, phone, address, remark) {
-        this.id = id;
-        this.name = name;
-        this.sexFormat = sexFormat;
-        this.birthday = birthday;
-        this.age = age;
-        this.phone = phone;
-        this.address = address;
-        this.remark = remark;
-    };
-    var MarkVo = function (markId, remark, lng, lat, customerVoList) {
-        this.markId = markId;
-        this.remark = remark;
-        this.lng = lng;
-        this.lat = lat;
-        this.customerVoList = customerVoList;
-    };*/
-
     //注册日期插件
     $("[data-type='birthdayInput']").datetimepicker({
         format: 'yyyy-mm-dd',
@@ -545,7 +526,6 @@
         });
     });
 
-
     var customerNoteTable;
     //编辑note按钮单击事件
     $(D).off("click", "[data-type='editNoteBtn']").on("click", "[data-type='editNoteBtn']", function () {
@@ -706,7 +686,6 @@
         $showCustomerNoteDiv.removeClass('hidden');
         $createCustomerNoteDiv.addClass('hidden');
     });
-
 
     //删除标记按钮单击事件
     $(D).off("click", "[data-type='deleteMarkBtn']").on("click", "[data-type='deleteMarkBtn']", function () {

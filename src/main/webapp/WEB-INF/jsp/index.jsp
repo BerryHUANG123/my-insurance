@@ -93,7 +93,7 @@
                             </tr>
                             <tr>
                                 <td>地址:</td>
-                                <td><textarea class="form-control" data-type="address" placeholder="请输入联络地址"></textarea>
+                                <td><textarea class="form-control" data-type="basicAddress" placeholder="请输入联络地址"></textarea>
                                 </td>
                             </tr>
                             <tr>
@@ -202,7 +202,7 @@
                             </tr>
                             <tr>
                                 <td>地址:</td>
-                                <td><textarea class="form-control" data-type="address" placeholder="请输入联络地址"></textarea>
+                                <td><textarea class="form-control" data-type="basicAddress" placeholder="请输入联络地址"></textarea>
                                 </td>
                             </tr>
                             <tr>
@@ -277,9 +277,8 @@
                         </div>
                         <div class="hidden hasData">
                             <div class="page-table">
-                                <div class="page-table-filter padding-left-5px padding-right-5px padding-top-5px
-                                padding-bottom-5px margin-left-5px margin-right-5px margin-top-5px margin-bottom-5px border-width-1px border-style-solid border-color-darkgray border-radius-5px">
-                                    <div class="pull-left">
+                                <div class="page-table-filter margin-left-5px margin-right-5px margin-top-5px margin-bottom-5px border-width-1px border-style-solid border-color-darkgray border-radius-5px">
+                                    <div class="pull-left padding-all-2px">
                                         <div class="pull-left">
                                             <input class="form-control" type="text" data-type="searchContent" placeholder="请输入搜索内容"/>
                                         </div>
@@ -288,7 +287,7 @@
                                             <button class=" glyphicon glyphicon-remove btn btn-sm" data-type="searchEmptyBtn" title="重置"></button>
                                         </div>
                                     </div>
-                                    <div class="pull-right">
+                                    <div class="pull-left padding-all-2px">
                                         <div class="pull-left padding-top-7px padding-right-5px">
                                             按
                                         </div>
@@ -311,7 +310,7 @@
                                     <div class="clear-float"></div>
                                 </div>
                                 <div class="page-table-main text-center border-width-1px border-style-solid border-color-darkgray border-radius-5px margin-top-5px
-                                padding-left-5px padding-right-5px padding-top-5px padding-bottom-5px" style="height: 532px;overflow:auto">
+                                padding-left-5px padding-right-5px padding-top-5px padding-bottom-5px" style="height: 300px;overflow:auto">
                                     <table class="table" id="customerNoteTable">
                                         <thead>
                                         <tr>

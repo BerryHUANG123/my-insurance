@@ -1,6 +1,5 @@
 package com.myinsurance.model.dto;
 
-import com.myinsurance.model.po.CustomerHobby;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -23,7 +22,15 @@ public class CustomerDto extends BaseDto {
 
     private String phone;
 
-    private String address;
+    private String basicAddress;
+
+    private String detailedAddress;
+
+    private Double lng;
+
+    private Double lat;
+
+    private Boolean createMarker;
 
     private String remark;
 
@@ -75,12 +82,12 @@ public class CustomerDto extends BaseDto {
         this.phone = phone;
     }
 
-    public String getAddress() {
-        return address;
+    public String getBasicAddress() {
+        return basicAddress;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setBasicAddress(String basicAddress) {
+        this.basicAddress = basicAddress;
     }
 
     public String getRemark() {
@@ -97,6 +104,38 @@ public class CustomerDto extends BaseDto {
 
     public void setCustomerHobbyDtoList(List<CustomerHobbyDto> customerHobbyDtoList) {
         this.customerHobbyDtoList = customerHobbyDtoList;
+    }
+
+    public String getDetailedAddress() {
+        return detailedAddress;
+    }
+
+    public void setDetailedAddress(String detailedAddress) {
+        this.detailedAddress = detailedAddress;
+    }
+
+    public Double getLng() {
+        return lng;
+    }
+
+    public void setLng(Double lng) {
+        this.lng = lng;
+    }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Boolean getCreateMarker() {
+        return createMarker;
+    }
+
+    public void setCreateMarker(Boolean createMarker) {
+        this.createMarker = createMarker;
     }
 }
 
