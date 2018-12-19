@@ -16,9 +16,14 @@
     list-style-type: none;
     margin-bottom:0px;
 }
-#topNavUl li {
-    font-size: 18px;
+
+#topNavUl li{
     float: left;
+    margin-top: 5px;
+}
+
+#topNavUl li a {
+    font-size: 18px;
     margin-left: 10px;
     margin-right: 10px;
     padding-left: 5px;
@@ -26,11 +31,8 @@
     margin-top: 5px;
     margin-bottom: 5px;
 }
-#topNavUl li:hover {
-    float: left;
-    margin-left: 10px;
-    margin-right: 10px;
-    cursor: pointer;
+
+#topNavUl li a:hover {
     background-color: lightgray;
     border-radius: 3px;
 }
