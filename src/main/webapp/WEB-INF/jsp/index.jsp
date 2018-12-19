@@ -13,10 +13,10 @@
 <input type="hidden" id="moduleInfo" data-name="map" data-parentName="map"/>
 <%--公共上部导航栏--%>
 <%@ include file="/WEB-INF/jsp/common/topNav.jsp" %>
-<div id="addressSearchDiv">
+<%--<div id="addressSearchDiv">
     地址搜索添加备注
     <input type="text" id="addressSearch"/>
-</div>
+</div>--%>
 <div class="clear-float"></div>
 <div id="map_canvas"></div>
 <div id="controlSwitchDiv">
@@ -93,7 +93,8 @@
                             </tr>
                             <tr>
                                 <td>地址:</td>
-                                <td><textarea class="form-control" data-type="basicAddress" placeholder="请输入联络地址"></textarea>
+                                <td><textarea class="form-control" data-type="basicAddress"
+                                              placeholder="请输入联络地址"></textarea>
                                 </td>
                             </tr>
                             <tr>
@@ -129,7 +130,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="editMarkModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+<%--<div class="modal fade" id="editMarkModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -237,6 +238,67 @@
             </div>
         </div>
     </div>
+</div>--%>
+<div class="modal fade" id="editMarkModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">编辑标注</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <input type="hidden" data-type="markId"/>
+                </div>
+                <%--<p>当前坐标： 经度:<span data-type="lng"></span>,纬度:<span data-type="lat"></span></p>--%>
+                <div class="padding-all-2px">
+                    <div class="pull-left margin-right-2px ft-weight-bolder padding-top-7px">
+                        添加尚无标注点的客户 :
+                    </div>
+                   <div class="pull-left">
+                       <select class="form-control" style="min-width:100px;max-width:200px;" data-type="noMapMarkerIdCustomerList">
+                       </select>
+                   </div>
+                    <div class="pull-left padding-top-7px padding-left-5px">
+                        <span class="glyphicon glyphicon-ok cursor-pointer" data-type="addToCustomerListBtn" title="添加到客户列表"></span>
+                    </div>
+                    <div class="clear-float"></div>
+                </div>
+                <div class="border-width-1px border-style-solid border-color-darkgray border-radius-5px">
+                    <div class="bg-color-darkgray ft-color-white text-center padding-left-5px padding-top-5px padding-bottom-5px">
+                        客户列表
+                    </div>
+                    <div class="padding-bottom-5px padding-top-5px padding-left-5px padding-right-5px">
+                        <ul class="list-group" data-type="customerList" style="max-height:300px;overflow:auto;">
+
+                        </ul>
+                    </div>
+                </div>
+                <br/>
+                <div class="border-width-1px border-style-solid border-color-darkgray border-radius-5px">
+                    <div class="bg-color-darkgray ft-color-white text-center padding-left-5px padding-top-5px padding-bottom-5px">
+                        标注信息
+                    </div>
+                    <div class="padding-bottom-5px padding-top-5px padding-left-5px padding-right-5px">
+                        <table>
+                            <tr>
+                                <td>备注:</td>
+                                <td><textarea class="form-control" data-type="marker-remark"
+                                              placeholder="请输入标记点备注信息"></textarea></td>
+                            </tr>
+                        </table>
+                        <div>
+                            <button class="btn btn-primary btn-sm pull-right" id="editMarkBtn">保存</button>
+                            <div class="clear-float"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
 </div>
 <div class="modal fade" id="editNoteModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
     <div class="modal-dialog" role="document">
@@ -253,7 +315,8 @@
                         <tr>
                             <td><label>内容:</label></td>
                             <td>
-                                <textarea class="form-control" data-type="content" placeholder="请输入Note内容"  rows="20" cols="60"></textarea>
+                                <textarea class="form-control" data-type="content" placeholder="请输入Note内容" rows="20"
+                                          cols="60"></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -267,7 +330,9 @@
 
                 <div id="showCustomerNoteDiv">
                     <div>
-                        <button class="btn btn-primary btn-sm border-radius-5px padding-all-5px cursor-pointer margin-right-5px pull-right" data-type="createBtn" title="新增Note">新增Note</button>
+                        <button class="btn btn-primary btn-sm border-radius-5px padding-all-5px cursor-pointer margin-right-5px pull-right"
+                                data-type="createBtn" title="新增Note">新增Note
+                        </button>
                     </div>
                     <div class="clear-float"></div>
                     <div class="margin-left-5px margin-right-5px" class="pageTableDiv" id="customerNotePageTable">
@@ -280,11 +345,14 @@
                                 <div class="page-table-filter margin-left-5px margin-right-5px margin-top-5px margin-bottom-5px border-width-1px border-style-solid border-color-darkgray border-radius-5px">
                                     <div class="pull-left padding-all-2px">
                                         <div class="pull-left">
-                                            <input class="form-control" type="text" data-type="searchContent" placeholder="请输入搜索内容"/>
+                                            <input class="form-control" type="text" data-type="searchContent"
+                                                   placeholder="请输入搜索内容"/>
                                         </div>
                                         <div class="pull-left padding-top-5px padding-left-5px">
-                                            <button class="glyphicon glyphicon-search btn btn-sm" data-type="searchBtn" title="搜索"></button>
-                                            <button class=" glyphicon glyphicon-remove btn btn-sm" data-type="searchEmptyBtn" title="重置"></button>
+                                            <button class="glyphicon glyphicon-search btn btn-sm" data-type="searchBtn"
+                                                    title="搜索"></button>
+                                            <button class=" glyphicon glyphicon-remove btn btn-sm"
+                                                    data-type="searchEmptyBtn" title="重置"></button>
                                         </div>
                                     </div>
                                     <div class="pull-left padding-all-2px">
@@ -310,7 +378,8 @@
                                     <div class="clear-float"></div>
                                 </div>
                                 <div class="page-table-main text-center border-width-1px border-style-solid border-color-darkgray border-radius-5px margin-top-5px
-                                padding-left-5px padding-right-5px padding-top-5px padding-bottom-5px" style="height: 300px;overflow:auto">
+                                padding-left-5px padding-right-5px padding-top-5px padding-bottom-5px"
+                                     style="height: 300px;overflow:auto">
                                     <table class="table" id="customerNoteTable">
                                         <thead>
                                         <tr>

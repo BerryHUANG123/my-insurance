@@ -184,8 +184,8 @@
                                 <tr>
                                     <td></td>
                                     <td>
-                                        <label class="radio-inline">
-                                            <input type="checkbox" data-type="createMarker"/>是否快速创建地图标记点
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" data-type="createMarker" checked="checked"/>是否需要地图标记点
                                         </label>
                                     </td>
                                 </tr>
@@ -307,15 +307,17 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td></td>
+                                    <td>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" data-type="createMarker"/>是否需要地图标记点
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td title="详细地址可根据基础地址进行微调,用以记录基础地址外更详细的信息">详细地址:</td>
                                     <td><textarea class="form-control" rows="3" data-type="detailedAddress"
                                                   placeholder="请输入详细地址"></textarea>
-                                    </td>
-                                </tr>
-                                <tr class="hidden">
-                                    <td></td>
-                                    <td>
-                                        <input type="checkbox" data-type="createMarker"/>是否快速创建地图标记点
                                     </td>
                                 </tr>
                                 <tr>

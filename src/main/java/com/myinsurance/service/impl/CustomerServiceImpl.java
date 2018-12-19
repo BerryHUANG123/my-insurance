@@ -158,7 +158,7 @@ public class CustomerServiceImpl implements ICustomerService {
         //编辑客户信息
         Customer newCustomer = new Customer(customerDto.getId(), uid, customerDto.getName(), customerDto.getSex(), customerDto.getBirthday(),
                 customerDto.getAge(), customerDto.getPhone(), customerDto.getBasicAddress(), customerDto.getDetailedAddress(),
-                oldCustomer.getLng(), oldCustomer.getLat(), customerDto.getRemark(), oldCustomer.getMapMarkerId(), oldCustomer.getCreateTime(), new Date());
+                customerDto.getLng(), customerDto.getLat(), customerDto.getRemark(), oldCustomer.getMapMarkerId(), oldCustomer.getCreateTime(), new Date());
         customerDao.updateByExample(newCustomer, customerExample);
 
         //判断是否需要创建,更换或删除地图标注点
@@ -170,9 +170,9 @@ public class CustomerServiceImpl implements ICustomerService {
             //查询该点是否已存在,若已存在,则不在创建
             MapMarkerExample mapMarkerExample = new MapMarkerExample();
             MapMarkerExample.Criteria mapMarkerExampleCriteria = mapMarkerExample.createCriteria();
-            criteria.andLngEqualTo(customerDto.getLng());
-            criteria.andLatEqualTo(customerDto.getLat());
-            criteria.andUidEqualTo(uid);
+            mapMarkerExampleCriteria.andLngEqualTo(customerDto.getLng());
+            mapMarkerExampleCriteria.andLatEqualTo(customerDto.getLat());
+            mapMarkerExampleCriteria.andUidEqualTo(uid);
             List<MapMarker> mapMarkerList = mapMarkerDao.selectByExample(mapMarkerExample);
             if (mapMarkerList.isEmpty()) {
                 //创建标注点
@@ -352,5 +352,86 @@ public class CustomerServiceImpl implements ICustomerService {
                 .collect(toList());
         PageVo<CustomerVo> resultPageVo = new PageVo<>(pageInfo.getTotal(), pageInfo.getPageSize(), pageInfo.getPageNum(), customerVoList);
         return ResultUtil.returnSuccess(resultPageVo);
+    }
+
+    @Override
+    public Result removeMapMarkerId(Integer uid, Integer markId, Integer customerId) {
+        CustomerExample customerExample = new CustomerExample();
+        CustomerExample.Criteria customerExampleCriteria = customerExample.createCriteria();
+        customerExampleCriteria.andUidEqualTo(uid);
+        customerExampleCriteria.andMapMarkerIdEqualTo(markId);
+        customerExampleCriteria.andIdEqualTo(customerId);
+        List<Customer> customerList = customerDao.selectByExample(customerExample);
+        if (customerList.isEmpty()) {
+            return ResultUtil.returnError("当前客户不存在!");
+        }
+        Customer customer = customerList.get(0);
+        customer.setMapMarkerId(null);
+        customer.setUpdateTime(new Date());
+        customerDao.updateByPrimaryKey(customer);
+        return ResultUtil.returnSuccess();
+    }
+
+    @Override
+    public Result getNoMapMarkerIdCustomerList(Integer uid) {
+        CustomerExample customerExample = new CustomerExample();
+        CustomerExample.Criteria customerExampleCriteria = customerExample.createCriteria();
+        customerExample.setOrderByClause("`create_time` DESC");
+        customerExampleCriteria.andUidEqualTo(uid);
+        customerExampleCriteria.andMapMarkerIdIsNull();
+
+        List<CustomerVo> customerVoList = customerDao.selectByExample(customerExample).stream().map(customer -> {
+            CustomerHobbyExample customerHobbyExample = new CustomerHobbyExample();
+            CustomerHobbyExample.Criteria customerHobbyExampleCriteria = customerHobbyExample.createCriteria();
+            customerHobbyExample.setOrderByClause("`create_time` ASC");
+            customerHobbyExampleCriteria.andUidEqualTo(uid);
+            customerHobbyExampleCriteria.andCustomerIdEqualTo(customer.getId());
+            List<CustomerHobbyVo> customerHobbyVoList = customerHobbyDao.selectByExample(customerHobbyExample).stream()
+                    .map(customerHobby -> new CustomerHobbyVo(customerHobby.getId(), customerHobby.getCustomerId(),
+                            customerHobby.getHobby(), customerHobby.getSpecificHobby(), customerHobby.getCustomHobby(),
+                            customerHobby.getCreateTime(), customerHobby.getUpdateTime())).collect(toList());
+
+            return new CustomerVo(customer.getId(), customer.getName(), customer.getSex(), customer.getBirthday(), customer.getAge(),
+                    customerHobbyVoList, customer.getPhone(), customer.getBasicAddress(),
+                    customer.getDetailedAddress(), customer.getLng(), customer.getLat(),
+                    customer.getRemark(), customer.getMapMarkerId(), customer.getCreateTime(), customer.getUpdateTime());
+        }).collect(toList());
+        return ResultUtil.returnSuccess(customerVoList);
+    }
+
+    @Override
+    public Result editMapMarkId(Integer uid, Integer markId, Integer customerId) {
+        MapMarkerExample mapMarkerExample = new MapMarkerExample();
+        MapMarkerExample.Criteria mapMarkerExampleCriteria = mapMarkerExample.createCriteria();
+        mapMarkerExampleCriteria.andUidEqualTo(uid);
+        mapMarkerExampleCriteria.andIdEqualTo(markId);
+        List<MapMarker> mapMarkerList = mapMarkerDao.selectByExample(mapMarkerExample);
+        if (mapMarkerList.isEmpty()) {
+            return ResultUtil.returnError("当前标注不存在!");
+        }
+        CustomerExample customerExample = new CustomerExample();
+        CustomerExample.Criteria customerExampleCriteria = customerExample.createCriteria();
+        customerExampleCriteria.andUidEqualTo(uid);
+        customerExampleCriteria.andIdEqualTo(customerId);
+        List<Customer> customerList = customerDao.selectByExample(customerExample);
+        if (customerList.isEmpty()) {
+            return ResultUtil.returnError("当前客户不存在!");
+        }
+        Customer customer = customerList.get(0);
+        customer.setUpdateTime(new Date());
+        customer.setMapMarkerId(markId);
+        customerDao.updateByExample(customer, customerExample);
+        CustomerHobbyExample customerHobbyExample = new CustomerHobbyExample();
+        CustomerHobbyExample.Criteria customerHobbyExampleCriteria = customerHobbyExample.createCriteria();
+        customerHobbyExampleCriteria.andUidEqualTo(uid);
+        customerHobbyExampleCriteria.andCustomerIdEqualTo(customerId);
+        List<CustomerHobbyVo> customerHobbyVoList = customerHobbyDao.selectByExample(customerHobbyExample).stream().map(
+                customerHobby -> new CustomerHobbyVo(customerHobby.getId(), customerHobby.getCustomerId(), customerHobby.getHobby(),
+                        customerHobby.getSpecificHobby(), customerHobby.getCustomHobby(), customerHobby.getCreateTime(), customerHobby.getUpdateTime())
+        ).collect(toList());
+        CustomerVo customerVo = new CustomerVo(customerId, customer.getName(), customer.getSex(), customer.getBirthday(), customer.getAge(), customerHobbyVoList, customer.getPhone(),
+                customer.getBasicAddress(), customer.getDetailedAddress(), customer.getLng(), customer.getLat(),
+                customer.getRemark(), customer.getMapMarkerId(), customer.getCreateTime(), customer.getUpdateTime());
+        return ResultUtil.returnSuccess(customerVo);
     }
 }

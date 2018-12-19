@@ -27,6 +27,18 @@ public class MarkVo extends BaseVo {
 
     private List<CustomerVo> customerVoList;
 
+
+    public MarkVo() {
+    }
+
+    public MarkVo(Integer markId, String remark, Double lng, Double lat, List<CustomerVo> customerVoList) {
+        this.markId = markId;
+        this.remark = remark;
+        this.lng = lng;
+        this.lat = lat;
+        this.customerVoList = customerVoList;
+    }
+
     public Integer getMarkId() {
         return markId;
     }

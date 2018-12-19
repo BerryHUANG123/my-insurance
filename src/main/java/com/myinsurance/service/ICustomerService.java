@@ -16,4 +16,10 @@ public interface ICustomerService {
     Result delete(Integer uid, Integer customerId);
 
     Result page(Integer uid, CustomerPageDto customerPageDto);
+
+    Result removeMapMarkerId(Integer uid, Integer markId, Integer customerId);
+
+    Result getNoMapMarkerIdCustomerList(Integer uid);
+
+    Result editMapMarkId(Integer uid, Integer markId, Integer customerId);
 }

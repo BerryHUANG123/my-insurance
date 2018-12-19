@@ -54,4 +54,16 @@ public class CustomerController extends BaseController{
         return customerService.delete(getUid(),customerId);
     }
 
+    @RequestMapping("getNoMapMarkerIdCustomerList")
+    @ResponseBody
+    public Result getNoMapMarkerIdCustomerList(){
+        return customerService.getNoMapMarkerIdCustomerList(getUid());
+    }
+
+    @RequestMapping("editMapMarkId")
+    @ResponseBody
+    public Result editMapMarkId(Integer markId,Integer customerId){
+        return customerService.editMapMarkId(getUid(),markId,customerId);
+    }
+
 }

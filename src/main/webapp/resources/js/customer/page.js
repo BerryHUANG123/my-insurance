@@ -86,7 +86,8 @@
             $detailedInfoDiv.find('[data-type="hobby"]').html($customerHobbyOl);
 
             $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="phoneDiv"> 电话: <span data-type="phone">' + (customerVo.phone ? customerVo.phone : '未设置') + '</span></div>');
-            $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="addressDiv"> 地址: <span data-type="address">' + (customerVo.address ? customerVo.address : '未设置') + '</span></div>');
+            $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="addressDiv"> 基础地址: <span data-type="basicAddress">' + (customerVo.basicAddress ? customerVo.basicAddress : '未设置') + '</span></div>');
+            $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="addressDiv"> 详细地址: <span data-type="detailedAddress">' + (customerVo.basicAddress ? customerVo.detailedAddress : '未设置') + '</span></div>');
             $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="remarkDiv"> 备注: <span data-type="remark">' + (customerVo.remark ? '<textarea disabled rows="4" cols="40">' + customerVo.remark + '</textarea>' : '未设置') + '</span></div>');
             $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="createTimeDiv"> 创建时间: <span data-type="createTime">' + commonFn.dateFormat(customerVo.createTime, 'yyyy-MM-dd HH:mm:ss') + '</span></div>');
             $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="updateTimeDiv"> 更新时间: <span data-type="updateTime">' + (customerVo.updateTime ? commonFn.dateFormat(customerVo.updateTime, 'yyyy-MM-dd HH:mm:ss') : '尚未更新') + '</span></div>');
@@ -121,6 +122,7 @@
         $addCustomerModal.find("[data-type='phone']").val('');
         $('#addCustomerAddressSearch').val('');
         $addCustomerModal.find("[data-type='basicAddress']").val('').attr('data-lng', '').attr('data-lat', '');
+        $addCustomerModal.find("[data-type='createMarker']").prop('checked',true);
         $addCustomerModal.find("[data-type='detailedAddress']").val('');
         $addCustomerModal.find("[data-type='customer-remark']").val('');
         $addCustomerModal.modal('show');
@@ -137,6 +139,7 @@
         var detailedAddress = $addCustomerModal.find("[data-type='detailedAddress']").val();
         var lng = $addCustomerModal.find("[data-type='basicAddress']").attr('data-lng');
         var lat = $addCustomerModal.find("[data-type='basicAddress']").attr('data-lat');
+        var createMarker = $addCustomerModal.find('[data-type="createMarker"]').prop('checked');
         var customerRemark = $addCustomerModal.find("[data-type='customer-remark']").val();
 
         //组成爱好list
@@ -163,9 +166,14 @@
             commonFn.messaage('error', '请输入客户姓名!');
             return;
         }
+       if(createMarker && (!basicAddress || !lng ||!lat)) {
+           commonFn.messaage('error', '创建地图标记点需要基础地址,请完善!');
+           return;
+       }
+
         commonFn.mLoading.show();
         commonFn.ajaxPost(commonFn.baseUrl + "customer/save.json",
-            new CustomerDto(null, name, sex, birthday, age, customerHobbyDtoList, phone, address, customerRemark),
+            new CustomerDto(null, name, sex, birthday, age, customerHobbyDtoList, phone, basicAddress,detailedAddress,lng,lat, createMarker,customerRemark),
             function (result) {
                 commonFn.mLoading.hide();
                 if (result.success) {
@@ -186,7 +194,11 @@
         var age = $editCustomerModal.find("[data-type='age']").val();
         var birthday = $editCustomerModal.find("[data-type='birthday']").val();
         var phone = $editCustomerModal.find("[data-type='phone']").val();
-        var address = $editCustomerModal.find("[data-type='address']").val();
+        var basicAddress = $editCustomerModal.find("[data-type='basicAddress']").val();
+        var detailedAddress = $editCustomerModal.find("[data-type='detailedAddress']").val();
+            var lng = $editCustomerModal.find("[data-type='basicAddress']").attr('data-lng');
+        var lat = $editCustomerModal.find("[data-type='basicAddress']").attr('data-lat');
+        var createMarker = $editCustomerModal.find('[data-type="createMarker"]').prop('checked');
         var customerRemark = $editCustomerModal.find("[data-type='customer-remark']").val();
 
         //组成爱好list
@@ -214,10 +226,13 @@
             commonFn.messaage('error', '请输入客户姓名!');
             return;
         }
-
+        if(createMarker && (!basicAddress || !lng ||!lat)) {
+            commonFn.messaage('error', '创建地图标记点需要基础地址,请完善!');
+            return;
+        }
         commonFn.mLoading.show();
         commonFn.ajaxPost(commonFn.baseUrl + "customer/edit.json",
-            new CustomerDto(customerId, name, sex, birthday, age, customerHobbyDtoList, phone, address, customerRemark),
+            new CustomerDto(customerId, name, sex, birthday, age, customerHobbyDtoList, phone, basicAddress, detailedAddress,lng,lat,createMarker,customerRemark),
             function (result) {
                 commonFn.mLoading.hide();
                 if (result.success) {
@@ -237,7 +252,6 @@
             input: 'addCustomerAddressSearch'
         };
         var autoComplete = new AMap.Autocomplete(autoOptions);
-
         autoComplete.on("select", function (e) {
             var poi = e.poi;
             //获取完整地址
@@ -245,6 +259,7 @@
             //获取经纬度
             var location = poi.location;
             if (!location) {
+                $('#addCustomerModal [data-type="basicAddress"]').val('').attr('data-lng', '').attr('data-lat', '');
                 commonFn.messaage('error', "请更换地点,该点没有经纬度数据!");
                 return;
             }
@@ -269,7 +284,8 @@
             //获取经纬度
             var location = poi.location;
             if (!location) {
-                alert("请更换地点,该点没有经纬度数据!");
+                $('#editCustomerModal [data-type="basicAddress"]').val('').attr('data-lng', '').attr('data-lat', '');
+                commonFn.messaage('error', "请更换地点,该点没有经纬度数据!");
                 return;
             }
             var lng = poi.location.lng;
@@ -304,9 +320,9 @@
                 $editCustomerModal.find("[data-type='birthday']").val('');
                 $editCustomerModal.find("[data-type='hobbyDiv']").empty();
                 $editCustomerModal.find("[data-type='phone']").val('');
+                $('#editCustomerAddressSearch').val('');
                 $editCustomerModal.find("[data-type='address']").val('');
                 $editCustomerModal.find("[data-type='customer-remark']").val('');
-
                 $editCustomerModal.find("[data-type='customerId']").val(customerVo.id);
                 $editCustomerModal.find("[data-type='name']").val(customerVo.name);
                 $editCustomerModal.find("[data-type='sex']:checked").prop('checked', false);
@@ -344,7 +360,14 @@
                 }
 
                 $editCustomerModal.find("[data-type='phone']").val(customerVo.phone);
-                $editCustomerModal.find("[data-type='address']").val(customerVo.address);
+                $editCustomerModal.find("[data-type='basicAddress']").val(customerVo.basicAddress);
+                $editCustomerModal.find("[data-type='basicAddress']").attr('data-lng',customerVo.lng).attr('data-lat',customerVo.lat);
+                $editCustomerModal.find("[data-type='detailedAddress']").val(customerVo.detailedAddress);
+                if(customerVo.mapMarkerId){
+                    $editCustomerModal.find("[data-type='createMarker']").prop('checked',true);
+                }else{
+                    $editCustomerModal.find("[data-type='createMarker']").prop('checked',false);
+                }
                 $editCustomerModal.find("[data-type='customer-remark']").val(customerVo.remark);
                 $editCustomerModal.modal("show");
             } else {

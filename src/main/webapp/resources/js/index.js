@@ -13,12 +13,9 @@
         this.remark = remark;
     };
 
-    var MarkDto = function (markId, remark, lng, lat, customerDtoList) {
+    var MarkDto = function (markId, remark) {
         this.markId = markId;
         this.remark = remark;
-        this.lng = lng;
-        this.lat = lat;
-        this.customerDtoList = customerDtoList;
     };
 
     var CustomerHobbyDto = function (id, customerId, hobby, specificHobby, customHobby) {
@@ -35,7 +32,7 @@
         this.content = content;
     };
 
-    var CustomerNotePageDto = function (customerId, pageSize, pageNum, orderField, desc,searchContent) {
+    var CustomerNotePageDto = function (customerId, pageSize, pageNum, orderField, desc, searchContent) {
         this.customerId = customerId;
         this.pageSize = pageSize;
         this.pageNum = pageNum;
@@ -169,14 +166,14 @@
     //从服务器读取已保存的所有标注并回显
     map.on('complete', function () {
         //地图任意点单击事件
-        map.on('click', function (e) {
+        /*map.on('click', function (e) {
             var lnglat = e.lnglat;
             var $addMarkModal = $("#addMarkModal");
             $addMarkModal.find("[data-type='lng']").html(lnglat.getLng());
             $addMarkModal.find("[data-type='lat']").html(lnglat.getLat());
             clearAddMarkModalInfo();
             $addMarkModal.modal("show");
-        });
+        });*/
         //从服务器接受原始数据，并处理成markers和回显
         commonFn.mLoading.show();
         $.get(commonFn.baseUrl + "marker/list.json", function (result) {
@@ -293,6 +290,38 @@
         var $editMarkModal = $("#editMarkModal");
         //关键信息
         var markId = $editMarkModal.find("[data-type='markId']").val();
+        //标注信息
+        var markerRemark = $editMarkModal.find("[data-type='marker-remark']").val();
+
+        commonFn.mLoading.show();
+        commonFn.ajaxPost(commonFn.baseUrl + "marker/edit.json",
+            new MarkDto(markId, markerRemark),
+            function (result) {
+                commonFn.mLoading.hide();
+                if (result.success) {
+                    //保存成功后从markers中删除这个点并重新展示这个点（页面上）
+                    commonFn.ajaxGet(commonFn.baseUrl+"marker/get.json",{markId:markId},function(result){
+                        if(result.success){
+                            var data = result.data;
+                            removeMark(data.markId);
+                            //回显mark并打开对应信息窗体
+                            AMap.event.trigger(showMark(data), 'click');
+                            $("#editMarkModal").modal("hide");
+                            commonFn.messaage('success','编辑保存标注信息成功!');
+                        }else{
+                            commonFn.messaage('error',result.msg);
+                        }
+                    });
+
+                } else {
+                    commonFn.messaage('error',result.msg);
+                }
+            });
+    });
+    /*$(D).off("click", "#editMarkBtn").on("click", "#editMarkBtn", function () {
+        var $editMarkModal = $("#editMarkModal");
+        //关键信息
+        var markId = $editMarkModal.find("[data-type='markId']").val();
         var customerId = $editMarkModal.find("[data-type='customerId']").val();
 
         //客户信息
@@ -348,7 +377,7 @@
                     alert(result.msg);
                 }
             });
-    });
+    });*/
 
 
     /**
@@ -356,13 +385,17 @@
      * @param markVo
      */
     var showMark = function (markVo) {
-        var customerVo = (markVo.customerVoList)[0];
+        var customerVoList = markVo.customerVoList;
+        var customerVo = customerVoList[0];
         var lngLat = new AMap.LngLat(markVo.lng, markVo.lat);
         // 创建一个 Marker 实例：
         var marker = new AMap.Marker({
             position: lngLat,   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-            title: customerVo.name,
-            label: {content: customerVo.name, offset: new AMap.Pixel(20, 5)}
+            title: (!customerVoList || customerVoList.length == 0) ? '' : (customerVoList.length > 1 ? (customerVoList[0].name + ' 等' + customerVoList.length + '人') : (customerVoList[0].name)),
+            label: {
+                content: (!customerVoList || customerVoList.length == 0) ? '' : (customerVoList.length > 1 ? (customerVoList[0].name + ' 等' + customerVoList.length + '人') : (customerVoList[0].name)),
+                offset: new AMap.Pixel(20, 5)
+            }
         });
         // 将创建的点标记添加到已有的地图实例
         marker.setExtData(markVo.markId);
@@ -372,58 +405,74 @@
         //创建信息窗口
         // 创建 infoWindow 实例
         //模板构造
-        var $customerInfoTable = $('<div><span class="ft-weight-bolder margin-right-5px">姓名:</span><span data-type="name"></span></div>' +
-            '<div><span class="ft-weight-bolder margin-right-5px">性别:</span><span data-type="sex"></span></div>' +
-            '<div><span class="ft-weight-bolder margin-right-5px">年龄:</span><span data-type="age"></span></div>' +
-            '<div><span class="ft-weight-bolder margin-right-5px">生日:</span><span data-type="birthday"></span></div>' +
-            '<div><span class="ft-weight-bolder margin-right-5px">爱好:</span><span data-type="hobby"></span></div>' +
-            '<div><span class="ft-weight-bolder margin-right-5px">电话:</span><span data-type="phone"></span></div>' +
-            '<div><span class="ft-weight-bolder margin-right-5px">地址:</span><span data-type="address"></span></div>' +
-            '<div><span class="ft-weight-bolder margin-right-5px">备注:</span><span data-type="customer-remark"></span></div>');
-        var $markerInfoTable = $('<div><span class="ft-weight-bolder margin-right-5px">备注:</span><span data-type="marker-remark"></span></div>');
 
-        //信息注入
-        $customerInfoTable.find('[data-type="name"]').text(customerVo.name);
-        $customerInfoTable.find('[data-type="sex"]').text(commonFn.sexFormat(customerVo.sex));
-        customerVo.age == 0 || customerVo.age ? $customerInfoTable.find('[data-type="age"]').text(customerVo.age) : $customerInfoTable.find('[data-type="age"]').html('<span class="ft-color-lightgray">未设置</span>');
-        customerVo.birthday ? $customerInfoTable.find('[data-type="birthday"]').text(commonFn.dateFormat(customerVo.birthday)) : $customerInfoTable.find('[data-type="birthday"]').html('<span class="ft-color-lightgray">未设置</span>');
-        var $customerHobbyOl = '<span class="ft-color-lightgray">暂无</span>';
-        var customerHobbyVoList = customerVo.customerHobbyVoList;
-        if (customerHobbyVoList && customerHobbyVoList.length > 0) {
-            $customerHobbyOl = $('<ol></ol>');
-            for (var i = 0; i < customerHobbyVoList.length; i++) {
-                $customerHobbyOl.append('<li class="margin-bottom-5px">' +
-                    '<span class="border-width-1px border-radius-5px bg-color-deepskyblue ft-color-white padding-all-2px">' + commonObject.hobby.getParentHobbyName(customerHobbyVoList[i].hobby) + '</span>&nbsp;' +
-                    (customerHobbyVoList[i].specificHobby ? '<span class="border-width-1px border-radius-5px bg-color-deepskyblue ft-color-white padding-all-2px">' + commonObject.hobby.getChildHobbyName(customerHobbyVoList[i].specificHobby) + '</span>&nbsp;' : '&nbsp;') +
-                    (customerHobbyVoList[i].customHobby ? '<span class="border-width-1px border-radius-5px bg-color-deepskyblue ft-color-white padding-all-2px">' + customerHobbyVoList[i].customHobby + '</span>' : '&nbsp;') + '</li>');
-            }
+        var $showContent = $('<div></div>');
+        if (customerVoList && customerVoList.length > 0) {
+            var $customerInfoDiv = $('<div style="min-width:230px;max-height: 400px; overflow:auto"></div>');
+            $.each(customerVoList, function (index, customerVo) {
+                var $customerInfoTable = $('<div><span class="ft-weight-bolder margin-right-5px">姓名:</span><span data-type="name"></span></div>' +
+                    '<div><span class="ft-weight-bolder margin-right-5px">性别:</span><span data-type="sex"></span></div>' +
+                    '<div><span class="ft-weight-bolder margin-right-5px">年龄:</span><span data-type="age"></span></div>' +
+                    '<div><span class="ft-weight-bolder margin-right-5px">生日:</span><span data-type="birthday"></span></div>' +
+                    '<div><span class="ft-weight-bolder margin-right-5px">爱好:</span><span data-type="hobby"></span></div>' +
+                    '<div><span class="ft-weight-bolder margin-right-5px">电话:</span><span data-type="phone"></span></div>' +
+                    '<div><span class="ft-weight-bolder margin-right-5px">基础地址:</span><textarea class="border-radius-5px padding-all-2px" rows="3" data-type="basicAddress" disabled></textarea></div>' +
+                    '<div><span class="ft-weight-bolder margin-right-5px">详细地址:</span><textarea class="border-radius-5px padding-all-2px" rows="3" data-type="detailedAddress" disabled></textarea></div>' +
+                    '<div><span class="ft-weight-bolder margin-right-5px">备注:</span><span data-type="customer-remark"></span></div>' +
+                    '<hr/>');
+
+                //信息注入
+                $customerInfoTable.find('[data-type="name"]').text(customerVo.name);
+                $customerInfoTable.find('[data-type="sex"]').text(commonFn.sexFormat(customerVo.sex));
+                customerVo.age == 0 || customerVo.age ? $customerInfoTable.find('[data-type="age"]').text(customerVo.age) : $customerInfoTable.find('[data-type="age"]').html('<span class="ft-color-lightgray">未设置</span>');
+                customerVo.birthday ? $customerInfoTable.find('[data-type="birthday"]').text(commonFn.dateFormat(customerVo.birthday)) : $customerInfoTable.find('[data-type="birthday"]').html('<span class="ft-color-lightgray">未设置</span>');
+                var $customerHobbyOl = '<span class="ft-color-lightgray">暂无</span>';
+                var customerHobbyVoList = customerVo.customerHobbyVoList;
+                if (customerHobbyVoList && customerHobbyVoList.length > 0) {
+                    $customerHobbyOl = $('<ol></ol>');
+                    for (var i = 0; i < customerHobbyVoList.length; i++) {
+                        $customerHobbyOl.append('<li class="margin-bottom-5px">' +
+                            '<span class="border-width-1px border-radius-5px bg-color-deepskyblue ft-color-white padding-all-2px">' + commonObject.hobby.getParentHobbyName(customerHobbyVoList[i].hobby) + '</span>&nbsp;' +
+                            (customerHobbyVoList[i].specificHobby ? '<span class="border-width-1px border-radius-5px bg-color-deepskyblue ft-color-white padding-all-2px">' + commonObject.hobby.getChildHobbyName(customerHobbyVoList[i].specificHobby) + '</span>&nbsp;' : '&nbsp;') +
+                            (customerHobbyVoList[i].customHobby ? '<span class="border-width-1px border-radius-5px bg-color-deepskyblue ft-color-white padding-all-2px">' + customerHobbyVoList[i].customHobby + '</span>' : '&nbsp;') + '</li>');
+                    }
+                }
+                $customerInfoTable.find('[data-type="hobby"]').html($customerHobbyOl);
+                customerVo.phone ? $customerInfoTable.find('[data-type="phone"]').text(customerVo.phone) : $customerInfoTable.find('[data-type="phone"]').html('<span class="ft-color-lightgray">未填写</span>');
+                customerVo.basicAddress ? $customerInfoTable.find('[data-type="basicAddress"]').val(customerVo.basicAddress) : $customerInfoTable.find('[data-type="basicAddress"]').val('未填写');
+                customerVo.detailedAddress ? $customerInfoTable.find('[data-type="detailedAddress"]').val(customerVo.detailedAddress) : $customerInfoTable.find('[data-type="detailedAddress"]').val('未填写');
+                customerVo.remark ? $customerInfoTable.find('[data-type="customer-remark"]').text(customerVo.remark) : $customerInfoTable.find('[data-type="customer-remark"]').html('<span class="ft-color-lightgray">未填写</span>');
+                var $singleContent = $('<div class="border-width-1px border-style-solid border-color-darkgray border-radius-5px padding-all-2px margin-top-5px margin-bottom-5px" style="min-width: 200px;" data-type="singleDiv">' +
+                    '<div><span class="ft-weight-bolder">' + customerVo.name + '</span><span class="pull-right cursor-pointer glyphicon ' + (index == 0 ? 'glyphicon-minus' : 'glyphicon-plus') + '" data-type="openDetailedCustomerInfoBtn"></span></div>' +
+                    '<div class="' + (index == 0 ? '' : 'hidden') + '" data-type="infoDiv">' +
+                    '<div class="border-radius-5px border-color-darkgray border-width-1px" data-type="customerInfoDiv">' +
+                    '<div class="bg-color-darkgray ft-color-white text-center padding-left-5px padding-top-5px padding-bottom-5px ft-weight-bolder margin-bottom-5px">客户信息</div>' +
+                    '</div>' +
+                    '<div class="margin-top-5px text-center ' + (index == 0 ? '' : 'hidden') + '" data-type="operateDiv">' +
+                    '<span class="glyphicon glyphicon-pencil bg-color-darkgray border-radius-5px padding-all-5px cursor-pointer" data-type="editCustomerBtn" data-customerId="' + customerVo.id + '"></span>' +
+                    '&nbsp;' +
+                    '<span class="glyphicon glyphicon-comment bg-color-darkgray border-radius-5px padding-all-5px cursor-pointer" data-type="editNoteBtn" data-customerId="' + customerVo.id + '"></span>' +
+                    '&nbsp;' +
+                    /*'<span class="glyphicon glyphicon-trash bg-color-darkgray border-radius-5px padding-all-5px cursor-pointer" data-type="deleteMarkBtn" data-markId="' + markVo.markId + '"></span>' +*/
+                    '</div></div>');
+                $singleContent.find('[data-type="customerInfoDiv"]').append($customerInfoTable);
+                $singleContent.find('[data-type="markerInfoDiv"]').append($markerInfoTable);
+
+                $customerInfoDiv.append($singleContent);
+            });
+            $showContent.append($customerInfoDiv);
         }
-        $customerInfoTable.find('[data-type="hobby"]').html($customerHobbyOl);
-        customerVo.phone ? $customerInfoTable.find('[data-type="phone"]').text(customerVo.phone) : $customerInfoTable.find('[data-type="phone"]').html('<span class="ft-color-lightgray">未填写</span>');
-        customerVo.address ? $customerInfoTable.find('[data-type="address"]').text(customerVo.address) : $customerInfoTable.find('[data-type="address"]').html('<span class="ft-color-lightgray">未填写</span>');
-        customerVo.remark ? $customerInfoTable.find('[data-type="customer-remark"]').text(customerVo.remark) : $customerInfoTable.find('[data-type="customer-remark"]').html('<span class="ft-color-lightgray">未填写</span>');
-        markVo.remark ? $markerInfoTable.find('[data-type="marker-remark"]').text(markVo.remark) : $markerInfoTable.find('[data-type="marker-remark"]').html('<span class="ft-color-lightgray">未填写</span>');
-
-        var $showContent = $('<div>' +
-            '<div data-type="infoDiv">' +
-            '<div class="border-radius-5px border-color-darkgray border-width-1px" data-type="customerInfoDiv">' +
-            '<div class="bg-color-darkgray ft-color-white text-center padding-left-5px padding-top-5px padding-bottom-5px ft-weight-bolder margin-bottom-5px">客户信息</div>' +
-            '</div>' +
-            '<hr/>' +
-            '<div class="border-radius-5px border-color-darkgray border-width-1px" data-type="markerInfoDiv">' +
+        //注入标注信息
+        var $markerInfoTable = $('<div class="border-radius-5px border-color-darkgray border-width-1px" data-type="markerInfoDiv">' +
             '<div class="bg-color-darkgray ft-color-white text-center padding-left-5px padding-top-5px padding-bottom-5px ft-weight-bolder margin-bottom-5px">标注信息</div>' +
-            '</div>' +
-            '</div>' +
-            '<div class="margin-top-5px text-center" data-type="operateDiv">' +
-            '<span class="glyphicon glyphicon-pencil bg-color-darkgray border-radius-5px padding-all-5px cursor-pointer" data-type="editMarkBtn" data-markId = "' + markVo.markId + '" data-customerId="' + customerVo.id + '"></span>' +
-            '&nbsp;' +
-            '<span class="glyphicon glyphicon-comment bg-color-darkgray border-radius-5px padding-all-5px cursor-pointer" data-type="editNoteBtn" data-customerId="' + customerVo.id + '"></span>' +
-            '&nbsp;' +
+            '<span class="ft-weight-bolder margin-right-5px">备注:</span><textarea disabled data-type="marker-remark"></textarea>' +
+            '<div class="text-center" data-type="operateDiv">' +
+            '<span class=" margin-all-2px glyphicon glyphicon-pencil bg-color-darkgray border-radius-5px padding-all-5px cursor-pointer" data-type="editMarkBtn" data-markId = "' + markVo.markId + '"></span>' +
             '<span class="glyphicon glyphicon-trash bg-color-darkgray border-radius-5px padding-all-5px cursor-pointer" data-type="deleteMarkBtn" data-markId="' + markVo.markId + '"></span>' +
-            '</div></div>');
-
-        $showContent.find('[data-type="customerInfoDiv"]').append($customerInfoTable);
-        $showContent.find('[data-type="markerInfoDiv"]').append($markerInfoTable);
+            '</div>' +
+            '</div>');
+        markVo.remark ? $markerInfoTable.find('[data-type="marker-remark"]').val(markVo.remark) : $markerInfoTable.find('[data-type="marker-remark"]').val('未填写');
+        $showContent.append($markerInfoTable);
 
         var infoWindow = new AMap.InfoWindow({
             position: lngLat,
@@ -441,6 +490,16 @@
         //返回mark对象,用于保存时或编辑时模拟打开信息窗体
         return marker;
     };
+
+    $(D).off('click', '[data-type="openDetailedCustomerInfoBtn"]').on('click', '[data-type="openDetailedCustomerInfoBtn"]', function () {
+        $(this).closest('div[data-type="singleDiv"]').find('[data-type="infoDiv"]').toggleClass('hidden');
+        $(this).closest('div[data-type="singleDiv"]').find('[data-type="operateDiv"]').toggleClass('hidden');
+        if ($(this).hasClass('glyphicon-minus')) {
+            $(this).removeClass('glyphicon-minus').addClass('glyphicon-plus');
+        } else {
+            $(this).removeClass('glyphicon-plus').addClass('glyphicon-minus');
+        }
+    });
 
     /**
      * 从页面移除某个存在的标注(不产生数据库交互)
@@ -465,6 +524,101 @@
 
     //编辑标记按钮单击事件
     $(D).off("click", "[data-type='editMarkBtn']").on("click", "[data-type='editMarkBtn']", function () {
+        //从数据库查询客户信息和标注信息
+        var markId = $(this).attr("data-markId");
+        commonFn.mLoading.show();
+        $.get(commonFn.baseUrl + "marker/get.json?markId=" + markId, function (result) {
+            commonFn.mLoading.hide();
+            if (result.success) {
+                var markVo = result.data;
+                var customerVoList = markVo.customerVoList;
+                var $editMarkModal = $("#editMarkModal");
+                $editMarkModal.find("[data-type='markId']").val(markVo.markId);
+                //先清空编辑mark模态框的客户列表
+                var $customerUl = $editMarkModal.find('[data-type="customerList"]');
+                $customerUl.empty();
+                //循环渲染客户
+                if (customerVoList) {
+                    $.each(customerVoList, function (index, customerVo) {
+                        var $li = $('<li class="list-group-item"></li>');
+                        var $table = $('<table></table>');
+                        var $tr = $('<tr></tr>');
+                        var $td = $('<td></td>');
+                        var $mainDiv = $('<div class="border-width-1px border-style-solid border-color-darkgray border-radius-5px padding-all-5px margin-top-5px margin-bottom-5px bg-color-lightgray"></div>');
+
+                        //简短信息
+                        var $briefInfoDiv = $('<div class="border-width-1px border-style-solid border-color-darkgray" data-type="briefInfoDiv"> <span class="pull-right glyphicon glyphicon-remove cursor-pointer" data-type="removeCustomerBtn" data-customerId="' + customerVo.id + '" data-markId="' + markVo.markId + '" title="从该标记点中移除此该客户"></span></div>');
+                        var $nameDiv = $('<div class="pull-left padding-all-2px ft-weight-bolder ft-size-16px" data-type="name"></div>');
+                        $nameDiv.text(customerVo.name);
+                        $briefInfoDiv.append($nameDiv);
+                        $briefInfoDiv.append('<div class="pull-left  border-radius-50per ft-color-white margin-top-2px margin-left-5px ' + (customerVo.sex == 'male' ? 'bg-color-dodgerblue' : 'bg-color-red') + '" data-type="sex">' + '&nbsp;' + commonFn.sexFormat(customerVo.sex) + '&nbsp;' + '</div>');
+                        $briefInfoDiv.append('<div class="pull-left padding-all-2px margin-left-5px " data-type="age">' + (customerVo.age ? customerVo.age + '岁' : '未设置年龄') + '</div>');
+                        $briefInfoDiv.append('<div class="pull-left padding-all-2px margin-left-5px " data-type="birthday">' + (customerVo.birthday ? commonFn.dateFormat(customerVo.birthday) : '未设置生日') + '</div>');
+                        $briefInfoDiv.append('<div class="clear-float"></div>');
+                        $mainDiv.append($briefInfoDiv);
+
+                        //详细信息
+                        var $detailedInfoDiv = $('<div class="border-width-1px border-style-solid border-color-darkgray" data-type="detailedInfoDiv"></div>');
+                        $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="hobbyDiv"><div class="pull-left">爱好:</div><div class="pull-left" data-type="hobby"></div><div class="clear-float"></div></div>');
+                        //处理爱好回显
+                        var $customerHobbyOl = '<span>暂无</span>';
+                        var customerHobbyVoList = customerVo.customerHobbyVoList;
+                        if (customerHobbyVoList && customerHobbyVoList.length > 0) {
+                            $customerHobbyOl = $('<ol></ol>');
+                            for (var i = 0; i < customerHobbyVoList.length; i++) {
+                                $customerHobbyOl.append('<li class="margin-bottom-5px">' +
+                                    '<span class="border-width-1px border-radius-5px bg-color-deepskyblue ft-color-white padding-all-2px">' + commonObject.hobby.getParentHobbyName(customerHobbyVoList[i].hobby) + '</span>&nbsp;' +
+                                    (customerHobbyVoList[i].specificHobby ? '<span class="border-width-1px border-radius-5px bg-color-deepskyblue ft-color-white padding-all-2px">' + commonObject.hobby.getChildHobbyName(customerHobbyVoList[i].specificHobby) + '</span>&nbsp;' : '&nbsp;') +
+                                    (customerHobbyVoList[i].customHobby ? '<span class="border-width-1px border-radius-5px bg-color-deepskyblue ft-color-white padding-all-2px">' + customerHobbyVoList[i].customHobby + '</span>' : '&nbsp;') + '</li>');
+                            }
+                        }
+                        $detailedInfoDiv.find('[data-type="hobby"]').html($customerHobbyOl);
+
+                        $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="phoneDiv"> 电话: <span data-type="phone">' + (customerVo.phone ? customerVo.phone : '未设置') + '</span></div>');
+                        $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="addressDiv"> 基础地址: <textarea disabled rows="4" cols="20" data-type="basicAddress">' + (customerVo.basicAddress ? customerVo.basicAddress : '未设置') + '</textarea></div>');
+                        $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="addressDiv"> 详细地址: <textarea disabled rows="4" cols="20" data-type="detailedAddress">' + (customerVo.basicAddress ? customerVo.detailedAddress : '未设置') + '</textarea></div>');
+                        $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="remarkDiv"> 备注: <span data-type="remark">' + (customerVo.remark ? '<textarea disabled rows="4" cols="24">' + customerVo.remark + '</textarea>' : '未设置') + '</span></div>');
+                        $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="createTimeDiv"> 创建时间: <span data-type="createTime">' + commonFn.dateFormat(customerVo.createTime, 'yyyy-MM-dd HH:mm:ss') + '</span></div>');
+                        $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="updateTimeDiv"> 更新时间: <span data-type="updateTime">' + (customerVo.updateTime ? commonFn.dateFormat(customerVo.updateTime, 'yyyy-MM-dd HH:mm:ss') : '尚未更新') + '</span></div>');
+                        $mainDiv.append($detailedInfoDiv);
+                        $td.append($mainDiv);
+                        $tr.append($td);
+                        $table.append($tr);
+                        $li.append($table);
+                        $customerUl.append($li);
+                    });
+                }
+
+                //获取noMapMarkerIdCustomerList
+                commonFn.mLoading.show();
+                commonFn.ajaxGet(commonFn.baseUrl+'customer/getNoMapMarkerIdCustomerList.json',null,function(result){
+                    if(result.success){
+                        commonFn.mLoading.hide();
+                        var noMapMarkerIdCustomerList = result.data;
+                        var $noMapMarkerIdCustomerList = $('#editMarkModal [data-type="noMapMarkerIdCustomerList"]');
+                        $noMapMarkerIdCustomerList.empty();
+                        $noMapMarkerIdCustomerList.append('<option value="null">请选择</option>');
+                        if(noMapMarkerIdCustomerList && noMapMarkerIdCustomerList.length>0){
+                            $.each(noMapMarkerIdCustomerList,function(index,customerVo){
+                                var $option = $('<option></option>');
+                                $option.val(customerVo.id);
+                                $option.text(customerVo.name);
+                                $noMapMarkerIdCustomerList.append($option);
+                            });
+                        }
+                        $editMarkModal.modal("show");
+                    }else{
+                        commonFn.messaage('error',result.msg);
+                    }
+                });
+
+            } else {
+                alert(result.msg);
+            }
+        });
+    });
+
+    /*$(D).off("click", "[data-type='editMarkBtn']").on("click", "[data-type='editMarkBtn']", function () {
         //从数据库查询客户信息和标注信息
         var markId = $(this).attr("data-markId");
         commonFn.mLoading.show();
@@ -524,7 +678,155 @@
                 alert(result.msg);
             }
         });
+    });*/
+
+    //编辑标记模态框 添加到客户列表按钮单击事件
+    $(D).off('click','#editMarkModal [data-type="addToCustomerListBtn"]').on('click','#editMarkModal [data-type="addToCustomerListBtn"]',function(){
+        var $editMarkModal = $('#editMarkModal');
+        var customerId = $editMarkModal.find('[data-type="noMapMarkerIdCustomerList"]').val();
+        if(customerId=='null'){
+            commonFn.messaage('error',"请选择希望加入客户列表的客户!");
+            return;
+        }
+        var markId = $editMarkModal.find('[data-type="markId"]').val();
+        commonFn.mLoading.show();
+        $.post(
+            commonFn.baseUrl+'customer/editMapMarkId.json',
+            {
+                customerId:customerId,
+                markId:markId
+            },
+            function(result){
+                if(result.success){
+                    //将该客户信息添加到模态框中
+                    var customerVo = result.data;
+                    var $li = $('<li class="list-group-item"></li>');
+                    var $table = $('<table></table>');
+                    var $tr = $('<tr></tr>');
+                    var $td = $('<td></td>');
+                    var $mainDiv = $('<div class="border-width-1px border-style-solid border-color-darkgray border-radius-5px padding-all-5px margin-top-5px margin-bottom-5px bg-color-lightgray"></div>');
+
+                    //简短信息
+                    var $briefInfoDiv = $('<div class="border-width-1px border-style-solid border-color-darkgray" data-type="briefInfoDiv"> <span class="pull-right glyphicon glyphicon-remove cursor-pointer" data-type="removeCustomerBtn" data-customerId="' + customerVo.id + '" data-markId="' + markId + '" title="从该标记点中移除此该客户"></span></div>');
+                    var $nameDiv = $('<div class="pull-left padding-all-2px ft-weight-bolder ft-size-16px" data-type="name"></div>');
+                    $nameDiv.text(customerVo.name);
+                    $briefInfoDiv.append($nameDiv);
+                    $briefInfoDiv.append('<div class="pull-left  border-radius-50per ft-color-white margin-top-2px margin-left-5px ' + (customerVo.sex == 'male' ? 'bg-color-dodgerblue' : 'bg-color-red') + '" data-type="sex">' + '&nbsp;' + commonFn.sexFormat(customerVo.sex) + '&nbsp;' + '</div>');
+                    $briefInfoDiv.append('<div class="pull-left padding-all-2px margin-left-5px " data-type="age">' + (customerVo.age ? customerVo.age + '岁' : '未设置年龄') + '</div>');
+                    $briefInfoDiv.append('<div class="pull-left padding-all-2px margin-left-5px " data-type="birthday">' + (customerVo.birthday ? commonFn.dateFormat(customerVo.birthday) : '未设置生日') + '</div>');
+                    $briefInfoDiv.append('<div class="clear-float"></div>');
+                    $mainDiv.append($briefInfoDiv);
+
+                    //详细信息
+                    var $detailedInfoDiv = $('<div class="border-width-1px border-style-solid border-color-darkgray" data-type="detailedInfoDiv"></div>');
+                    $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="hobbyDiv"><div class="pull-left">爱好:</div><div class="pull-left" data-type="hobby"></div><div class="clear-float"></div></div>');
+                    //处理爱好回显
+                    var $customerHobbyOl = '<span>暂无</span>';
+                    var customerHobbyVoList = customerVo.customerHobbyVoList;
+                    if (customerHobbyVoList && customerHobbyVoList.length > 0) {
+                        $customerHobbyOl = $('<ol></ol>');
+                        for (var i = 0; i < customerHobbyVoList.length; i++) {
+                            $customerHobbyOl.append('<li class="margin-bottom-5px">' +
+                                '<span class="border-width-1px border-radius-5px bg-color-deepskyblue ft-color-white padding-all-2px">' + commonObject.hobby.getParentHobbyName(customerHobbyVoList[i].hobby) + '</span>&nbsp;' +
+                                (customerHobbyVoList[i].specificHobby ? '<span class="border-width-1px border-radius-5px bg-color-deepskyblue ft-color-white padding-all-2px">' + commonObject.hobby.getChildHobbyName(customerHobbyVoList[i].specificHobby) + '</span>&nbsp;' : '&nbsp;') +
+                                (customerHobbyVoList[i].customHobby ? '<span class="border-width-1px border-radius-5px bg-color-deepskyblue ft-color-white padding-all-2px">' + customerHobbyVoList[i].customHobby + '</span>' : '&nbsp;') + '</li>');
+                        }
+                    }
+                    $detailedInfoDiv.find('[data-type="hobby"]').html($customerHobbyOl);
+
+                    $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="phoneDiv"> 电话: <span data-type="phone">' + (customerVo.phone ? customerVo.phone : '未设置') + '</span></div>');
+                    $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="addressDiv"> 基础地址: <textarea disabled rows="4" cols="20" data-type="basicAddress">' + (customerVo.basicAddress ? customerVo.basicAddress : '未设置') + '</textarea></div>');
+                    $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="addressDiv"> 详细地址: <textarea disabled rows="4" cols="20" data-type="detailedAddress">' + (customerVo.basicAddress ? customerVo.detailedAddress : '未设置') + '</textarea></div>');
+                    $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="remarkDiv"> 备注: <span data-type="remark">' + (customerVo.remark ? '<textarea disabled rows="4" cols="24">' + customerVo.remark + '</textarea>' : '未设置') + '</span></div>');
+                    $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="createTimeDiv"> 创建时间: <span data-type="createTime">' + commonFn.dateFormat(customerVo.createTime, 'yyyy-MM-dd HH:mm:ss') + '</span></div>');
+                    $detailedInfoDiv.append('<div class="padding-all-2px margin-left-5px " data-type="updateTimeDiv"> 更新时间: <span data-type="updateTime">' + (customerVo.updateTime ? commonFn.dateFormat(customerVo.updateTime, 'yyyy-MM-dd HH:mm:ss') : '尚未更新') + '</span></div>');
+                    $mainDiv.append($detailedInfoDiv);
+                    $td.append($mainDiv);
+                    $tr.append($td);
+                    $table.append($tr);
+                    $li.append($table);
+                    $editMarkModal.find('[data-type="customerList"]').prepend($li);
+
+                    //保存成功后从markers中删除这个点并重新展示这个点（页面上）
+                    commonFn.ajaxGet(commonFn.baseUrl+"marker/get.json",{markId:markId},function(result){
+                        if(result.success){
+                            var data = result.data;
+                            removeMark(data.markId);
+                            //回显mark并打开对应信息窗体
+                            AMap.event.trigger(showMark(data), 'click');
+                        }else{
+                            commonFn.messaage('error',result.msg);
+                        }
+                    });
+
+                    //重新渲染未添加标注的客户列表
+                    commonFn.ajaxGet(commonFn.baseUrl+'customer/getNoMapMarkerIdCustomerList.json',null,function(result){
+                        if(result.success){
+                            var noMapMarkerIdCustomerList = result.data;
+                            var $noMapMarkerIdCustomerList = $editMarkModal.find('[data-type="noMapMarkerIdCustomerList"]');
+                            $noMapMarkerIdCustomerList.empty();
+                            $noMapMarkerIdCustomerList.append('<option value="null">请选择</option>');
+                            if(noMapMarkerIdCustomerList && noMapMarkerIdCustomerList.length>0){
+                                $.each(noMapMarkerIdCustomerList,function(index,customerVo){
+                                    var $option = $('<option></option>');
+                                    $option.val(customerVo.id);
+                                    $option.text(customerVo.name);
+                                    $noMapMarkerIdCustomerList.append($option);
+                                });
+                            }
+                            commonFn.mLoading.hide();
+                            commonFn.messaage('添加成功!');
+                        }else{
+                            commonFn.messaage('error',result.msg);
+                        }
+                    });
+                }else{
+                    commonFn.messaage('error',result.msg);
+                }
+            }
+        );
     });
+
+    //编辑标记模态框 从标记中移除某个客户按钮单击事件
+    $(D).off('click', '#editMarkModal [data-type="customerList"] [data-type="removeCustomerBtn"]')
+        .on('click', '#editMarkModal [data-type="customerList"] [data-type="removeCustomerBtn"]', function () {
+            var flag = confirm('是否立即将该客户从该标注点中移除?(不删除客户实体)');
+            if (!flag) {
+                return;
+            }
+            var customerId = $(this).attr('data-customerId');
+            var markId = $(this).attr('data-markId');
+            var $li = $(this).closest('li');
+            commonFn.mLoading.show();
+            $.post(
+                commonFn.baseUrl + "marker/removeCustomer.json",
+                {
+                    customerId: customerId,
+                    markId: markId
+                },
+                function (result) {
+                    commonFn.mLoading.hide();
+                    if (result.success) {
+                        //保存成功后从markers中删除这个点并重新展示这个点（页面上）
+                        commonFn.ajaxGet(commonFn.baseUrl+"marker/get.json",{markId:markId},function(result){
+                            if(result.success){
+                                var data = result.data;
+                                removeMark(data.markId);
+                                //回显mark并打开对应信息窗体
+                                AMap.event.trigger(showMark(data), 'click');
+                            }else{
+                                commonFn.messaage('error',result.msg);
+                            }
+                        });
+                        $li.remove();
+                        commonFn.messaage("success", "该客户已从该标记点移除!");
+                    } else {
+                        commonFn.messaage("error", result.msg);
+                    }
+                }
+            );
+
+        });
 
     var customerNoteTable;
     //编辑note按钮单击事件

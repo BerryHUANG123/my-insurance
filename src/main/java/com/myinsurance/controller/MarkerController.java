@@ -2,6 +2,7 @@ package com.myinsurance.controller;
 
 import com.myinsurance.model.dto.MarkDto;
 import com.myinsurance.model.vo.Result;
+import com.myinsurance.service.ICustomerService;
 import com.myinsurance.service.IMarkerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,8 @@ public class MarkerController extends BaseController {
 
     @Autowired
     private IMarkerService markerService;
+    @Autowired
+    private ICustomerService customerService;
 
     @RequestMapping("get")
     @ResponseBody
@@ -46,4 +49,11 @@ public class MarkerController extends BaseController {
         return markerService.remove(getUid(), markId);
     }
 
+    @RequestMapping("removeCustomer")
+    @ResponseBody
+    public Result removeCustomer(Integer markId,Integer customerId) {
+        System.out.println(markId);
+        System.out.println(customerId);
+       return customerService.removeMapMarkerId(getUid(),markId,customerId);
+    }
 }
