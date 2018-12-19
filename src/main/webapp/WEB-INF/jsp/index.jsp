@@ -383,7 +383,6 @@
                                     <table class="table" id="customerNoteTable">
                                         <thead>
                                         <tr>
-
                                         </tr>
                                         </thead>
                                         <tbody>

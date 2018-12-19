@@ -47,8 +47,15 @@
     //设置表格区域高度
     $("#customerTable").parent().css("height", (D.documentElement.clientHeight - 240) + 'px').css('overflow', 'auto');
 
-    //加载客户table
     var $customerPageTable = $('#customerPageTable');
+    //读取渲染爱好筛选列表
+    var parentHobbyList = commonObject.hobby.getParentHobbyList();
+    var $parentHobbyType = $customerPageTable.find('[data-type="parentHobbyType"]');
+    $.each(parentHobbyList,function(index,parentHobby){
+        $parentHobbyType.append('<option value="'+parentHobby.key+'">'+parentHobby.cn_name+'</option>');
+    });
+
+    //加载客户table
     var customerPageTable = new commonFn.PageTable($customerPageTable, commonFn.baseUrl + 'customer/pageData.json', customerPageDto, function (rows) {
         var $tbody = $("#customerTable").find('tbody');
         $tbody.empty();
@@ -108,6 +115,39 @@
             $tbody.append($tr);
         });
     }, false).reload();
+
+    //绑定主爱好change事件
+    $(D).off('change','#customerPageTable [data-type="parentHobbyType"]').on('change','#customerPageTable [data-type="parentHobbyType"]',function(){
+        var parentHobbyType = $(this).val();
+        //重新渲染子爱好
+        var $childHobbyType = $customerPageTable.find('[data-type="childHobbyType"]');
+        var childHobbyList = commonObject.hobby.getChildHobbyList(parentHobbyType);
+        $childHobbyType.empty();
+        $childHobbyType.append('<option value="null">全部</option>');
+        $.each(childHobbyList,function(index,childHobby){
+            $childHobbyType.append('<option value="'+childHobby.key+'">'+childHobby.cn_name+'</option>');
+        });
+        //触发查询
+        if(parentHobbyType=='null'){
+            customerPageTable.config.pageDto.parentHobbyType = null;
+        }else{
+            customerPageTable.config.pageDto.parentHobbyType = parentHobbyType;
+        }
+        customerPageTable.config.pageDto.childHobbyType = null;
+        customerPageTable.reload();
+    });
+
+    //绑定子爱好change事件
+    $(D).off('change','#customerPageTable [data-type="childHobbyType"]').on('change','#customerPageTable [data-type="childHobbyType"]',function(){
+        var childHobbyType = $(this).val();
+        //触发查询
+        if(childHobbyType=='null'){
+            customerPageTable.config.pageDto.childHobbyType = null;
+        }else{
+            customerPageTable.config.pageDto.childHobbyType = childHobbyType;
+        }
+        customerPageTable.reload();
+    });
 
     //新增客户按钮单击事件
     $(D).off('click', '#addCustomerBtn').on('click', '#addCustomerBtn', function () {

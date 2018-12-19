@@ -2,6 +2,7 @@ package com.myinsurance.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.myinsurance.dao.ICustomerDao;
 import com.myinsurance.dao.ICustomerHobbyDao;
 import com.myinsurance.dao.ICustomerNoteDao;
@@ -328,6 +329,29 @@ public class CustomerServiceImpl implements ICustomerService {
         }
         customerExample.setOrderByClause(orderField + (customerPageDto.getDesc() == null || customerPageDto.getDesc() ? " DESC" : " ASC"));
         CustomerExample.Criteria criteria = customerExample.createCriteria();
+
+        //筛选
+        String parentHobbyType = customerPageDto.getParentHobbyType();
+        String childHobbyType = customerPageDto.getChildHobbyType();
+        List<Integer> idList = null;
+        if (StringUtils.isNotBlank(parentHobbyType)) {
+            CustomerHobbyExample customerHobbyExample = new CustomerHobbyExample();
+            CustomerHobbyExample.Criteria customerHobbyExampleCriteria = customerHobbyExample.createCriteria();
+            customerHobbyExampleCriteria.andUidEqualTo(uid);
+            customerHobbyExampleCriteria.andHobbyEqualTo(parentHobbyType);
+            if(StringUtils.isNotBlank(childHobbyType)){
+                customerHobbyExampleCriteria.andSpecificHobbyEqualTo(childHobbyType);
+            }
+            idList = customerHobbyDao.selectByExample(customerHobbyExample).stream().map(CustomerHobby::getCustomerId).collect(toList());
+        }
+        if(idList!=null){
+            if(idList.isEmpty()){
+                return ResultUtil.returnSuccess(new PageVo<CustomerVo>(0L, customerPageDto.getPageSize(), customerPageDto.getPageNum(), Lists.newArrayList()));
+            }
+            criteria.andIdIn(idList);
+        }
+
+        //搜索
         String searchType = customerPageDto.getSearchType();
         String searchContent = customerPageDto.getSearchContent();
         if (StringUtils.isNotBlank(searchType) && StringUtils.isNotBlank(searchContent)) {

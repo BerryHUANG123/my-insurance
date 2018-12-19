@@ -101,6 +101,7 @@ var commonFn = (function ($, D, W) {
                 show(this.config.pageTable, this.config.url, newPageDto, this.config.viewCallBack, this.config.async);
             };
             var show = function ($pageTable, url, pageDto, viewCallBack, async) {
+                commonFn.mLoading.show();
                 $.ajax({
                     type: "get",
                     url: url,
@@ -108,6 +109,7 @@ var commonFn = (function ($, D, W) {
                     dataType: "json",
                     async: !!async,
                     success: function (result) {
+                        commonFn.mLoading.hide();
                         if (result.success) {
                             console.log(result.data);
                             var pageVo = result.data;

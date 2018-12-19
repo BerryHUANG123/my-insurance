@@ -25,8 +25,45 @@
     </div>
     <div class="clear-float"></div>
     <div class="margin-left-5px margin-right-5px" class="pageTableDiv" id="customerPageTable">
+        <%--筛选--%>
+        <div class="page-table-screen margin-left-5px margin-right-5px margin-top-5px margin-bottom-5px border-width-1px border-style-solid border-color-darkgray border-radius-5px">
+            <table>
+                <tr>
+                    <td>筛选:</td>
+                    <td>
+                        <%--爱好父类型--%>
+                        <div class="pull-left">
+                            <div class="pull-left padding-top-7px">
+                                主爱好:
+                            </div>
+                            <div class="pull-left">
+                                <select class="form-control" data-type="parentHobbyType">
+                                    <option value="null">全部</option>
+                                </select>
+                            </div>
+                            <div class="clear-float"></div>
+                        </div>
+                        <%--爱好子类型--%>
+                        <div class="pull-left margin-left-5px">
+                            <div class="pull-left padding-top-7px">
+                                子爱好:
+                            </div>
+                            <div class="pull-left">
+                                <select class="form-control" data-type="childHobbyType">
+                                    <option value="null">全部</option>
+                                </select>
+                            </div>
+                            <div class="clear-float"></div>
+                        </div>
+                        <div class="clear-float"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <%--搜索以及排序--%>
         <div class="page-table-filter margin-left-5px margin-right-5px margin-top-5px margin-bottom-5px border-width-1px border-style-solid border-color-darkgray border-radius-5px">
             <div class="pull-left padding-all-2px">
+                <div class="pull-left padding-top-7px">搜索:</div>
                 <div class="pull-left">
                     <select class="form-control" type="text" data-type="searchType">
                         <option value="name" data-tips="请输入姓名关键字">姓名</option>
@@ -36,7 +73,8 @@
                     </select>
                 </div>
                 <div class="pull-left">
-                    <input class="form-control" type="text" data-type="searchContent" placeholder="请输入姓名关键字"/>
+                    <input class="form-control" type="text" data-type="searchContent" placeholder="请输入姓名关键字"
+                           style="width:140px;"/>
                 </div>
                 <div class="pull-left padding-top-5px padding-left-5px">
                     <button class="glyphicon glyphicon-search btn btn-sm" data-type="searchBtn"
@@ -47,7 +85,7 @@
             </div>
             <div class="pull-right padding-all-2px">
                 <div class="pull-left padding-top-7px padding-right-5px">
-                    按
+                    排序:按
                 </div>
                 <div class="pull-left">
                     <select class="form-control" data-type="orderField">
@@ -186,7 +224,9 @@
                                         </textarea>
                                     </td>
                                     <td>
-                                        <button class="btn btn-primary btn-sm pull-left" data-type="basicAddressResetBtn">重置</button>
+                                        <button class="btn btn-primary btn-sm pull-left"
+                                                data-type="basicAddressResetBtn">重置
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -311,7 +351,9 @@
                                                   data-lng="" data-lat=""></textarea>
                                     </td>
                                     <td>
-                                        <button class="btn btn-primary btn-sm pull-left" data-type="basicAddressResetBtn">重置</button>
+                                        <button class="btn btn-primary btn-sm pull-left"
+                                                data-type="basicAddressResetBtn">重置
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr>
