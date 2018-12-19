@@ -328,6 +328,26 @@ public class CustomerServiceImpl implements ICustomerService {
         }
         customerExample.setOrderByClause(orderField + (customerPageDto.getDesc() == null || customerPageDto.getDesc() ? " DESC" : " ASC"));
         CustomerExample.Criteria criteria = customerExample.createCriteria();
+        String searchType = customerPageDto.getSearchType();
+        String searchContent = customerPageDto.getSearchContent();
+        if (StringUtils.isNotBlank(searchType) && StringUtils.isNotBlank(searchContent)) {
+            switch (searchType) {
+                case "name":
+                    criteria.andNameLike("%" + searchContent.trim() + "%");
+                    break;
+                case "basicAddress":
+                    criteria.andBasicAddressLike("%" + searchContent.trim() + "%");
+                    break;
+                case "detailedAddress":
+                    criteria.andDetailedAddressLike("%" + searchContent.trim() + "%");
+                    break;
+                case "remark":
+                    criteria.andRemarkLike("%" + searchContent.trim() + "%");
+                    break;
+                default:
+                    criteria.andNameLike("%" + searchContent.trim() + "%");
+            }
+        }
         criteria.andUidEqualTo(uid);
         PageHelper.startPage(customerPageDto.getPageNum(), customerPageDto.getPageSize());
         List<Customer> list = customerDao.selectByExample(customerExample);

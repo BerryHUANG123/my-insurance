@@ -27,7 +27,7 @@
         this.customerId = customerId;
         this.content = content;
     };
-    var customerPageDto = new commonFn.PageDto(30, 1, "createTime", true, null, null);
+    var customerPageDto = new commonFn.PageDto(30, 1, "createTime", true,'name',null,null);
 
     //注册日期插件
     $("[data-type='birthdayInput']").datetimepicker({

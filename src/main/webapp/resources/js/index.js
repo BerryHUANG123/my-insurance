@@ -449,7 +449,7 @@
                     '<div class="bg-color-darkgray ft-color-white text-center padding-left-5px padding-top-5px padding-bottom-5px ft-weight-bolder margin-bottom-5px">客户信息</div>' +
                     '</div>' +
                     '<div class="margin-top-5px text-center ' + (index == 0 ? '' : 'hidden') + '" data-type="operateDiv">' +
-                    '<span class="glyphicon glyphicon-pencil bg-color-darkgray border-radius-5px padding-all-5px cursor-pointer" data-type="editCustomerBtn" data-customerId="' + customerVo.id + '"></span>' +
+                    /*'<span class="glyphicon glyphicon-pencil bg-color-darkgray border-radius-5px padding-all-5px cursor-pointer" data-type="editCustomerBtn" data-customerId="' + customerVo.id + '"></span>' +*/
                     '&nbsp;' +
                     '<span class="glyphicon glyphicon-comment bg-color-darkgray border-radius-5px padding-all-5px cursor-pointer" data-type="editNoteBtn" data-customerId="' + customerVo.id + '"></span>' +
                     '&nbsp;' +

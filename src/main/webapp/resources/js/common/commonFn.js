@@ -62,11 +62,12 @@ var commonFn = (function ($, D, W) {
         },
 
         //分页
-        PageDto: function (pageSize, pageNum, orderField, desc, searchContent, otherParam) {
+        PageDto: function (pageSize, pageNum, orderField, desc, searchType,searchContent, otherParam) {
             this.pageSize = pageSize;
             this.pageNum = pageNum;
             this.orderField = orderField;
             this.desc = desc;
+            this.searchType = searchType;
             this.searchContent = searchContent;
 
             if (otherParam) {
@@ -210,6 +211,12 @@ var commonFn = (function ($, D, W) {
                     $this.config.pageDto.searchContent = searchContent;
                     $this.reload();
                 }
+            });
+
+            $pageTable.find('select[data-type="searchType"]').off('change').on('change', function () {
+                var $selectedOption = $pageTable.find('select[data-type="searchType"] option:selected');
+                $pageTable.find('input[data-type="searchContent"]').attr('placeholder',$selectedOption.attr('data-tips'));
+                $this.config.pageDto.searchType = $selectedOption.val();
             });
 
             $pageTable.find('button[data-type="searchEmptyBtn"]').off('click').on('click', function () {
