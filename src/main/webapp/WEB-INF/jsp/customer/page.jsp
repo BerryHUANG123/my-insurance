@@ -393,8 +393,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                     </button>
                     <h4 class="modal-title">编辑Note</h4>
                 </div>
@@ -405,8 +404,8 @@
                             <tr>
                                 <td><label>内容:</label></td>
                                 <td>
-                                    <textarea class="form-control" data-type="content" placeholder="请输入Note内容" rows="20"
-                                              cols="60"></textarea>
+                                <textarea class="form-control" data-type="content" placeholder="请输入Note内容" rows="20"
+                                          cols="60"></textarea>
                                 </td>
                             </tr>
                             <tr>
@@ -426,54 +425,53 @@
                         </div>
                         <div class="clear-float"></div>
                         <div class="margin-left-5px margin-right-5px" class="pageTableDiv" id="customerNotePageTable">
+                            <div class="page-table-filter margin-left-5px margin-right-5px margin-top-5px margin-bottom-5px border-width-1px border-style-solid border-color-darkgray border-radius-5px">
+                                <div class="pull-left padding-all-2px">
+                                    <div class="pull-left">
+                                        <input class="form-control" type="text" data-type="searchContent"
+                                               placeholder="请输入搜索内容"/>
+                                    </div>
+                                    <div class="pull-left padding-top-5px padding-left-5px">
+                                        <button class="glyphicon glyphicon-search btn btn-sm" data-type="searchBtn"
+                                                title="搜索"></button>
+                                        <button class=" glyphicon glyphicon-remove btn btn-sm"
+                                                data-type="searchEmptyBtn" title="重置"></button>
+                                    </div>
+                                </div>
+                                <div class="pull-left padding-all-2px">
+                                    <div class="pull-left padding-top-7px padding-right-5px">
+                                        按
+                                    </div>
+                                    <div class="pull-left">
+                                        <select class="form-control" data-type="orderField">
+                                            <option value="createTime">创建时间</option>
+                                            <option value="updateTime">更新时间</option>
+                                        </select>
+                                    </div>
+                                    <div class="pull-left">
+                                        <select class="form-control" data-type="desc">
+                                            <option value="true">降序</option>
+                                            <option value="false">升序</option>
+                                        </select>
+                                    </div>
+                                    <div class="pull-left padding-top-7px  padding-left-5px">
+                                        排列
+                                    </div>
+                                </div>
+                                <div class="clear-float"></div>
+                            </div>
                             <div class="noData text-center border-width-1px border-style-solid border-color-darkgray border-radius-5px margin-top-5px"
                                  style="width:100%;height: 100px;line-height: 100px">
                                 <span class="ft-weight-bolder">暂无数据</span>
                             </div>
                             <div class="hidden hasData">
                                 <div class="page-table">
-                                    <div class="page-table-filter margin-left-5px margin-right-5px margin-top-5px margin-bottom-5px border-width-1px border-style-solid border-color-darkgray border-radius-5px">
-                                        <div class="pull-left padding-all-2px">
-                                            <div class="pull-left">
-                                                <input class="form-control" type="text" data-type="searchContent"
-                                                       placeholder="请输入搜索内容"/>
-                                            </div>
-                                            <div class="pull-left padding-top-5px padding-left-5px">
-                                                <button class="glyphicon glyphicon-search btn btn-sm"
-                                                        data-type="searchBtn" title="搜索"></button>
-                                                <button class=" glyphicon glyphicon-remove btn btn-sm"
-                                                        data-type="searchEmptyBtn" title="重置"></button>
-                                            </div>
-                                        </div>
-                                        <div class="pull-left padding-all-2px">
-                                            <div class="pull-left padding-top-7px padding-right-5px">
-                                                按
-                                            </div>
-                                            <div class="pull-left">
-                                                <select class="form-control" data-type="orderField">
-                                                    <option value="createTime">创建时间</option>
-                                                    <option value="updateTime">更新时间</option>
-                                                </select>
-                                            </div>
-                                            <div class="pull-left">
-                                                <select class="form-control" data-type="desc">
-                                                    <option value="true">降序</option>
-                                                    <option value="false">升序</option>
-                                                </select>
-                                            </div>
-                                            <div class="pull-left padding-top-7px  padding-left-5px">
-                                                排列
-                                            </div>
-                                        </div>
-                                        <div class="clear-float"></div>
-                                    </div>
                                     <div class="page-table-main text-center border-width-1px border-style-solid border-color-darkgray border-radius-5px margin-top-5px
                                 padding-left-5px padding-right-5px padding-top-5px padding-bottom-5px"
                                          style="height: 300px;overflow:auto">
                                         <table class="table" id="customerNoteTable">
                                             <thead>
                                             <tr>
-
                                             </tr>
                                             </thead>
                                             <tbody>

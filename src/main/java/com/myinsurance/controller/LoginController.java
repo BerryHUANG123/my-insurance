@@ -30,6 +30,8 @@ public class LoginController extends BaseController {
        User user = loginService.doLogin(userName, password);
         if (user != null) {
             HttpSession httpSession = request.getSession();
+            //1天过期
+            httpSession.setMaxInactiveInterval(60*60*24);
             httpSession.setAttribute("user", user);
             response.sendRedirect("/index/page.htm");
         } else {

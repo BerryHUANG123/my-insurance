@@ -27,7 +27,7 @@
         this.customerId = customerId;
         this.content = content;
     };
-    var customerPageDto = new commonFn.PageDto(30, 1, "createTime", true,'name',null,null);
+    var customerPageDto = new commonFn.PageDto(30, 1, "createTime", true, 'name', null, null);
 
     //注册日期插件
     $("[data-type='birthdayInput']").datetimepicker({
@@ -51,8 +51,8 @@
     //读取渲染爱好筛选列表
     var parentHobbyList = commonObject.hobby.getParentHobbyList();
     var $parentHobbyType = $customerPageTable.find('[data-type="parentHobbyType"]');
-    $.each(parentHobbyList,function(index,parentHobby){
-        $parentHobbyType.append('<option value="'+parentHobby.key+'">'+parentHobby.cn_name+'</option>');
+    $.each(parentHobbyList, function (index, parentHobby) {
+        $parentHobbyType.append('<option value="' + parentHobby.key + '">' + parentHobby.cn_name + '</option>');
     });
 
     //加载客户table
@@ -117,20 +117,20 @@
     }, false).reload();
 
     //绑定主爱好change事件
-    $(D).off('change','#customerPageTable [data-type="parentHobbyType"]').on('change','#customerPageTable [data-type="parentHobbyType"]',function(){
+    $(D).off('change', '#customerPageTable [data-type="parentHobbyType"]').on('change', '#customerPageTable [data-type="parentHobbyType"]', function () {
         var parentHobbyType = $(this).val();
         //重新渲染子爱好
         var $childHobbyType = $customerPageTable.find('[data-type="childHobbyType"]');
         var childHobbyList = commonObject.hobby.getChildHobbyList(parentHobbyType);
         $childHobbyType.empty();
         $childHobbyType.append('<option value="null">全部</option>');
-        $.each(childHobbyList,function(index,childHobby){
-            $childHobbyType.append('<option value="'+childHobby.key+'">'+childHobby.cn_name+'</option>');
+        $.each(childHobbyList, function (index, childHobby) {
+            $childHobbyType.append('<option value="' + childHobby.key + '">' + childHobby.cn_name + '</option>');
         });
         //触发查询
-        if(parentHobbyType=='null'){
+        if (parentHobbyType == 'null') {
             customerPageTable.config.pageDto.parentHobbyType = null;
-        }else{
+        } else {
             customerPageTable.config.pageDto.parentHobbyType = parentHobbyType;
         }
         customerPageTable.config.pageDto.childHobbyType = null;
@@ -138,12 +138,12 @@
     });
 
     //绑定子爱好change事件
-    $(D).off('change','#customerPageTable [data-type="childHobbyType"]').on('change','#customerPageTable [data-type="childHobbyType"]',function(){
+    $(D).off('change', '#customerPageTable [data-type="childHobbyType"]').on('change', '#customerPageTable [data-type="childHobbyType"]', function () {
         var childHobbyType = $(this).val();
         //触发查询
-        if(childHobbyType=='null'){
+        if (childHobbyType == 'null') {
             customerPageTable.config.pageDto.childHobbyType = null;
-        }else{
+        } else {
             customerPageTable.config.pageDto.childHobbyType = childHobbyType;
         }
         customerPageTable.reload();
@@ -162,7 +162,7 @@
         $addCustomerModal.find("[data-type='phone']").val('');
         $('#addCustomerAddressSearch').val('');
         $addCustomerModal.find("[data-type='basicAddress']").val('').attr('data-lng', '').attr('data-lat', '');
-        $addCustomerModal.find("[data-type='createMarker']").prop('checked',true);
+        $addCustomerModal.find("[data-type='createMarker']").prop('checked', true);
         $addCustomerModal.find("[data-type='detailedAddress']").val('');
         $addCustomerModal.find("[data-type='customer-remark']").val('');
         $addCustomerModal.modal('show');
@@ -206,14 +206,14 @@
             commonFn.messaage('error', '请输入客户姓名!');
             return;
         }
-       if(createMarker && (!basicAddress || !lng ||!lat)) {
-           commonFn.messaage('error', '创建地图标记点需要基础地址,请完善!');
-           return;
-       }
+        if (createMarker && (!basicAddress || !lng || !lat)) {
+            commonFn.messaage('error', '创建地图标记点需要基础地址,请完善!');
+            return;
+        }
 
         commonFn.mLoading.show();
         commonFn.ajaxPost(commonFn.baseUrl + "customer/save.json",
-            new CustomerDto(null, name, sex, birthday, age, customerHobbyDtoList, phone, basicAddress,detailedAddress,lng,lat, createMarker,customerRemark),
+            new CustomerDto(null, name, sex, birthday, age, customerHobbyDtoList, phone, basicAddress, detailedAddress, lng, lat, createMarker, customerRemark),
             function (result) {
                 commonFn.mLoading.hide();
                 if (result.success) {
@@ -236,7 +236,7 @@
         var phone = $editCustomerModal.find("[data-type='phone']").val();
         var basicAddress = $editCustomerModal.find("[data-type='basicAddress']").val();
         var detailedAddress = $editCustomerModal.find("[data-type='detailedAddress']").val();
-            var lng = $editCustomerModal.find("[data-type='basicAddress']").attr('data-lng');
+        var lng = $editCustomerModal.find("[data-type='basicAddress']").attr('data-lng');
         var lat = $editCustomerModal.find("[data-type='basicAddress']").attr('data-lat');
         var createMarker = $editCustomerModal.find('[data-type="createMarker"]').prop('checked');
         var customerRemark = $editCustomerModal.find("[data-type='customer-remark']").val();
@@ -266,13 +266,13 @@
             commonFn.messaage('error', '请输入客户姓名!');
             return;
         }
-        if(createMarker && (!basicAddress || !lng ||!lat)) {
+        if (createMarker && (!basicAddress || !lng || !lat)) {
             commonFn.messaage('error', '创建地图标记点需要基础地址,请完善!');
             return;
         }
         commonFn.mLoading.show();
         commonFn.ajaxPost(commonFn.baseUrl + "customer/edit.json",
-            new CustomerDto(customerId, name, sex, birthday, age, customerHobbyDtoList, phone, basicAddress, detailedAddress,lng,lat,createMarker,customerRemark),
+            new CustomerDto(customerId, name, sex, birthday, age, customerHobbyDtoList, phone, basicAddress, detailedAddress, lng, lat, createMarker, customerRemark),
             function (result) {
                 commonFn.mLoading.hide();
                 if (result.success) {
@@ -401,12 +401,12 @@
 
                 $editCustomerModal.find("[data-type='phone']").val(customerVo.phone);
                 $editCustomerModal.find("[data-type='basicAddress']").val(customerVo.basicAddress);
-                $editCustomerModal.find("[data-type='basicAddress']").attr('data-lng',customerVo.lng).attr('data-lat',customerVo.lat);
+                $editCustomerModal.find("[data-type='basicAddress']").attr('data-lng', customerVo.lng).attr('data-lat', customerVo.lat);
                 $editCustomerModal.find("[data-type='detailedAddress']").val(customerVo.detailedAddress);
-                if(customerVo.mapMarkerId){
-                    $editCustomerModal.find("[data-type='createMarker']").prop('checked',true);
-                }else{
-                    $editCustomerModal.find("[data-type='createMarker']").prop('checked',false);
+                if (customerVo.mapMarkerId) {
+                    $editCustomerModal.find("[data-type='createMarker']").prop('checked', true);
+                } else {
+                    $editCustomerModal.find("[data-type='createMarker']").prop('checked', false);
                 }
                 $editCustomerModal.find("[data-type='customer-remark']").val(customerVo.remark);
                 $editCustomerModal.modal("show");
@@ -416,11 +416,7 @@
         });
 
     });
-    //编辑客户Note按钮单击事件
-    $(D).off('click', '#customerTable [data-type="editNoteBtn"]').on('click', '#customerTable [data-type="editNoteBtn"]', function () {
-        var customerId = $(this).attr('data-customerId');
 
-    });
     //删除客户按钮单击事件
     $(D).off('click', '#customerTable [data-type="deleteBtn"]').on('click', '#customerTable [data-type="deleteBtn"]', function () {
         var flag = confirm('是否确定删除此客户?删除后无法恢复!');
@@ -531,6 +527,167 @@
         var birthdayStr = year + "-" + month + "-" + day;
         var age = commonFn.age(birthdayStr);
         $(this).closest('div.modal').find("[data-type='age']").val(age);
+    });
+
+    //编辑note按钮单击事件
+    var customerNoteTable;
+    $(D).off("click", "#customerTable [data-type='editNoteBtn']").on("click", "#customerTable [data-type='editNoteBtn']", function () {
+        var customerId = $(this).attr('data-customerId');
+        var $createCustomerNoteDiv = $("#createCustomerNoteDiv");
+        $createCustomerNoteDiv.find('[data-type="saveBtn"]').attr('data-customerId', customerId);
+        customerNoteTable = new commonFn.PageTable($("#customerNotePageTable"), commonFn.baseUrl + "customerNote/pageData.json", new commonFn.PageDto(5, 1, "createTime", true, 'name', null, {customerId: customerId}), function (rows) {
+            //此处写如何渲染列表到table中的逻辑
+            commonFn.mLoading.show();
+            var $customerNotePageTable = $("#customerNotePageTable");
+            var $tbody = $customerNotePageTable.find('tbody');
+            $tbody.empty();
+            for (var i = 0; i < rows.length; i++) {
+                var customerNoteVo = rows[i];
+                var $tr = $('<tr></tr>');
+                var $td = $('<td></td>');
+                var $contentDiv = $('<div class="margin-bottom-5px" data-type="contentDiv"><textarea class="width-100per" rows="4" disabled="disabled" data-type="content"></textarea></div>');
+                $contentDiv.find('[data-type="content"]').val(customerNoteVo.content);
+                $td.append($contentDiv);
+
+                var $timeDiv = $('<div class="pull-left" data-type="timeDiv"></div>');
+                var $createTimeDiv = $('<div class="pull-left margin-right-5px" data-type="createTimeDiv"><label>创建时间:</label><span data-type="createTime"></span></div>');
+                $createTimeDiv.find('[data-type="createTime"]').text(commonFn.dateFormat(customerNoteVo.createTime, 'yyyy-MM-dd HH:mm:ss'));
+                var $updateTimeDiv = $('<div class="pull-left" data-type="updateTimeDiv"><label>更新时间:</label><span data-type="updateTime"></span></div>');
+                $updateTimeDiv.find('[data-type="updateTime"]').text(customerNoteVo.updateTime ? commonFn.dateFormat(customerNoteVo.updateTime, 'yyyy-MM-dd HH:mm:ss') : '尚未更新');
+                $timeDiv.append($createTimeDiv);
+                $timeDiv.append($updateTimeDiv);
+                $td.append($timeDiv);
+
+                var $operateDiv = $('<div class="pull-right">' +
+                    '<span class="glyphicon glyphicon-pencil bg-color-darkgray border-radius-5px padding-all-5px cursor-pointer margin-right-5px" data-type="editBtn"></span>' +
+                    '<span class="glyphicon glyphicon-floppy-disk bg-color-darkgray border-radius-5px padding-all-5px cursor-pointer hidden  margin-right-5px" data-type="saveBtn"' +
+                    ' data-customerNoteId="' + customerNoteVo.id + '"></span>' +
+                    '<span class="glyphicon glyphicon-trash bg-color-darkgray border-radius-5px padding-all-5px cursor-pointer margin-right-5px" data-type="deleteBtn" ' +
+                    'data-customerNoteId="' + customerNoteVo.id + '"></span>' +
+                    '</div>');
+                $td.append($operateDiv);
+                $tr.append($td);
+                $tbody.append($tr);
+            }
+            commonFn.mLoading.hide();
+        });
+        customerNoteTable.reload();
+        $createCustomerNoteDiv.addClass('hidden');
+        $("#showCustomerNoteDiv").removeClass('hidden');
+        $("#editNoteModal").modal("show");
+    });
+
+    //编辑Note按钮单击事件
+    $(D).off('click', '#customerNoteTable [data-type="editBtn"]').on('click', '#customerNoteTable [data-type="editBtn"]', function () {
+        var $this = $(this);
+        var $tr = $this.closest('tr');
+        $tr.find('textarea[data-type="content"]').removeAttr('disabled');
+        $this.addClass('hidden');
+        $tr.find('[data-type="saveBtn"]').removeClass('hidden');
+    });
+
+    //保存Note按钮单击事件
+    $(D).off('click', '#customerNoteTable [data-type="saveBtn"]').on('click', '#customerNoteTable [data-type="saveBtn"]', function () {
+        var $this = $(this);
+        var id = $this.attr('data-customerNoteId');
+        var $tr = $this.closest('tr');
+
+        var content = $tr.find('[data-type="content"]').val();
+        if (!content) {
+            commonFn.messaage('error', '请输入Note内容!');
+            return;
+        }
+        var customerNoteDto = new CustomerNoteDto(id, null, content);
+
+        commonFn.mLoading.show();
+        commonFn.ajaxPost('customerNote/edit.json', customerNoteDto, function (result) {
+            commonFn.mLoading.hide();
+            if (result.success) {
+                commonFn.messaage('success', '更新成功!');
+                $tr.find('textarea[data-type="content"]').prop('disabled', true);
+                $this.addClass('hidden');
+                $tr.find('[data-type="editBtn"]').removeClass('hidden');
+                var customerNoteVo = result.data;
+                $tr.find('[data-type="content"]').val(customerNoteVo.content);
+                $tr.find('[data-type="createTime"]').text(commonFn.dateFormat(customerNoteVo.createTime, 'yyyy-MM-dd HH:mm:ss'));
+                $tr.find('[data-type="updateTime"]').text(commonFn.dateFormat(customerNoteVo.updateTime, 'yyyy-MM-dd HH:mm:ss'));
+            } else {
+                commonFn.messaage('error', result.msg);
+            }
+        });
+    });
+
+    //删除Note按钮单击事件
+    $(D).off('click', '#customerNoteTable [data-type="deleteBtn"]').on('click', '#customerNoteTable [data-type="deleteBtn"]', function () {
+        var flag = confirm('确定删除该Note吗?删除后无法恢复!');
+        if (!flag) {
+            return;
+        }
+        var id = $(this).attr('data-customerNoteId');
+        commonFn.mLoading.show();
+        $.post(
+            commonFn.baseUrl + 'customerNote/delete.json',
+            {id: id},
+            function (result) {
+                commonFn.mLoading.hide();
+                if (result.success) {
+                    commonFn.messaage('success', '删除成功!');
+                    customerNoteTable.refresh();
+                } else {
+                    commonFn.messaage('error', result.msg);
+                }
+            }
+        );
+
+
+    });
+
+    //新建Note按钮单击事件
+    $(D).off('click', '#showCustomerNoteDiv [data-type="createBtn"]').on('click', '#showCustomerNoteDiv [data-type="createBtn"]', function () {
+        var $showCustomerNoteDiv = $('#showCustomerNoteDiv');
+        var $createCustomerNoteDiv = $('#createCustomerNoteDiv');
+
+        //清空信息
+        $createCustomerNoteDiv.find('[data-type="content"]').val('');
+
+        $showCustomerNoteDiv.addClass('hidden');
+        $createCustomerNoteDiv.removeClass('hidden');
+    });
+
+    //新建Note的保存按钮单击事件
+    $(D).off('click', '#createCustomerNoteDiv [data-type="saveBtn"]').on('click', '#createCustomerNoteDiv [data-type="saveBtn"]', function () {
+        //获取数据
+        var $createCustomerNoteDiv = $('#createCustomerNoteDiv');
+        var customerId = $createCustomerNoteDiv.find('[data-type="saveBtn"]').attr('data-customerId');
+        var content = $createCustomerNoteDiv.find('[data-type="content"]').val();
+        if (!content) {
+            commonFn.messaage('error', '请输入Note内容!');
+            return;
+        }
+
+        commonFn.mLoading.show();
+        commonFn.ajaxPost(
+            commonFn.baseUrl + 'customerNote/create.json',
+            new CustomerNoteDto(null, customerId, content),
+            function (result) {
+                commonFn.mLoading.hide();
+                if (result.success) {
+                    commonFn.messaage('success', '保存成功!');
+                } else {
+                    commonFn.messaage('success', result.msg);
+                }
+            }
+        );
+
+    });
+
+    //新建Note的返回按钮单击事件
+    $(D).off('click', '#createCustomerNoteDiv [data-type="returnBtn"]').on('click', '#createCustomerNoteDiv [data-type="returnBtn"]', function () {
+        var $showCustomerNoteDiv = $('#showCustomerNoteDiv');
+        var $createCustomerNoteDiv = $('#createCustomerNoteDiv');
+        customerNoteTable.reload();
+        $showCustomerNoteDiv.removeClass('hidden');
+        $createCustomerNoteDiv.addClass('hidden');
     });
 
 })(jQuery, window, document);
