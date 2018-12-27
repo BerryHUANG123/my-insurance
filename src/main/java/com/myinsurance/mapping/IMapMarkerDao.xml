@@ -14,6 +14,7 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <collection column="{uid=uid,mapMarkerId=id}" property="customerList" select="com.myinsurance.dao.ICustomerDao.selectByUidAndMapMarkerId" fetchType="lazy"/>
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -316,4 +317,27 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!--自定义SQL-->
+  <select id="selectByUid" parameterType="int" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM
+    `t_map_marker`
+    WHERE
+    `uid` = #{uid}
+    ORDER BY
+    `create_time` DESC
+  </select>
+
+  <select id="selectByIdAndUid" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM
+    `t_map_marker`
+    WHERE
+    `id` = #{id}
+    AND
+    `uid` = #{uid}
+  </select>
 </mapper>

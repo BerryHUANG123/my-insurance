@@ -2,7 +2,9 @@ package com.myinsurance.dao;
 
 import com.myinsurance.model.po.CustomerHobby;
 import com.myinsurance.model.po.CustomerHobbyExample;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface ICustomerHobbyDao {
@@ -93,4 +95,6 @@ public interface ICustomerHobbyDao {
      * @mbg.generated 2018-12-09 17:47:02
      */
     int updateByPrimaryKey(CustomerHobby record);
+
+     List<CustomerHobby> selectByUidAndCustomerId(@Param("uid") Integer uid, @Param("customerId") Integer customerId);
 }

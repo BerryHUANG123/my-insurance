@@ -37,34 +37,17 @@ public class MarkerServiceImpl extends BaseService implements IMarkerService {
 
     @Override
     public Result get(Integer uid, Integer markId) {
-        MapMarkerExample mapMarkerExample = new MapMarkerExample();
-        MapMarkerExample.Criteria mapMarkerExampleCriteria = mapMarkerExample.createCriteria();
-        mapMarkerExampleCriteria.andUidEqualTo(uid);
-        mapMarkerExampleCriteria.andIdEqualTo(markId);
-        List<MapMarker> mapMarkerList = mapMarkerDao.selectByExample(mapMarkerExample);
-        if (mapMarkerList == null || mapMarkerList.isEmpty()) {
+        MapMarker mapMarker = mapMarkerDao.selectByIdAndUid(markId, uid);
+        if (mapMarker == null) {
             return ResultUtil.returnError("标注点已不存在!");
         }
-        MapMarker mapMarker = mapMarkerList.get(0);
         //获取该标注点所有客户信息
-        CustomerExample customerExample = new CustomerExample();
-        CustomerExample.Criteria customerExampleCriteria = customerExample.createCriteria();
-        customerExampleCriteria.andUidEqualTo(uid);
-        customerExampleCriteria.andMapMarkerIdEqualTo(mapMarker.getId());
-        List<Customer> customerList = customerDao.selectByExample(customerExample);
-
-        List<CustomerVo> customerVoList = customerList.stream().map(
+        List<CustomerVo> customerVoList = mapMarker.getCustomerList().stream().map(
                 customer -> {
-                    //查询客户爱好数据
-                    CustomerHobbyExample customerHobbyExample = new CustomerHobbyExample();
-                    CustomerHobbyExample.Criteria criteria = customerHobbyExample.createCriteria();
-                    criteria.andUidEqualTo(uid);
-                    criteria.andCustomerIdEqualTo(customer.getId());
-                    List<CustomerHobbyVo> customerHobbyVoList = customerHobbyDao.selectByExample(customerHobbyExample).stream().map(
-                            customerHobby -> new CustomerHobbyVo(customerHobby.getId(), customerHobby.getCustomerId(), customerHobby.getHobby(),
-                                    customerHobby.getSpecificHobby(), customerHobby.getCustomHobby(), customerHobby.getCreateTime(), customerHobby.getUpdateTime())
-                    ).collect(toList());
-                    return new CustomerVo(customer.getId(), customer.getName(), customer.getSex(), customer.getBirthday(), customer.getAge(), customerHobbyVoList, customer.getPhone(), customer.getBasicAddress(),
+                    return new CustomerVo(customer.getId(), customer.getName(), customer.getSex(), customer.getBirthday(), customer.getAge(), customer.getCustomerHobbyList().stream().map(customerHobby ->
+                            new CustomerHobbyVo(customerHobby.getId(), customerHobby.getCustomerId(), customerHobby.getHobby(),
+                                    customerHobby.getSpecificHobby(), customerHobby.getCustomHobby(), customerHobby.getCreateTime(),
+                                    customerHobby.getUpdateTime())).collect(toList()), customer.getPhone(), customer.getBasicAddress(),
                             customer.getDetailedAddress(), customer.getLng(), customer.getLat(), customer.getRemark(), customer.getMapMarkerId(), customer.getCreateTime(), customer.getUpdateTime());
                 }
         ).collect(toList());
@@ -73,31 +56,19 @@ public class MarkerServiceImpl extends BaseService implements IMarkerService {
 
     @Override
     public Result list(Integer uid) {
-        MapMarkerExample mapMarkerExample = new MapMarkerExample();
-        MapMarkerExample.Criteria mapMarkerExampleCriteria = mapMarkerExample.createCriteria();
-        mapMarkerExampleCriteria.andUidEqualTo(uid);
-        mapMarkerExample.setOrderByClause("`create_time` DESC");
-        List<MapMarker> mapMarkerList = mapMarkerDao.selectByExample(mapMarkerExample);
+        List<MapMarker> mapMarkerList = mapMarkerDao.selectByUid(uid);
         List<MarkVo> markVoList = Lists.newArrayList();
         for (MapMarker mapMarker : mapMarkerList) {
-            //查询客户实体
-            CustomerExample customerExample = new CustomerExample();
-            CustomerExample.Criteria customerExampleCriteria = customerExample.createCriteria();
-            customerExampleCriteria.andUidEqualTo(uid);
-            customerExampleCriteria.andMapMarkerIdEqualTo(mapMarker.getId());
-            List<Customer> customerList = customerDao.selectByExample(customerExample);
-            List<CustomerVo> customerVoList = customerList.stream().map(
+            List<CustomerVo> customerVoList = mapMarker.getCustomerList().stream().map(
                     customer -> {
-                        //查询客户爱好
-                        CustomerHobbyExample customerHobbyExample = new CustomerHobbyExample();
-                        CustomerHobbyExample.Criteria customerHobbyExampleCriteria = customerHobbyExample.createCriteria();
-                        customerHobbyExampleCriteria.andUidEqualTo(uid);
-                        customerHobbyExampleCriteria.andCustomerIdEqualTo(customer.getId());
-                        List<CustomerHobbyVo> customerHobbyVoList = customerHobbyDao.selectByExample(customerHobbyExample).stream().map(customerHobby ->
+                        CustomerVo customerVo = new CustomerVo(customer.getId(), customer.getName(), customer.getSex(),
+                                customer.getBirthday(), customer.getAge(), customer.getCustomerHobbyList().stream().map(customerHobby ->
                                 new CustomerHobbyVo(customerHobby.getId(), customerHobby.getCustomerId(), customerHobby.getHobby(),
-                                        customerHobby.getSpecificHobby(), customerHobby.getCustomHobby(), customerHobby.getCreateTime(), customerHobby.getUpdateTime())).collect(toList());
-                        CustomerVo customerVo = new CustomerVo(customer.getId(), customer.getName(), customer.getSex(), customer.getBirthday(), customer.getAge(), customerHobbyVoList, customer.getPhone(), customer.getBasicAddress(), customer.getDetailedAddress(),
-                                customer.getLng(), customer.getLat(), customer.getRemark(), customer.getMapMarkerId(), customer.getCreateTime(), customer.getUpdateTime());
+                                        customerHobby.getSpecificHobby(), customerHobby.getCustomHobby(), customerHobby.getCreateTime(),
+                                        customerHobby.getUpdateTime())).collect(toList()), customer.getPhone(),
+                                customer.getBasicAddress(), customer.getDetailedAddress(),
+                                customer.getLng(), customer.getLat(), customer.getRemark(), customer.getMapMarkerId(),
+                                customer.getCreateTime(), customer.getUpdateTime());
                         return customerVo;
                     }
             ).collect(Collectors.toList());
@@ -192,11 +163,11 @@ public class MarkerServiceImpl extends BaseService implements IMarkerService {
         MapMarkerExample.Criteria mapMarkerExampleCriteria = mapMarkerExample.createCriteria();
         mapMarkerExampleCriteria.andUidEqualTo(uid);
         mapMarkerExampleCriteria.andIdEqualTo(markId);
-        List<MapMarker> mapMarkerList = mapMarkerDao.selectByExample(mapMarkerExample);
-        if (mapMarkerList == null || mapMarkerList.isEmpty()) {
+        MapMarker oldMapMarker  = mapMarkerDao.selectByIdAndUid(markDto.getMarkId(),uid);
+        if (oldMapMarker == null) {
             return ResultUtil.returnError("标注点已不存在!");
         }
-        MapMarker oldMapMarker = mapMarkerList.get(0);
+
         oldMapMarker.setRemark(markDto.getRemark());
         oldMapMarker.setUpdateTime(new Date());
         mapMarkerDao.updateByPrimaryKey(oldMapMarker);

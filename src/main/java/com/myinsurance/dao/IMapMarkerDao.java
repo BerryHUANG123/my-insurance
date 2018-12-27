@@ -3,6 +3,8 @@ package com.myinsurance.dao;
 import com.myinsurance.model.po.MapMarker;
 import com.myinsurance.model.po.MapMarkerExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface IMapMarkerDao {
@@ -93,4 +95,9 @@ public interface IMapMarkerDao {
      * @mbg.generated 2018-12-16 21:21:13
      */
     int updateByPrimaryKey(MapMarker record);
+
+    List<MapMarker> selectByUid(Integer uid);
+
+    MapMarker selectByIdAndUid(@Param("id") Integer id, @Param("uid") Integer uid);
+    
 }

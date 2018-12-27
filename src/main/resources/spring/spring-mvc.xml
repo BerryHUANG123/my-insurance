@@ -44,7 +44,7 @@
 
     <!-- 配置ViewResolver 。可用多个ViewResolver 。使用order属性排序。   InternalResourceViewResolver 放在最后-->
     <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-        <property name="order" value="1"></property>
+        <property name="order" value="1"/>
         <property name="mediaTypes">
             <map>
                 <!-- 告诉视图解析器，返回的类型为json格式 -->
@@ -59,7 +59,7 @@
                 <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"/>
             </list>
         </property>
-        <property name="ignoreAcceptHeader" value="true"></property>
+        <property name="ignoreAcceptHeader" value="true"/>
     </bean>
 
     <!-- 定义跳转的文件的前后缀 ，视图模式配置-->

@@ -331,4 +331,18 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!--自定义SQL-->
+  <select id="selectByUidAndCustomerId" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM
+    `t_customer_hobby`
+    WHERE
+    `uid` = #{uid}
+    AND
+    `customer_id` = #{customerId}
+    ORDER BY
+    `create_time` DESC
+  </select>
 </mapper>

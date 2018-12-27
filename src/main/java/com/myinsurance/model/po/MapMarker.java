@@ -1,6 +1,7 @@
 package com.myinsurance.model.po;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Database Table Remarks:
@@ -86,6 +87,8 @@ public class MapMarker {
      * @mbg.generated 2018-12-16 21:21:13
      */
     private Date updateTime;
+
+    private List<Customer> customerList;
 
     public MapMarker() {
     }
@@ -266,5 +269,13 @@ public class MapMarker {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public List<Customer> getCustomerList() {
+        return customerList;
+    }
+
+    public void setCustomerList(List<Customer> customerList) {
+        this.customerList = customerList;
     }
 }

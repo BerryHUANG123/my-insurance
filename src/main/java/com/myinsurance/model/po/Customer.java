@@ -1,6 +1,7 @@
 package com.myinsurance.model.po;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -172,6 +173,8 @@ public class Customer {
      * @mbg.generated 2018-12-16 19:47:24
      */
     private Date updateTime;
+
+    private List<CustomerHobby> customerHobbyList;
 
     public Customer() {
     }
@@ -552,5 +555,13 @@ public class Customer {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public List<CustomerHobby> getCustomerHobbyList() {
+        return customerHobbyList;
+    }
+
+    public void setCustomerHobbyList(List<CustomerHobby> customerHobbyList) {
+        this.customerHobbyList = customerHobbyList;
     }
 }

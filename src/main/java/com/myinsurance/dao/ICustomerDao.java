@@ -2,7 +2,9 @@ package com.myinsurance.dao;
 
 import com.myinsurance.model.po.Customer;
 import com.myinsurance.model.po.CustomerExample;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface ICustomerDao {
@@ -93,4 +95,22 @@ public interface ICustomerDao {
      * @mbg.generated 2018-12-16 19:47:24
      */
     int updateByPrimaryKey(Customer record);
+
+    /**
+     * 根据Uid和Id查询客户实体
+     *
+     * @param uid 用户ID
+     * @param id  客户ID
+     * @return 客户实体
+     */
+    Customer selectByUidAndId(@Param("uid") Integer uid, @Param("id") Integer id);
+
+    /**
+     * 根据Uid和MapMarkerId查询客户实体集合
+     *
+     * @param uid
+     * @param mapMarkerId
+     * @return
+     */
+    List<Customer> selectByUidAndMapMarkerId(@Param("uid") Integer uid, @Param("mapMarkerId") Integer mapMarkerId);
 }

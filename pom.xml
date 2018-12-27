@@ -20,7 +20,7 @@
         <!-- spring版本号 -->
         <spring.version>4.0.9.RELEASE</spring.version>
         <!--spring security版本号-->
-        <spring.security.version>3.2.3.RELEASE</spring.security.version>
+        <!--<spring.security.version>3.2.3.RELEASE</spring.security.version>-->
         <!-- mybatis版本号 -->
         <mybatis.version>3.2.6</mybatis.version>
         <!-- log4j日志文件管理包版本 -->
@@ -47,6 +47,19 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.0.Alpha1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>3.2.5</version>
+        </dependency>
+
         <!-- jsqlparser -->
         <dependency>
             <groupId>com.github.jsqlparser</groupId>
@@ -62,7 +75,7 @@
         </dependency>
 
         <!-- Spring Security -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
             <version>${spring.security.version}</version>
@@ -72,7 +85,7 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
             <version>${spring.security.version}</version>
-        </dependency>
+        </dependency>-->
 
 
         <!--junit-->
@@ -345,6 +358,15 @@
                 <configuration>
                     <source>8</source>
                     <target>8</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.20.1</version>
+                <configuration>
+                    <skipTests>true</skipTests>
                 </configuration>
             </plugin>
         </plugins>
